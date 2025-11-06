@@ -605,6 +605,7 @@ export const ChristmasGiftGenerator = () => {
         }
         .animate-fall {
           animation: fall linear infinite;
+          animation-duration: 8s; /* constant duration so flakes always fall */
         }
       `}</style>
     </div>
