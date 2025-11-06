@@ -5,10 +5,10 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+  // Hardcode base for GitHub Pages to avoid 404s
+  const BASE = mode === "production" ? "/Christmas_Generator/" : "/";
   return {
-    // For GitHub Pages: serve under /<repo>/ in production builds on CI
-    base: mode === "production" && repoName ? `/${repoName}/` : "/",
+    base: BASE,
     server: {
       host: "::",
       port: 8080,
