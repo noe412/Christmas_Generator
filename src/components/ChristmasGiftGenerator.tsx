@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -251,10 +251,10 @@ export const ChristmasGiftGenerator = () => {
         backgroundAttachment: 'fixed',
       }}
     >
-      {/* Snowflakes */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      {/* Snowflakes (memoized to avoid re-renders during selection) */}
+      {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
         <Snowflake key={i} delay={i * 0.5} />
-      ))}
+      )), [])}
 
       <div className={`relative z-10 mx-auto py-8 px-4 ${isPresentationMode ? 'max-w-full' : 'max-w-6xl'}`}>
         {/* Header */}
@@ -591,7 +591,7 @@ export const ChristmasGiftGenerator = () => {
         )}
       </div>
 
-      {/* CSS for snowflake animation */}
+      {/* CSS for snowflake animation (fixed rule; per-element duration set inline) */}
       <style>{`
         @keyframes fall {
           0% {
@@ -605,7 +605,6 @@ export const ChristmasGiftGenerator = () => {
         }
         .animate-fall {
           animation: fall linear infinite;
-          animation-duration: ${Math.random() * 3 + 5}s;
         }
       `}</style>
     </div>
