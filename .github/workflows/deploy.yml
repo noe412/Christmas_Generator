@@ -17,26 +17,32 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: santa-shake-shuffle-main
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Determine build directory
+        run: |
+          if [ -f santa-shake-shuffle-main/package.json ]; then
+            echo "BUILD_DIR=santa-shake-shuffle-main" >> $GITHUB_ENV
+          else
+            echo "BUILD_DIR=." >> $GITHUB_ENV
+          fi
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
-          cache-dependency-path: santa-shake-shuffle-main/package-lock.json
+          cache-dependency-path: ${{ env.BUILD_DIR }}/package-lock.json
       - name: Install dependencies
+        working-directory: ${{ env.BUILD_DIR }}
         run: npm ci
       - name: Build
+        working-directory: ${{ env.BUILD_DIR }}
         run: npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: santa-shake-shuffle-main/dist
+          path: ${{ env.BUILD_DIR }}/dist
 
   deploy:
     environment:
