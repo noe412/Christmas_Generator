@@ -21,7 +21,8 @@ const Snowflake = ({ delay }: { delay: number }) => (
     className="absolute text-white/80 animate-fall pointer-events-none"
     style={{
       left: `${Math.random() * 100}%`,
-      animationDelay: `${delay}s`,
+      top: `-10%`,
+      animationDelay: `-${delay}s`,
       fontSize: `${Math.random() * 10 + 10}px`,
     }}
   >
@@ -252,7 +253,7 @@ export const ChristmasGiftGenerator = () => {
       }}
     >
       {/* Snowflakes (memoized to avoid re-renders during selection) */}
-      {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
+      {useMemo(() => Array.from({ length: 80 }).map((_, i) => (
         <Snowflake key={i} delay={i * 0.5} />
       )), [])}
 
@@ -611,3 +612,4 @@ export const ChristmasGiftGenerator = () => {
     </div>
   );
 };
+
