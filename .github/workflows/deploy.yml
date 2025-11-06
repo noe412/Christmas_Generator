@@ -48,6 +48,9 @@ jobs:
       - name: Add SPA fallback (404.html)
         run: |
           cp "$BUILD_DIR/dist/index.html" "$BUILD_DIR/dist/404.html" || true
+      - name: Disable Jekyll processing
+        run: |
+          touch "$BUILD_DIR/dist/.nojekyll"
       - name: Verify build output
         run: |
           echo "Listing dist contents:" 
