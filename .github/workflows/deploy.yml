@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BUILD_DIR: santa-shake-shuffle-main/santa-shake-shuffle-main
+      BUILD_DIR: .
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,4 +60,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
