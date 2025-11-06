@@ -550,7 +550,7 @@ export const ChristmasGiftGenerator = () => {
                 <div className="relative z-10 text-center p-12">
                   {isSpinning ? (
                     <div className="animate-pulse">
-                      <div className="text-8xl font-bold text-primary mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.8)]">
+                      <div className="text-8xl font-bold text-white mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
                         {spinningName}
                       </div>
                       <div className="text-3xl text-primary/80 font-elegant font-semibold">
