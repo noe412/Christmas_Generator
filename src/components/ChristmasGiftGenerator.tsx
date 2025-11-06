@@ -553,17 +553,17 @@ export const ChristmasGiftGenerator = () => {
                       <div className="text-8xl font-bold text-white mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
                         {spinningName}
                       </div>
-                      <div className="text-3xl text-primary/80 font-elegant font-semibold">
+                      <div className="text-3xl text-white font-elegant font-semibold drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
                         Wird ausgewählt...
                       </div>
                     </div>
                   ) : selectedName ? (
                     <div className="animate-scale-in">
                       <div className="text-9xl mb-8 animate-spin-slow drop-shadow-2xl">🎁</div>
-                      <div className="text-7xl font-bold text-primary mb-6 font-christmas drop-shadow-[0_4px_20px_rgba(220,38,38,0.6)]">
+                      <div className="text-7xl font-bold text-white mb-6 font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
                         {selectedName}
                       </div>
-                      <div className="text-4xl text-primary font-semibold font-elegant drop-shadow-lg">
+                      <div className="text-4xl text-white font-semibold font-elegant drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
                         verteilt die Geschenke! 🎅
                       </div>
                     </div>
