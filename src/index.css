@@ -7,6 +7,68 @@ All colors MUST be HSL.
 */
 
 @layer base {
+  /* Local font-face declarations for fonts previously loaded via Google Fonts.
+     Place the corresponding .woff2 files in public/fonts with the exact filenames below.
+     These load from the Pages subpath thanks to Vite's base handling. */
+  @font-face {
+    font-family: 'Great Vibes';
+    src: url('/fonts/GreatVibes-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Merriweather';
+    src: url('/fonts/Merriweather-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Merriweather';
+    src: url('/fonts/Merriweather-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/Roboto-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/Roboto-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/Roboto-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/Roboto-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Pacifico';
+    src: url('/fonts/Pacifico-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 :root {
     --background: 355 20% 15%;
     --foreground: 0 0% 98%;
