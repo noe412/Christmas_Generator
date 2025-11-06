@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+:root {
+    --background: 355 20% 15%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 355 85% 25%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 355 85% 25%;
+
+    --primary: 355 75% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 60% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 145 15% 88%;
+    --muted-foreground: 145 10% 45%;
+
+    --accent: 45 95% 60%;
+    --accent-foreground: 355 85% 25%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 145 20% 85%;
+    --input: 145 20% 90%;
+    --ring: 355 75% 45%;
+
+    --radius: 0.75rem;
+    
+    --gradient-festive: linear-gradient(135deg, hsl(355 75% 50%), hsl(355 65% 60%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 95% 60%), hsl(45 85% 70%));
+    --gradient-snow: linear-gradient(180deg, hsl(0 0% 100% / 0.9), hsl(145 20% 95%));
+    
+    --shadow-festive: 0 10px 40px -10px hsl(355 75% 45% / 0.5);
+    --shadow-gold: 0 5px 25px -5px hsl(45 95% 60% / 0.6);
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 355 20% 12%;
+    --foreground: 0 0% 95%;
+
+    --card: 355 18% 15%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 355 18% 15%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 355 75% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 50% 30%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 355 15% 20%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 45 90% 60%;
+    --accent-foreground: 355 20% 12%;
+
+    --destructive: 0 62.8% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 355 15% 25%;
+    --input: 355 15% 25%;
+    --ring: 355 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .card {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 0.75rem;
+  }
+}
+
+/* Slim, reusable UI primitives */
+@layer components {
+  .input {
+    @apply flex h-10 w-full rounded-md px-3 py-2 ring-offset-background text-lg md:text-sm
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+           disabled:cursor-not-allowed disabled:opacity-50
+           border-2 border-primary/50 focus:border-primary
+           bg-input text-card-foreground font-body placeholder:text-muted-foreground;
+  }
+
+  .textarea {
+    @apply flex min-h-[80px] w-full rounded-md px-3 py-2 text-sm ring-offset-background
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+           disabled:cursor-not-allowed disabled:opacity-50
+           border border-input bg-background placeholder:text-muted-foreground;
+  }
+
+  /* Select primitives */
+  .select-trigger {
+    @apply flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1;
+  }
+
+  .select-content {
+    @apply relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  }
+
+  .select-viewport {
+    @apply p-1;
+  }
+
+  .select-scroll-btn {
+    @apply flex cursor-default items-center justify-center py-1;
+  }
+
+  .select-item {
+    @apply relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground;
+  }
+
+  .select-separator {
+    @apply -mx-1 my-1 h-px bg-muted;
+  }
+
+  /* Checkbox */
+  .checkbox {
+    @apply h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Switch */
+  .switch {
+    @apply inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .switch-thumb {
+    @apply pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0;
+  }
+
+  /* Radio */
+  .radio {
+    @apply aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
