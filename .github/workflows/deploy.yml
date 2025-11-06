@@ -45,6 +45,9 @@ jobs:
       - name: Build
         working-directory: ${{ env.BUILD_DIR }}
         run: npm run build
+      - name: Add SPA fallback (404.html)
+        run: |
+          cp "$BUILD_DIR/dist/index.html" "$BUILD_DIR/dist/404.html" || true
       - name: Verify build output
         run: |
           echo "Listing dist contents:" 
