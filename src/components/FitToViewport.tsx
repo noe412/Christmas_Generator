@@ -14,16 +14,7 @@ export function FitToViewport({
   const localStageRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(1);
-  const [vh, setVh] = useState<number>(() => {
-    if (typeof window === "undefined") return 0;
-    return (window.visualViewport && window.visualViewport.height) || window.innerHeight || 0;
-  });
-  const [isLandscape, setIsLandscape] = useState<boolean>(() =>
-    typeof window !== "undefined" ? window.innerWidth > window.innerHeight : false
-  );
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(() =>
-    typeof document !== "undefined" ? !!document.fullscreenElement : false
-  );
+  const [vh, setVh] = useState<number>(() => (typeof window !== "undefined" ? window.innerHeight : 0));
 
   const usedStageRef = stageRef ?? localStageRef;
   const originalTransforms = useRef(new Map<Element, string>());
@@ -43,53 +34,34 @@ export function FitToViewport({
       const content = contentRef.current;
       if (!stage || !content) return;
 
-  const stageRect = stage.getBoundingClientRect();
-  const contentRect = content.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
 
-  const cw = content.scrollWidth || contentRect.width;
-  const ch = content.scrollHeight || contentRect.height;
+      const cw = content.scrollWidth || contentRect.width;
+      const ch = content.scrollHeight || contentRect.height;
 
-  // Use the actual visible viewport size (visualViewport when available,
-  // otherwise fall back to the stage rect / window inner sizes). This
-  // ensures we compute a scale that actually fits on-screen UI in
-  // landscape/fullscreen on tablets.
-  const visual = (window as any).visualViewport;
-  const availW = (visual && visual.width) || stageRect.width || window.innerWidth;
-  const availH = (visual && visual.height) || stageRect.height || window.innerHeight;
-
-  const s = Math.min(availW / cw, availH / ch, 1);
-  setScale(s);
-      // Update viewport height: prefer visualViewport (excludes on-screen UI)
-      const visualH = (window.visualViewport && window.visualViewport.height) || 0;
-      setVh(visualH || window.innerHeight || Math.round(stageRect.height));
-      // Update orientation/fullscreen state
-      setIsLandscape((window.visualViewport ? window.visualViewport.width : window.innerWidth) >
-        (window.visualViewport ? window.visualViewport.height : window.innerHeight));
-      setIsFullscreen(!!document.fullscreenElement);
+      const s = Math.min(stageRect.width / cw, stageRect.height / ch, 1);
+      setScale(s);
+      // Keep a pinned viewport height (in pixels) to avoid mobile browser UI/toolbars
+      // shrinking/expanding the visible area and cutting off content in fullscreen.
+      // Using window.innerHeight is more reliable than 100vh / 100dvh on many tablets.
+      setVh(window.innerHeight || Math.round(stageRect.height));
     };
 
     calc();
     const ro = new ResizeObserver(calc);
     if (usedStageRef.current) ro.observe(usedStageRef.current);
     if (contentRef.current) ro.observe(contentRef.current);
-    window.addEventListener("orientationchange", calc);
-    window.addEventListener("fullscreenchange", calc);
-    // also update on resize (covers some browser UI changes)
-    window.addEventListener("resize", calc);
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", calc);
-      window.visualViewport.addEventListener("scroll", calc);
-    }
+  window.addEventListener("orientationchange", calc);
+  window.addEventListener("fullscreenchange", calc);
+  // also update on resize (covers some browser UI changes)
+  window.addEventListener("resize", calc);
 
     return () => {
       ro.disconnect();
       window.removeEventListener("orientationchange", calc);
       window.removeEventListener("fullscreenchange", calc);
       window.removeEventListener("resize", calc);
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", calc);
-        window.visualViewport.removeEventListener("scroll", calc);
-      }
     };
   }, [enabled, usedStageRef]);
 
@@ -132,22 +104,16 @@ export function FitToViewport({
 
   if (!enabled) return <>{children}</>;
 
-  const useFixed = isFullscreen || isLandscape;
-
   return (
     <div
       ref={usedStageRef as any}
       style={{
         width: "100vw",
-        // Use a pixel height derived from visualViewport/innerHeight to avoid mobile
+        // Use a pixel height derived from window.innerHeight to avoid mobile
         // browser UI (address/toolbars) causing the bottom to be clipped.
         height: vh ? `${vh}px` : "100dvh",
         overflow: "hidden",
-        position: useFixed ? "fixed" : "relative",
-        top: useFixed ? 0 : undefined,
-        left: useFixed ? 0 : undefined,
-        right: useFixed ? 0 : undefined,
-        zIndex: useFixed ? 9999 : undefined,
+        position: "relative",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
