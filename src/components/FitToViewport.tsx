@@ -5,18 +5,11 @@ export function FitToViewport({
   stageRef,
   children,
   innerSelector = ".inner-frame",
-  presentationScale = 0.92,
 }: {
   enabled?: boolean;
   stageRef?: RefObject<HTMLDivElement>;
   children: React.ReactNode;
   innerSelector?: string;
-  /**
-   * Maximum scale to apply when in presentation mode (<= 1).
-   * Use this to keep content slightly smaller than the viewport so
-   * background/overlays don't touch the edges. Defaults to 0.92.
-   */
-  presentationScale?: number;
 }) {
   const localStageRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -47,11 +40,7 @@ export function FitToViewport({
       const cw = content.scrollWidth || contentRect.width;
       const ch = content.scrollHeight || contentRect.height;
 
-  // When presentation mode is enabled, cap the computed scale to
-  // `presentationScale` so the visual content remains slightly
-  // smaller than the full viewport (prevents clipping/edge overlap).
-  const maxScale = enabled ? presentationScale : 1;
-  const s = Math.min(stageRect.width / cw, stageRect.height / ch, maxScale);
+      const s = Math.min(stageRect.width / cw, stageRect.height / ch, 1);
       setScale(s);
       // Keep a pinned viewport height (in pixels) to avoid mobile browser UI/toolbars
       // shrinking/expanding the visible area and cutting off content in fullscreen.
