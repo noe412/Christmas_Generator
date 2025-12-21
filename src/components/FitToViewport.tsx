@@ -85,7 +85,7 @@ export function FitToViewport({
       if (!originalTransforms.current.has(el)) {
         originalTransforms.current.set(el, (el as HTMLElement).style.transform || "");
       }
-      (el as HTMLElement).style.transformOrigin = (el as HTMLElement).style.transformOrigin || "center top";
+      (el as HTMLElement).style.transformOrigin = (el as HTMLElement).style.transformOrigin || "top left";
       (el as HTMLElement).style.transform = `scale(${1 / scale})`;
     });
 
@@ -108,26 +108,14 @@ export function FitToViewport({
     >
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+          width: "max-content",
+          height: "max-content",
         }}
+        ref={contentRef as any}
       >
-        <div
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: "center top",
-            display: "inline-block",
-            width: "max-content",
-            height: "max-content",
-          }}
-          ref={contentRef as any}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   );
