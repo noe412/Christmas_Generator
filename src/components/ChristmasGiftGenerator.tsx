@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -31,6 +31,7 @@ const Snowflake = ({ delay }: { delay: number }) => (
 );
 
 export const ChristmasGiftGenerator = () => {
+  const presentationRef = useRef<HTMLDivElement | null>(null);
   const [names, setNames] = useState<string[]>([]);
   const [currentName, setCurrentName] = useState("");
   const [isSpinning, setIsSpinning] = useState(false);
@@ -228,8 +229,9 @@ export const ChristmasGiftGenerator = () => {
       // Enter presentation mode
       setIsPresentationMode(true);
       setShowSetup(false);
-      // Try to enter fullscreen
-      document.documentElement.requestFullscreen?.().catch(err => {
+      // Try to enter fullscreen on the presentation wrapper (better than html)
+      const el = presentationRef.current ?? document.documentElement;
+      (el as HTMLElement).requestFullscreen?.().catch(err => {
         console.log("Fullscreen not supported:", err);
       });
     } else {
@@ -257,7 +259,10 @@ export const ChristmasGiftGenerator = () => {
         <Snowflake key={i} delay={i * 0.5} />
       )), [])}
 
-      <div className={`relative z-10 mx-auto py-8 px-4 ${isPresentationMode ? 'max-w-full' : 'max-w-6xl'}`}>
+      <div
+        ref={presentationRef}
+        className={`relative z-10 ${isPresentationMode ? 'presentation' : 'mx-auto py-8 px-4 max-w-6xl'}`}
+      >
         {/* Header */}
         {!isPresentationMode && (
           <div className="text-center mb-8 animate-fade-in">
@@ -410,7 +415,7 @@ export const ChristmasGiftGenerator = () => {
 
             {/* Image Upload */}
             <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Bilder für Diashow</h2>
+              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Images for slideshow</h2>
               <div className="flex gap-3 mb-4">
                 <label className="flex-1">
                   <input

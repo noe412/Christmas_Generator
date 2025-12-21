@@ -246,3 +246,40 @@ All colors MUST be HSL.
     @apply aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 }
+
+/* Ensure app can occupy whole viewport for fullscreen mode */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Presentation helper: force full-viewport layout and remove max-width/centering/transform */
+.presentation {
+  position: fixed;
+  inset: 0;               /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Ensure inner main frame stretches in presentation mode */
+.presentation .relative.mx-auto,
+.presentation .mx-auto,
+.presentation .max-w-7xl,
+.presentation .max-w-4xl,
+.presentation .max-w-6xl {
+  max-width: none !important;
+  width: 100% !important;
+  transform: none !important;
+}
