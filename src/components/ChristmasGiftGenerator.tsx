@@ -229,10 +229,10 @@ export const ChristmasGiftGenerator = () => {
       // Enter presentation mode
       setIsPresentationMode(true);
       setShowSetup(false);
-      // Try to enter fullscreen on the presentation wrapper (better than html)
+      // request fullscreen on the outer wrapper (keeps inner layout intact)
       const el = presentationRef.current ?? document.documentElement;
-      (el as HTMLElement).requestFullscreen?.().catch(err => {
-        console.log("Fullscreen not supported:", err);
+      el.requestFullscreen?.().catch(err => {
+        console.warn("Fullscreen request failed:", err);
       });
     } else {
       // Exit presentation mode
@@ -244,9 +244,18 @@ export const ChristmasGiftGenerator = () => {
     }
   };
 
+  useEffect(() => {
+    const onFsChange = () => {
+      if (!document.fullscreenElement) setIsPresentationMode(false);
+    };
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
   return (
     <div 
-      className="min-h-screen relative overflow-hidden"
+      ref={presentationRef}
+      className={`min-h-screen relative overflow-hidden ${isPresentationMode ? 'presentation' : ''}`}
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${christmasBackground})`,
         backgroundSize: 'cover',
@@ -259,10 +268,7 @@ export const ChristmasGiftGenerator = () => {
         <Snowflake key={i} delay={i * 0.5} />
       )), [])}
 
-      <div
-        ref={presentationRef}
-        className={`relative z-10 ${isPresentationMode ? 'presentation' : 'mx-auto py-8 px-4 max-w-6xl'}`}
-      >
+      <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl">
         {/* Header */}
         {!isPresentationMode && (
           <div className="text-center mb-8 animate-fade-in">

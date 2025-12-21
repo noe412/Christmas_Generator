@@ -255,31 +255,22 @@ html, body, #root {
   padding: 0;
 }
 
-/* Presentation helper: force full-viewport layout and remove max-width/centering/transform */
+/* Presentation wrapper: full viewport, but do NOT override inner max-width */
 .presentation {
   position: fixed;
-  inset: 0;               /* top:0; right:0; bottom:0; left:0 */
+  inset: 0;            /* top:0; right:0; bottom:0; left:0 */
   width: 100vw;
   height: 100vh;
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
+  align-items: center;      /* vertikal zentrieren der inneren max-w-6xl */
+  justify-content: center;  /* horizontal zentrieren */
   z-index: 9999;
   overflow: hidden;
   background-size: cover;
   background-position: center;
 }
 
-/* Ensure inner main frame stretches in presentation mode 
-.presentation .relative.mx-auto,
-.presentation .mx-auto,
-.presentation .max-w-7xl,
-.presentation .max-w-4xl,
-.presentation .max-w-6xl {
-  max-width: none !important;
-  width: 100% !important;
-  transform: none !important;
-}*/
+/* DO NOT force .max-w-6xl / .mx-auto children to width:100% here.
+   Keep the inner frame (mx-auto max-w-6xl) unchanged so its size stays the same. */
