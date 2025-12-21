@@ -310,7 +310,7 @@ export const ChristmasGiftGenerator = () => {
           )}
 
           {/* Snowflakes (memoized to avoid re-renders during selection) */}
-          {useMemo(() => Array.from({ length: 80 }).map((_, i) => (
+          {useMemo(() => Array.from({ length: 40 }).map((_, i) => (
             <Snowflake key={i} delay={i * 0.5} />
           )), [])}
 
