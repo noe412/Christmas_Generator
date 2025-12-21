@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Gift, Plus, Trash2, Play, Settings, X, ChevronLeft, ChevronRight, Upload, Maximize, Minimize, Download } from "lucide-react";
 import christmasBackground from "@/assets/christmas-background.jpg";
+import { FitToViewport } from "./FitToViewport";
 // Build the jingle list dynamically from the sounds folder
 // This prevents build errors if individual files are added/removed.
 const soundModules = import.meta.glob("@/assets/sounds/*.mp3", {
@@ -227,21 +228,15 @@ export const ChristmasGiftGenerator = () => {
 
   const togglePresentationMode = () => {
     if (!isPresentationMode) {
-      // Enter presentation mode
       setIsPresentationMode(true);
       setShowSetup(false);
-      // request fullscreen on the outer wrapper (keeps inner layout intact)
       const el = presentationRef.current ?? document.documentElement;
-      el.requestFullscreen?.().catch(err => {
+      el.requestFullscreen?.().catch((err) => {
         console.warn("Fullscreen request failed:", err);
       });
     } else {
-      // Exit presentation mode
       setIsPresentationMode(false);
-      // Exit fullscreen if active
-      if (document.fullscreenElement) {
-        document.exitFullscreen?.();
-      }
+      document.exitFullscreen?.().catch(() => {});
     }
   };
 
@@ -275,372 +270,373 @@ export const ChristmasGiftGenerator = () => {
   }, []);
 
   return (
-    <div 
-      ref={presentationRef}
-      className={`min-h-screen relative overflow-hidden ${isPresentationMode ? 'presentation' : ''}`}
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${christmasBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      {/* Snowflakes (memoized to avoid re-renders during selection) */}
-      {useMemo(() => Array.from({ length: 80 }).map((_, i) => (
-        <Snowflake key={i} delay={i * 0.5} />
-      )), [])}
+    <FitToViewport enabled={isPresentationMode} stageRef={presentationRef}>
+      <div
+        className={`min-h-screen relative overflow-hidden ${isPresentationMode ? "presentation" : ""}`}
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${christmasBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        {/* Snowflakes (memoized to avoid re-renders during selection) */}
+        {useMemo(() => Array.from({ length: 80 }).map((_, i) => (
+          <Snowflake key={i} delay={i * 0.5} />
+        )), [])}
 
-      <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl inner-frame">
-        {/* Header */}
-        {!isPresentationMode && (
-          <div className="text-center mb-8 animate-fade-in">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
-              <h1 className="text-6xl md:text-7xl font-bold font-christmas text-white drop-shadow-[0_0_20px_rgba(255,215,0,0.9)]">
-                Who Is Santa’s Helper?
-              </h1>
-              <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
-            </div>
-            <p className="text-white/90 text-2xl font-elegant drop-shadow-lg">
-              Who’s giving, who’s getting?
-            </p>
-          </div>
-        )}
-
-        {/* Control Buttons */}
-        {!isPresentationMode && (
-          <div className="flex justify-center gap-4 mb-6">
-            <Button
-              onClick={() => setShowSetup(!showSetup)}
-              variant="secondary"
-              size="lg"
-              className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
-            >
-              {showSetup ? (
-                <>
-                  <X className="w-5 h-5 mr-2" />
-                  Hide Setup
-                </>
-              ) : (
-                <>
-                  <Settings className="w-5 h-5 mr-2" />
-                  Show Setup
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={togglePresentationMode}
-              variant="secondary"
-              size="lg"
-              className="bg-accent/80 hover:bg-accent text-foreground backdrop-blur-md border-2 border-accent shadow-xl font-semibold"
-            >
-              <Maximize className="w-5 h-5 mr-2" />
-              Presentation mode
-            </Button>
-          </div>
-        )}
-
-        {/* Exit Presentation Mode Button */}
-        {isPresentationMode && (
-          <div className="fixed top-4 right-4 z-50">
-            <Button
-              onClick={togglePresentationMode}
-              variant="secondary"
-              size="lg"
-              className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
-            >
-              <Minimize className="w-5 h-5 mr-2" />
-              Exit
-            </Button>
-          </div>
-        )}
-
-        {/* Setup Section (Collapsible) */}
-        {showSetup && (
-          <div className="space-y-6 mb-8 animate-scale-in">
-            {/* Name Input */}
-            <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Add names</h2>
-              <div className="flex gap-3">
-                <Input
-                  type="text"
-                  placeholder="Enter name..."
-                  value={currentName}
-                  onChange={(e) => setCurrentName(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && addName()}
-                  className="text-lg border-2 border-primary/50 focus:border-primary bg-white text-card-foreground font-body placeholder:text-muted-foreground"
-                />
-                <Button
-                  onClick={addName}
-                  className="bg-gradient-to-r from-primary to-primary/80 hover:shadow-festive transition-all text-white font-semibold"
-                  size="lg"
-                >
-                  <Plus className="w-5 h-5 mr-2" />
-                  Add
-                </Button>
+        <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl inner-frame">
+          {/* Header */}
+          {!isPresentationMode && (
+            <div className="text-center mb-8 animate-fade-in">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
+                <h1 className="text-6xl md:text-7xl font-bold font-christmas text-white drop-shadow-[0_0_20px_rgba(255,215,0,0.9)]">
+                  Who Is Santa’s Helper?
+                </h1>
+                <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
               </div>
+              <p className="text-white/90 text-2xl font-elegant drop-shadow-lg">
+                Who’s giving, who’s getting?
+              </p>
+            </div>
+          )}
 
-              {/* Import/Export controls for names */}
-              <div className="flex gap-3 mt-3">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={exportNames}
-                  className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
-                </Button>
-                <label>
-                  <input
-                    id="names-import-input"
-                    type="file"
-                    accept="application/json"
-                    className="hidden"
-                    onChange={importNamesFromFile}
+          {/* Control Buttons */}
+          {!isPresentationMode && (
+            <div className="flex justify-center gap-4 mb-6">
+              <Button
+                onClick={() => setShowSetup(!showSetup)}
+                variant="secondary"
+                size="lg"
+                className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
+              >
+                {showSetup ? (
+                  <>
+                    <X className="w-5 h-5 mr-2" />
+                    Hide Setup
+                  </>
+                ) : (
+                  <>
+                    <Settings className="w-5 h-5 mr-2" />
+                    Show Setup
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={togglePresentationMode}
+                variant="secondary"
+                size="lg"
+                className="bg-accent/80 hover:bg-accent text-foreground backdrop-blur-md border-2 border-accent shadow-xl font-semibold"
+              >
+                <Maximize className="w-5 h-5 mr-2" />
+                Presentation mode
+              </Button>
+            </div>
+          )}
+
+          {/* Exit Presentation Mode Button */}
+          {isPresentationMode && (
+            <div className="fixed top-4 right-4 z-50">
+              <Button
+                onClick={togglePresentationMode}
+                variant="secondary"
+                size="lg"
+                className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
+              >
+                <Minimize className="w-5 h-5 mr-2" />
+                Exit
+              </Button>
+            </div>
+          )}
+
+          {/* Setup Section (Collapsible) */}
+          {showSetup && (
+            <div className="space-y-6 mb-8 animate-scale-in">
+              {/* Name Input */}
+              <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
+                <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Add names</h2>
+                <div className="flex gap-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter name..."
+                    value={currentName}
+                    onChange={(e) => setCurrentName(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && addName()}
+                    className="text-lg border-2 border-primary/50 focus:border-primary bg-white text-card-foreground font-body placeholder:text-muted-foreground"
                   />
+                  <Button
+                    onClick={addName}
+                    className="bg-gradient-to-r from-primary to-primary/80 hover:shadow-festive transition-all text-white font-semibold"
+                    size="lg"
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    Add
+                  </Button>
+                </div>
+
+                {/* Import/Export controls for names */}
+                <div className="flex gap-3 mt-3">
                   <Button
                     type="button"
                     variant="secondary"
                     size="sm"
+                    onClick={exportNames}
                     className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
-                    onClick={() => (document.getElementById('names-import-input') as HTMLInputElement | null)?.click()}
                   >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Import
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
                   </Button>
-                </label>
-              </div>
-
-              {names.length > 0 && (
-                <div className="mt-6 space-y-2">
-                  <h3 className="font-semibold text-primary mb-3 font-elegant text-lg">
-                    Santas and Ms Claus ({names.length})
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                    {names.map((name, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 rounded-lg bg-white/80 hover:bg-white transition-all animate-scale-in border-2 border-primary/30 shadow-sm"
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                      >
-                        <span className="font-medium text-card-foreground font-body text-base">{name}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeName(name)}
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
+                  <label>
+                    <input
+                      id="names-import-input"
+                      type="file"
+                      accept="application/json"
+                      className="hidden"
+                      onChange={importNamesFromFile}
+                    />
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
+                      onClick={() => (document.getElementById('names-import-input') as HTMLInputElement | null)?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Import
+                    </Button>
+                  </label>
                 </div>
-              )}
-            </Card>
 
-            {/* Image Upload */}
-            <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Images for slideshow</h2>
-              <div className="flex gap-3 mb-4">
-                <label className="flex-1">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    id="image-upload-input"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => (document.getElementById('image-upload-input') as HTMLInputElement | null)?.click()}
-                    className="w-full bg-gradient-to-r from-secondary to-secondary/80"
-                    size="lg"
-                  >
-                    <Upload className="w-5 h-5 mr-2" />
-                    Upload pictures
-                  </Button>
-                </label>
-              </div>
-
-              {images.length > 0 && (
-                <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-48 overflow-y-auto">
-                  {images.map((img, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={img}
-                        alt={`Slide ${index + 1}`}
-                        className="w-full h-20 object-cover rounded border-2 border-primary/30"
-                      />
-                      <button
-                        onClick={() => removeImage(index)}
-                        className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          </div>
-        )}
-
-        {/* Start Button */}
-        <div className={`text-center mb-8 ${isPresentationMode ? 'mt-8' : ''}`}>
-          <button
-            ref={startBtnRef}
-            type="button"
-            className="btn-primary"
-            onClick={startSelection}
-            aria-label="Start selection (Enter / Space)"
-          >
-            Start selection
-          </button>
-        </div>
-
-        {/* Main Display with Picture Frame */}
-        <div className="relative animate-scale-in">
-          {/* Ornate Picture Frame */}
-          <div className={`relative mx-auto ${isPresentationMode ? 'max-w-7xl' : 'max-w-4xl'}`}>
-            {/* Frame Border - Multiple Layers for Ornate Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 rounded-lg shadow-2xl transform -rotate-1" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-amber-800 via-amber-600 to-amber-700 rounded-lg shadow-2xl transform rotate-1" />
-            
-            {/* Main Frame */}
-            <div className="relative bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 p-8 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-              {/* Inner Frame Detail */}
-              <div className="absolute inset-6 border-4 border-amber-900/50 rounded pointer-events-none" />
-              <div className="absolute inset-8 border-2 border-amber-400/30 rounded pointer-events-none" />
-              
-              {/* Corner Ornaments */}
-              <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-accent rounded-tl-lg" />
-              <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-accent rounded-tr-lg" />
-              <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-accent rounded-bl-lg" />
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-accent rounded-br-lg" />
-
-              {/* Content Area */}
-              <Card className={`relative flex items-center justify-center bg-gradient-to-br from-white via-amber-50 to-white shadow-inner overflow-hidden ${
-                isPresentationMode ? 'min-h-[85vh]' : 'min-h-[500px]'
-              }`}>
-                {/* Background Image Slideshow - Always visible when images exist */}
-                {images.length > 0 && (
-                  <div className="absolute inset-0">
-                    {images.map((img, index) => (
-                      <img
-                        key={index}
-                        src={img}
-                        alt={`Slide ${index + 1}`}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                          index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      />
-                    ))}
-                    
-                    {/* Slideshow Controls */}
-                    {images.length > 1 && (
-                      <>
-                        <button
-                          onClick={prevImage}
-                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                {names.length > 0 && (
+                  <div className="mt-6 space-y-2">
+                    <h3 className="font-semibold text-primary mb-3 font-elegant text-lg">
+                      Santas and Ms Claus ({names.length})
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+                      {names.map((name, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 rounded-lg bg-white/80 hover:bg-white transition-all animate-scale-in border-2 border-primary/30 shadow-sm"
+                          style={{ animationDelay: `${index * 0.05}s` }}
                         >
-                          <ChevronLeft className="w-6 h-6" />
-                        </button>
-                        <button
-                          onClick={nextImage}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
-                        >
-                          <ChevronRight className="w-6 h-6" />
-                        </button>
-                        
-                        {/* Slide Indicators */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                          {images.map((_, index) => (
-                            <button
-                              key={index}
-                              onClick={() => setCurrentImageIndex(index)}
-                              className={`w-3 h-3 rounded-full transition-all ${
-                                index === currentImageIndex
-                                  ? 'bg-white scale-125'
-                                  : 'bg-white/50 hover:bg-white/75'
-                              }`}
-                            />
-                          ))}
+                          <span className="font-medium text-card-foreground font-body text-base">{name}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeName(name)}
+                            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </div>
-                      </>
-                    )}
-                    
-                    {/* Overlay for text visibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      ))}
+                    </div>
                   </div>
                 )}
+              </Card>
 
-                {/* Winner Display */}
-                <div className="relative z-10 text-center p-12">
-                  {isSpinning ? (
-                    <div className="animate-pulse">
-                      <div className="text-8xl font-bold text-white mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
-                        {spinningName}
-                      </div>
-                      <div className="text-3xl text-white font-elegant font-semibold drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                        Selecting...
-                      </div>
-                    </div>
-                  ) : selectedName ? (
-                    <div className="animate-scale-in">
-                      <div className="text-9xl mb-8 animate-spin-slow drop-shadow-2xl">🎁</div>
-                      <div className="text-7xl font-bold text-white mb-6 font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
-                        {selectedName}
-                      </div>
-                      <div className="text-4xl text-white font-semibold font-elegant drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                        is handing out the presents! 🎅
-                      </div>
-                    </div>
-                  ) : (
-                    <div className={`text-center ${images.length > 0 ? 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]' : 'text-muted-foreground'}`}>
-                      <Gift className="w-32 h-32 mx-auto mb-8 opacity-80" />
-                      <p className="text-3xl font-elegant">
-                        {images.length > 0 
-                          ? "Click on ‘Start selection’ to begin"
-                          : "Add names and pictures, then start the selection"}
-                      </p>
-                    </div>
-                  )}
+              {/* Image Upload */}
+              <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
+                <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Images for slideshow</h2>
+                <div className="flex gap-3 mb-4">
+                  <label className="flex-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="image-upload-input"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => (document.getElementById('image-upload-input') as HTMLInputElement | null)?.click()}
+                      className="w-full bg-gradient-to-r from-secondary to-secondary/80"
+                      size="lg"
+                    >
+                      <Upload className="w-5 h-5 mr-2" />
+                      Upload pictures
+                    </Button>
+                  </label>
                 </div>
+
+                {images.length > 0 && (
+                  <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-48 overflow-y-auto">
+                    {images.map((img, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={img}
+                          alt={`Slide ${index + 1}`}
+                          className="w-full h-20 object-cover rounded border-2 border-primary/30"
+                        />
+                        <button
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </Card>
             </div>
+          )}
+
+          {/* Start Button */}
+          <div className={`text-center mb-8 ${isPresentationMode ? 'mt-8' : ''}`}>
+            <button
+              ref={startBtnRef}
+              type="button"
+              className="btn-primary"
+              onClick={startSelection}
+              aria-label="Start selection (Enter / Space)"
+            >
+              Start selection
+            </button>
           </div>
+
+          {/* Main Display with Picture Frame */}
+          <div className="relative animate-scale-in">
+            {/* Ornate Picture Frame */}
+            <div className={`relative mx-auto ${isPresentationMode ? 'max-w-7xl' : 'max-w-4xl'}`}>
+              {/* Frame Border - Multiple Layers for Ornate Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 rounded-lg shadow-2xl transform -rotate-1" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-amber-800 via-amber-600 to-amber-700 rounded-lg shadow-2xl transform rotate-1" />
+              
+              {/* Main Frame */}
+              <div className="relative bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 p-8 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+                {/* Inner Frame Detail */}
+                <div className="absolute inset-6 border-4 border-amber-900/50 rounded pointer-events-none" />
+                <div className="absolute inset-8 border-2 border-amber-400/30 rounded pointer-events-none" />
+                
+                {/* Corner Ornaments */}
+                <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-accent rounded-tl-lg" />
+                <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-accent rounded-tr-lg" />
+                <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-accent rounded-bl-lg" />
+                <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-accent rounded-br-lg" />
+
+                {/* Content Area */}
+                <Card className={`relative flex items-center justify-center bg-gradient-to-br from-white via-amber-50 to-white shadow-inner overflow-hidden ${
+                  isPresentationMode ? 'min-h-[85vh]' : 'min-h-[500px]'
+                }`}>
+                  {/* Background Image Slideshow - Always visible when images exist */}
+                  {images.length > 0 && (
+                    <div className="absolute inset-0">
+                      {images.map((img, index) => (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`Slide ${index + 1}`}
+                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                          }`}
+                        />
+                      ))}
+                      
+                      {/* Slideshow Controls */}
+                      {images.length > 1 && (
+                        <>
+                          <button
+                            onClick={prevImage}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                          >
+                            <ChevronLeft className="w-6 h-6" />
+                          </button>
+                          <button
+                            onClick={nextImage}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                          >
+                            <ChevronRight className="w-6 h-6" />
+                          </button>
+                          
+                          {/* Slide Indicators */}
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                            {images.map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => setCurrentImageIndex(index)}
+                                className={`w-3 h-3 rounded-full transition-all ${
+                                  index === currentImageIndex
+                                    ? 'bg-white scale-125'
+                                    : 'bg-white/50 hover:bg-white/75'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                      
+                      {/* Overlay for text visibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    </div>
+                  )}
+
+                  {/* Winner Display */}
+                  <div className="relative z-10 text-center p-12">
+                    {isSpinning ? (
+                      <div className="animate-pulse">
+                        <div className="text-8xl font-bold text-white mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
+                          {spinningName}
+                        </div>
+                        <div className="text-3xl text-white font-elegant font-semibold drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
+                          Selecting...
+                        </div>
+                      </div>
+                    ) : selectedName ? (
+                      <div className="animate-scale-in">
+                        <div className="text-9xl mb-8 animate-spin-slow drop-shadow-2xl">🎁</div>
+                        <div className="text-7xl font-bold text-white mb-6 font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
+                          {selectedName}
+                        </div>
+                        <div className="text-4xl text-white font-semibold font-elegant drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
+                          is handing out the presents! 🎅
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={`text-center ${images.length > 0 ? 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]' : 'text-muted-foreground'}`}>
+                        <Gift className="w-32 h-32 mx-auto mb-8 opacity-80" />
+                        <p className="text-3xl font-elegant">
+                          {images.length > 0 
+                            ? "Click on ‘Start selection’ to begin"
+                            : "Add names and pictures, then start the selection"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          {!isPresentationMode && (
+            <div className="text-center mt-8 text-white/90 animate-fade-in font-elegant text-xl drop-shadow-lg">
+              <p>✨ Merry Christmas! 🎄✨</p>
+            </div>
+          )}
         </div>
 
-        {/* Footer */}
-        {!isPresentationMode && (
-          <div className="text-center mt-8 text-white/90 animate-fade-in font-elegant text-xl drop-shadow-lg">
-            <p>✨ Merry Christmas! 🎄✨</p>
-          </div>
-        )}
+        {/* CSS for snowflake animation (fixed rule; per-element duration set inline) */}
+        <style>{`
+          @keyframes fall {
+            0% {
+              top: -10%;
+              transform: translateX(0) rotate(0deg);
+            }
+            100% {
+              top: 100%;
+              transform: translateX(100px) rotate(360deg);
+            }
+          }
+          .animate-fall {
+            animation: fall linear infinite;
+            animation-duration: 8s; /* constant duration so flakes always fall */
+          }
+        `}</style>
       </div>
-
-      {/* CSS for snowflake animation (fixed rule; per-element duration set inline) */}
-      <style>{`
-        @keyframes fall {
-          0% {
-            top: -10%;
-            transform: translateX(0) rotate(0deg);
-          }
-          100% {
-            top: 100%;
-            transform: translateX(100px) rotate(360deg);
-          }
-        }
-        .animate-fall {
-          animation: fall linear infinite;
-          animation-duration: 8s; /* constant duration so flakes always fall */
-        }
-      `}</style>
-    </div>
+    </FitToViewport>
   );
 };
 
