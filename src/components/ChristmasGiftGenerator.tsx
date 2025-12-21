@@ -285,7 +285,6 @@ export const ChristmasGiftGenerator = () => {
 
       <FitToViewport enabled={isPresentationMode} stageRef={presentationRef}>
         <div
-          ref={presentationRef}
           className={`min-h-screen relative overflow-hidden ${isPresentationMode ? "presentation" : ""}`}
           style={{
             backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${christmasBackground})`,
