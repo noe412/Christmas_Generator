@@ -273,7 +273,7 @@ html, body, #root {
   background-position: center;
 }
 
-/* Ensure inner main frame stretches in presentation mode */
+/* Ensure inner main frame stretches in presentation mode 
 .presentation .relative.mx-auto,
 .presentation .mx-auto,
 .presentation .max-w-7xl,
@@ -282,4 +282,4 @@ html, body, #root {
   max-width: none !important;
   width: 100% !important;
   transform: none !important;
-}
+}*/
