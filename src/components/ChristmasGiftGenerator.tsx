@@ -32,6 +32,7 @@ const Snowflake = ({ delay }: { delay: number }) => (
 
 export const ChristmasGiftGenerator = () => {
   const presentationRef = useRef<HTMLDivElement | null>(null);
+  const startBtnRef = useRef<HTMLButtonElement | null>(null);
   const [names, setNames] = useState<string[]>([]);
   const [currentName, setCurrentName] = useState("");
   const [isSpinning, setIsSpinning] = useState(false);
@@ -252,6 +253,27 @@ export const ChristmasGiftGenerator = () => {
     return () => document.removeEventListener("fullscreenchange", onFsChange);
   }, []);
 
+  // Start über Enter / Space erlauben (außer wenn man gerade ein Input/textarea fokussiert)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const active = document.activeElement;
+      const inInput =
+        active && (
+          active.tagName === "INPUT" ||
+          active.tagName === "TEXTAREA" ||
+          (active as HTMLElement).isContentEditable
+        );
+      if (inInput) return;
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        // Verhindere Scroll bei Space
+        e.preventDefault();
+        startBtnRef.current?.click();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <div 
       ref={presentationRef}
@@ -469,17 +491,14 @@ export const ChristmasGiftGenerator = () => {
 
         {/* Start Button */}
         <div className={`text-center mb-8 ${isPresentationMode ? 'mt-8' : ''}`}>
-          <Button
+          <button
+            ref={startBtnRef}
+            className="btn-primary"
             onClick={startSelection}
-            disabled={isSpinning || names.length === 0}
-            size="lg"
-            className={`bg-gradient-to-r from-accent to-accent/80 hover:shadow-gold text-foreground transition-all font-christmas shadow-2xl ${
-              isPresentationMode ? 'text-3xl px-20 py-10' : 'text-2xl px-16 py-8'
-            } animate-glow`}
+            aria-label="Start selection (Enter / Space)"
           >
-            <Play className={`mr-3 ${isPresentationMode ? 'w-10 h-10' : 'w-8 h-8'}`} />
-            {isSpinning ? "Selecting..." : "Start selection"}
-          </Button>
+            Start selection
+          </button>
         </div>
 
         {/* Main Display with Picture Frame */}
