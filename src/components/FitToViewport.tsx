@@ -5,12 +5,19 @@ export function FitToViewport({
   stageRef,
   children,
   innerSelector = ".inner-frame",
+  manualAdjustable,
+  initialManualScale,
 }: {
   enabled?: boolean;
   stageRef?: RefObject<HTMLDivElement>;
   children: React.ReactNode;
   innerSelector?: string;
+  manualAdjustable?: boolean;
+  initialManualScale?: number;
 }) {
+  // Optional: allow manual scale adjustments via a small UI overlay.
+  // If you want the user to manually tweak size, pass `manualAdjustable={true}`
+  // and optionally `initialManualScale` via props in future extensions.
   const localStageRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(1);
@@ -24,6 +31,8 @@ export function FitToViewport({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(() =>
     typeof document !== "undefined" ? !!document.fullscreenElement : false
   );
+  // Manual scale state (user-adjustable). Default 1 (no change).
+  const [manualScale, setManualScale] = useState<number>(() => initialManualScale ?? 1);
 
   const usedStageRef = stageRef ?? localStageRef;
   const originalTransforms = useRef(new Map<Element, string>());
@@ -93,6 +102,9 @@ export function FitToViewport({
     };
   }, [enabled, usedStageRef]);
 
+  // appliedScale = automatic scale * manual user multiplier
+  const appliedScale = Math.max(0.1, Math.min(scale * manualScale, 1));
+
   useEffect(() => {
     if (!enabled) return;
 
@@ -107,7 +119,7 @@ export function FitToViewport({
       }
     });
 
-    if (scale === 1) {
+    if (appliedScale === 1) {
       nodes.forEach((el) => {
         if (originalTransforms.current.has(el)) {
           (el as HTMLElement).style.transform = originalTransforms.current.get(el) || "";
@@ -122,13 +134,13 @@ export function FitToViewport({
         originalTransforms.current.set(el, (el as HTMLElement).style.transform || "");
       }
       (el as HTMLElement).style.transformOrigin = (el as HTMLElement).style.transformOrigin || "top left";
-      (el as HTMLElement).style.transform = `scale(${1 / scale})`;
+      (el as HTMLElement).style.transform = `scale(${1 / appliedScale})`;
     });
 
     return () => {
       /* restored on disable */
     };
-  }, [enabled, scale, usedStageRef, innerSelector]);
+  }, [enabled, appliedScale, usedStageRef, innerSelector]);
 
   if (!enabled) return <>{children}</>;
 
@@ -151,9 +163,48 @@ export function FitToViewport({
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
+      {manualAdjustable && enabled && (
+        <div
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            background: "rgba(0,0,0,0.6)",
+            color: "#fff",
+            padding: "6px 8px",
+            borderRadius: 8,
+            zIndex: 10001,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 12,
+          }}
+        >
+          <label style={{display: "flex", alignItems: "center", gap: 6}}>
+            <span style={{minWidth: 36, textAlign: "right"}}>{Math.round(manualScale * 100)}%</span>
+          </label>
+          <input
+            aria-label="Adjust size"
+            type="range"
+            min={0.5}
+            max={1.5}
+            step={0.01}
+            value={manualScale}
+            onChange={(e) => setManualScale(Number(e.target.value))}
+            style={{width: 120}}
+          />
+          <button
+            onClick={() => setManualScale(1)}
+            style={{background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", padding: "4px 6px", borderRadius: 6, cursor: "pointer"}}
+          >
+            Reset
+          </button>
+        </div>
+      )}
+
       <div
         style={{
-          transform: `scale(${scale})`,
+          transform: `scale(${appliedScale})`,
           transformOrigin: "top left",
           width: "max-content",
           height: "max-content",
