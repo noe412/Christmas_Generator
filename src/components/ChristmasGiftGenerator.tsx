@@ -264,12 +264,12 @@ export const ChristmasGiftGenerator = () => {
             <div className="flex items-center justify-center gap-4 mb-4">
               <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
               <h1 className="text-6xl md:text-7xl font-bold font-christmas text-white drop-shadow-[0_0_20px_rgba(255,215,0,0.9)]">
-                Weihnachts-Geschenke-Generator
+                Who Is Santa’s Helper?
               </h1>
               <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
             </div>
             <p className="text-white/90 text-2xl font-elegant drop-shadow-lg">
-              Wer verteilt die Geschenke? 🎅
+              Who’s giving, who’s getting?
             </p>
           </div>
         )}
