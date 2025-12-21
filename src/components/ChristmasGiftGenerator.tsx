@@ -97,8 +97,8 @@ export const ChristmasGiftGenerator = () => {
       setNames([...names, currentName.trim()]);
       setCurrentName("");
       toast({
-        title: "Name hinzugefügt!",
-        description: `${currentName.trim()} wurde zur Liste hinzugefügt.`,
+        title: "Name added!",
+        description: `${currentName.trim()} was added to the list.`,
       });
     }
   };
@@ -106,8 +106,8 @@ export const ChristmasGiftGenerator = () => {
   const removeName = (nameToRemove: string) => {
     setNames(names.filter(name => name !== nameToRemove));
     toast({
-      title: "Name entfernt",
-      description: `${nameToRemove} wurde aus der Liste entfernt.`,
+      title: "Name removed",
+      description: `${nameToRemove} was removed from the list.`,
     });
   };
 
@@ -124,8 +124,8 @@ export const ChristmasGiftGenerator = () => {
         reader.readAsDataURL(file);
       });
       toast({
-        title: "Bilder hinzugefügt!",
-        description: `${files.length} Bild(er) zur Diashow hinzugefügt.`,
+        title: "Pictures added!",
+        description: `${files.length} picture(s) added to the slideshow.`,
       });
     }
   };
@@ -179,8 +179,8 @@ export const ChristmasGiftGenerator = () => {
   const startSelection = () => {
     if (names.length === 0) {
       toast({
-        title: "Keine Namen vorhanden",
-        description: "Bitte füge mindestens einen Namen hinzu.",
+        title: "No names available",
+        description: "Please add at least one name.",
         variant: "destructive",
       });
       return;
@@ -208,8 +208,8 @@ export const ChristmasGiftGenerator = () => {
         setNames((prev) => prev.filter((n) => n !== finalName));
         
         toast({
-          title: "🎁 Gewinner ausgewählt!",
-          description: `${finalName} verteilt die Geschenke!`,
+          title: "🎁 Winner selected!",
+          description: `${finalName} is handing out the presents!`,
         });
       }
     }, SPIN_STEP_MS);
@@ -286,12 +286,12 @@ export const ChristmasGiftGenerator = () => {
               {showSetup ? (
                 <>
                   <X className="w-5 h-5 mr-2" />
-                  Setup ausblenden
+                  Hide Setup
                 </>
               ) : (
                 <>
                   <Settings className="w-5 h-5 mr-2" />
-                  Setup anzeigen
+                  Show Setup
                 </>
               )}
             </Button>
@@ -302,7 +302,7 @@ export const ChristmasGiftGenerator = () => {
               className="bg-accent/80 hover:bg-accent text-foreground backdrop-blur-md border-2 border-accent shadow-xl font-semibold"
             >
               <Maximize className="w-5 h-5 mr-2" />
-              Präsentationsmodus
+              Presentation mode
             </Button>
           </div>
         )}
@@ -317,7 +317,7 @@ export const ChristmasGiftGenerator = () => {
               className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
             >
               <Minimize className="w-5 h-5 mr-2" />
-              Beenden
+              Exit
             </Button>
           </div>
         )}
@@ -327,11 +327,11 @@ export const ChristmasGiftGenerator = () => {
           <div className="space-y-6 mb-8 animate-scale-in">
             {/* Name Input */}
             <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Namen hinzufügen</h2>
+              <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Add names</h2>
               <div className="flex gap-3">
                 <Input
                   type="text"
-                  placeholder="Name eingeben..."
+                  placeholder="Enter name..."
                   value={currentName}
                   onChange={(e) => setCurrentName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && addName()}
@@ -343,7 +343,7 @@ export const ChristmasGiftGenerator = () => {
                   size="lg"
                 >
                   <Plus className="w-5 h-5 mr-2" />
-                  Hinzufügen
+                  Add
                 </Button>
               </div>
 
@@ -357,7 +357,7 @@ export const ChristmasGiftGenerator = () => {
                   className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  Exportieren
+                  Export
                 </Button>
                 <label>
                   <input
@@ -375,7 +375,7 @@ export const ChristmasGiftGenerator = () => {
                     onClick={() => (document.getElementById('names-import-input') as HTMLInputElement | null)?.click()}
                   >
                     <Upload className="w-4 h-4 mr-2" />
-                    Importieren
+                    Import
                   </Button>
                 </label>
               </div>
@@ -428,7 +428,7 @@ export const ChristmasGiftGenerator = () => {
                     size="lg"
                   >
                     <Upload className="w-5 h-5 mr-2" />
-                    Bilder hochladen
+                    Upload pictures
                   </Button>
                 </label>
               </div>
@@ -467,7 +467,7 @@ export const ChristmasGiftGenerator = () => {
             } animate-glow`}
           >
             <Play className={`mr-3 ${isPresentationMode ? 'w-10 h-10' : 'w-8 h-8'}`} />
-            {isSpinning ? "Wird ausgewählt..." : "Auswahl starten"}
+            {isSpinning ? "Selecting..." : "Start selection"}
           </Button>
         </div>
 
@@ -555,7 +555,7 @@ export const ChristmasGiftGenerator = () => {
                         {spinningName}
                       </div>
                       <div className="text-3xl text-white font-elegant font-semibold drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                        Wird ausgewählt...
+                        Selecting...
                       </div>
                     </div>
                   ) : selectedName ? (
@@ -565,7 +565,7 @@ export const ChristmasGiftGenerator = () => {
                         {selectedName}
                       </div>
                       <div className="text-4xl text-white font-semibold font-elegant drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                        verteilt die Geschenke! 🎅
+                        is handing out the presents! 🎅
                       </div>
                     </div>
                   ) : (
@@ -573,8 +573,8 @@ export const ChristmasGiftGenerator = () => {
                       <Gift className="w-32 h-32 mx-auto mb-8 opacity-80" />
                       <p className="text-3xl font-elegant">
                         {images.length > 0 
-                          ? "Klicke auf 'Auswahl starten' um zu beginnen"
-                          : "Füge Namen und Bilder hinzu, dann starte die Auswahl"}
+                          ? "Click on ‘Start selection’ to begin"
+                          : "Add names and pictures, then start the selection"}
                       </p>
                     </div>
                   )}
@@ -587,7 +587,7 @@ export const ChristmasGiftGenerator = () => {
         {/* Footer */}
         {!isPresentationMode && (
           <div className="text-center mt-8 text-white/90 animate-fade-in font-elegant text-xl drop-shadow-lg">
-            <p>✨ Frohe Weihnachten! 🎄✨</p>
+            <p>✨ Merry Christmas! 🎄✨</p>
           </div>
         )}
       </div>
