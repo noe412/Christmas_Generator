@@ -268,7 +268,7 @@ export const ChristmasGiftGenerator = () => {
         <Snowflake key={i} delay={i * 0.5} />
       )), [])}
 
-      <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl">
+      <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl inner-frame">
         {/* Header */}
         {!isPresentationMode && (
           <div className="text-center mb-8 animate-fade-in">
