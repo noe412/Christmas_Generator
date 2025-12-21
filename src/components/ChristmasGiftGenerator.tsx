@@ -256,17 +256,17 @@ export const ChristmasGiftGenerator = () => {
   // Start über Enter / Space erlauben (außer wenn man gerade ein Input/textarea fokussiert)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const active = document.activeElement;
+      const active = document.activeElement as HTMLElement | null;
       const inInput =
-        active && (
+        !!active && (
           active.tagName === "INPUT" ||
           active.tagName === "TEXTAREA" ||
-          (active as HTMLElement).isContentEditable
+          active.isContentEditable
         );
       if (inInput) return;
-      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-        // Verhindere Scroll bei Space
-        e.preventDefault();
+      // use keydown and check Enter or Space (e.code für Konsistenz)
+      if (e.key === "Enter" || e.code === "Space") {
+        e.preventDefault(); // verhindert Scroll bei Space
         startBtnRef.current?.click();
       }
     };
@@ -493,6 +493,7 @@ export const ChristmasGiftGenerator = () => {
         <div className={`text-center mb-8 ${isPresentationMode ? 'mt-8' : ''}`}>
           <button
             ref={startBtnRef}
+            type="button"
             className="btn-primary"
             onClick={startSelection}
             aria-label="Start selection (Enter / Space)"
