@@ -565,19 +565,19 @@ export const ChristmasGiftGenerator = () => {
                           <>
                             <button
                               onClick={prevImage}
-                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10"
                             >
                               <ChevronLeft className="w-6 h-6" />
                             </button>
                             <button
                               onClick={nextImage}
-                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10"
                             >
                               <ChevronRight className="w-6 h-6" />
                             </button>
                             
                             {/* Slide Indicators */}
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                               {images.map((_, index) => (
                                 <button
                                   key={index}
@@ -594,7 +594,7 @@ export const ChristmasGiftGenerator = () => {
                         )}
                         
                         {/* Overlay for text visibility */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                       </div>
                     )}
 
