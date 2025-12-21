@@ -22,13 +22,8 @@ export function FitToViewport({
   const originalTransforms = useRef(new Map<Element, string>());
 
   // helper to get accurate viewport height (uses visualViewport when available)
-  const getViewportHeight = () => {
-    // visualViewport gives the area excluding on-screen UI like address bar
-    // fallback to window.innerHeight
-    // convert to number
-    // prefer integer to avoid sub-pixel layout shifts
-    return Math.max(0, Math.floor((window.visualViewport?.height ?? window.innerHeight) || 0));
-  };
+  const getViewportHeight = () =>
+    Math.max(0, Math.floor((window.visualViewport?.height ?? window.innerHeight) || 0));
 
   useEffect(() => {
     if (!enabled) {
@@ -117,7 +112,7 @@ export function FitToViewport({
       if (!originalTransforms.current.has(el)) {
         originalTransforms.current.set(el, (el as HTMLElement).style.transform || "");
       }
-      (el as HTMLElement).style.transformOrigin = (el as HTMLElement).style.transformOrigin || "top left";
+      (el as HTMLElement).style.transformOrigin = (el as HTMLElement).style.transformOrigin || "center top";
       (el as HTMLElement).style.transform = `scale(${1 / scale})`;
     });
   }, [enabled, scale, usedStageRef, innerSelector]);
@@ -136,16 +131,29 @@ export function FitToViewport({
 
   return (
     <div ref={usedStageRef as any} style={stageStyle}>
+      {/* center the scaled content so it won't stick to top-left and be clipped on some devices */}
       <div
         style={{
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
-          width: "max-content",
-          height: "max-content",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
         }}
-        ref={contentRef as any}
       >
-        {children}
+        <div
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: "center top",
+            display: "inline-block",
+            width: "max-content",
+            height: "max-content",
+          }}
+          ref={contentRef as any}
+        >
+          {children}
+        </div>
       </div>
 
       {overlay ? (
