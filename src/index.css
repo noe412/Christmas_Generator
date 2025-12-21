@@ -303,5 +303,26 @@ html, body, #root {
   }
 }
 
-/* DO NOT force .max-w-6xl / .mx-auto children to width:100% here.
-   Keep the inner frame (mx-auto max-w-6xl) unchanged so its size stays the same. */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+/* Fullscreen container helper */
+.app-fullscreen {
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+@media (orientation: landscape) {
+  .presentation {
+    font-size: 1.2em;
+  }
+}
+
