@@ -529,7 +529,7 @@ export const ChristmasGiftGenerator = () => {
             {/* Main Display with Picture Frame */}
             <div className="relative animate-scale-in">
               {/* Ornate Picture Frame */}
-              <div className={`relative mx-auto ${isPresentationMode ? 'max-w-5xl' : 'max-w-4xl'}`}>
+              <div className={`relative mx-auto ${isPresentationMode ? 'max-w-4xl' : 'max-w-4xl'}`}>
                 {/* Frame Border - Multiple Layers for Ornate Effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 rounded-lg shadow-2xl transform -rotate-1" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-amber-800 via-amber-600 to-amber-700 rounded-lg shadow-2xl transform rotate-1" />
@@ -548,7 +548,7 @@ export const ChristmasGiftGenerator = () => {
 
                   {/* Content Area */}
                   <Card className={`relative flex items-center justify-center bg-gradient-to-br from-white via-amber-50 to-white shadow-inner overflow-hidden ${
-                    isPresentationMode ? 'min-h-[52vh]' : 'min-h-[500px]'
+                    isPresentationMode ? 'min-h-[62vh]' : 'min-h-[500px]'
                   }`}>
                     {/* Background Image Slideshow - Always visible when images exist */}
                     {images.length > 0 && (
