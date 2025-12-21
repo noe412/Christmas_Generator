@@ -280,5 +280,28 @@ html, body, #root {
   background-position: center;
 }
 
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-2 rounded-md font-semibold shadow-lg focus:outline-none;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.9));
+    color: hsl(var(--primary-foreground));
+    transition: var(--transition-smooth);
+  }
+
+  .btn-primary:hover {
+    filter: brightness(0.95);
+  }
+
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
 /* DO NOT force .max-w-6xl / .mx-auto children to width:100% here.
    Keep the inner frame (mx-auto max-w-6xl) unchanged so its size stays the same. */
