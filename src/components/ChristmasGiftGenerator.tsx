@@ -548,7 +548,7 @@ export const ChristmasGiftGenerator = () => {
 
                   {/* Content Area */}
                   <Card className={`relative flex items-center justify-center bg-gradient-to-br from-white via-amber-50 to-white shadow-inner overflow-hidden ${
-                    isPresentationMode ? 'min-h-[72vh]' : 'min-h-[500px]'
+                    isPresentationMode ? 'min-h-[52vh]' : 'min-h-[500px]'
                   }`}>
                     {/* Background Image Slideshow - Always visible when images exist */}
                     {images.length > 0 && (
