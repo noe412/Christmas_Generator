@@ -272,6 +272,7 @@ export const ChristmasGiftGenerator = () => {
   return (
     <FitToViewport enabled={isPresentationMode} stageRef={presentationRef}>
       <div
+        ref={presentationRef}
         className={`min-h-screen relative overflow-hidden ${isPresentationMode ? "presentation" : ""}`}
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${christmasBackground})`,
@@ -280,6 +281,18 @@ export const ChristmasGiftGenerator = () => {
           backgroundAttachment: 'fixed',
         }}
       >
+        {/* Exit-Button nur im Präsentationsmodus */}
+        {isPresentationMode && (
+          <button
+            type="button"
+            onClick={togglePresentationMode}
+            aria-label="Beende Präsentation"
+            className="fixed top-4 right-4 z-50 btn-primary"
+          >
+            Beenden
+          </button>
+        )}
+
         {/* Snowflakes (memoized to avoid re-renders during selection) */}
         {useMemo(() => Array.from({ length: 80 }).map((_, i) => (
           <Snowflake key={i} delay={i * 0.5} />
