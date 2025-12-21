@@ -24,7 +24,11 @@ const Snowflake = ({ delay }: { delay: number }) => (
       left: `${Math.random() * 100}%`,
       top: `-10%`,
       animationDelay: `-${delay}s`,
+      // Slightly shorter duration with GPU hint for smoother mobile playback
+      animationDuration: `${6 + Math.random() * 2}s`,
       fontSize: `${Math.random() * 10 + 10}px`,
+      transform: "translateZ(0)",
+      willChange: "transform",
     }}
   >
     ❄
