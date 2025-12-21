@@ -14,6 +14,7 @@ export function FitToViewport({
   const localStageRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [scale, setScale] = useState(1);
+  const [vh, setVh] = useState<number>(() => (typeof window !== "undefined" ? window.innerHeight : 0));
 
   const usedStageRef = stageRef ?? localStageRef;
   const originalTransforms = useRef(new Map<Element, string>());
@@ -41,19 +42,26 @@ export function FitToViewport({
 
       const s = Math.min(stageRect.width / cw, stageRect.height / ch, 1);
       setScale(s);
+      // Keep a pinned viewport height (in pixels) to avoid mobile browser UI/toolbars
+      // shrinking/expanding the visible area and cutting off content in fullscreen.
+      // Using window.innerHeight is more reliable than 100vh / 100dvh on many tablets.
+      setVh(window.innerHeight || Math.round(stageRect.height));
     };
 
     calc();
     const ro = new ResizeObserver(calc);
     if (usedStageRef.current) ro.observe(usedStageRef.current);
     if (contentRef.current) ro.observe(contentRef.current);
-    window.addEventListener("orientationchange", calc);
-    window.addEventListener("fullscreenchange", calc);
+  window.addEventListener("orientationchange", calc);
+  window.addEventListener("fullscreenchange", calc);
+  // also update on resize (covers some browser UI changes)
+  window.addEventListener("resize", calc);
 
     return () => {
       ro.disconnect();
       window.removeEventListener("orientationchange", calc);
       window.removeEventListener("fullscreenchange", calc);
+      window.removeEventListener("resize", calc);
     };
   }, [enabled, usedStageRef]);
 
@@ -101,9 +109,12 @@ export function FitToViewport({
       ref={usedStageRef as any}
       style={{
         width: "100vw",
-        height: "100dvh",
+        // Use a pixel height derived from window.innerHeight to avoid mobile
+        // browser UI (address/toolbars) causing the bottom to be clipped.
+        height: vh ? `${vh}px` : "100dvh",
         overflow: "hidden",
         position: "relative",
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
       <div
