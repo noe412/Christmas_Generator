@@ -23,10 +23,8 @@ export function FitToViewport({ enabled = false, stageRef, children }: FitToView
   const [vh, setVh] = useState(getViewportHeight);
 
   useEffect(() => {
-    if (!enabled) {
-      setScale(1);
-      return;
-    }
+    // Scale is only applied while enabled; it is recomputed on every activation.
+    if (!enabled) return;
 
     const calc = () => {
       const stage = usedStageRef.current;

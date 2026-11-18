@@ -15,21 +15,22 @@ let slideCounter = 0;
  */
 export function useSlideshow() {
   const [slides, setSlides] = useState<Slide[]>([]);
-  const [index, setIndex] = useState(0);
+  const [rawIndex, setIndex] = useState(0);
+  // Clamp during render instead of syncing state in an effect (e.g. after the last slide was removed).
+  const index = slides.length ? Math.min(rawIndex, slides.length - 1) : 0;
   const slidesRef = useRef(slides);
-  slidesRef.current = slides;
+
+  useEffect(() => {
+    slidesRef.current = slides;
+  }, [slides]);
 
   useEffect(() => () => slidesRef.current.forEach((s) => URL.revokeObjectURL(s.url)), []);
 
   useEffect(() => {
     if (slides.length < 2) return;
-    const timer = window.setInterval(() => setIndex((prev) => (prev + 1) % slides.length), APP_CONFIG.slideIntervalMs);
+    const timer = window.setInterval(() => setIndex((index + 1) % slides.length), APP_CONFIG.slideIntervalMs);
     return () => window.clearInterval(timer);
   }, [slides.length, index]);
-
-  useEffect(() => {
-    if (index >= slides.length && slides.length > 0) setIndex(slides.length - 1);
-  }, [index, slides.length]);
 
   /** Adds valid image files; returns the number of files that were accepted. */
   const addFiles = useCallback((files: Iterable<File>): number => {
@@ -44,17 +45,15 @@ export function useSlideshow() {
   }, []);
 
   const remove = useCallback((id: string) => {
-    setSlides((prev) => {
-      const target = prev.find((s) => s.id === id);
-      if (target) URL.revokeObjectURL(target.url);
-      return prev.filter((s) => s.id !== id);
-    });
+    const target = slidesRef.current.find((s) => s.id === id);
+    if (target) URL.revokeObjectURL(target.url);
+    setSlides((prev) => prev.filter((s) => s.id !== id));
   }, []);
 
-  const next = useCallback(() => setIndex((p) => (slides.length ? (p + 1) % slides.length : 0)), [slides.length]);
+  const next = useCallback(() => setIndex(slides.length ? (index + 1) % slides.length : 0), [index, slides.length]);
   const prev = useCallback(
-    () => setIndex((p) => (slides.length ? (p - 1 + slides.length) % slides.length : 0)),
-    [slides.length],
+    () => setIndex(slides.length ? (index - 1 + slides.length) % slides.length : 0),
+    [index, slides.length],
   );
 
   return { slides, index, setIndex, next, prev, addFiles, remove };

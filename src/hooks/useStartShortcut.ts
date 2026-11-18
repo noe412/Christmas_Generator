@@ -8,7 +8,10 @@ const INTERACTIVE = new Set(["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"]);
  */
 export function useStartShortcut(callback: () => void) {
   const callbackRef = useRef(callback);
-  callbackRef.current = callback;
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
