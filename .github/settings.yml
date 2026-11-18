@@ -1,0 +1,16 @@
+# Repository metadata (declarative).
+# Applied automatically when the "Settings" GitHub App (probot/settings) is installed;
+# otherwise copy the values into GitHub → Repository → ⚙ About.
+repository:
+  name: Christmas_Generator
+  description: "🎁 Fair, festive random draw that decides who hands out the Christmas presents – React + Vite SPA, 100 % client-side, presentation mode, slideshow & jingles."
+  homepage: https://noe412.github.io/Christmas_Generator/
+  topics: christmas, gift-generator, random-picker, raffle, secret-santa, react, typescript, vite, tailwindcss, github-pages, spa, privacy-friendly
+  has_issues: true
+  has_wiki: false
+  has_projects: false
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  delete_branch_on_merge: true

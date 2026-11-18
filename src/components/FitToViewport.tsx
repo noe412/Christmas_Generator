@@ -1,24 +1,26 @@
-import React, { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 
-export function FitToViewport({
-  enabled,
-  stageRef,
-  children,
-}: {
+interface FitToViewportProps {
+  /** When false, children are rendered unchanged. */
   enabled?: boolean;
+  /** Optional external ref to the stage element (used as fullscreen target). */
   stageRef?: RefObject<HTMLDivElement>;
-  children: React.ReactNode;
-}) {
-  const localStageRef = useRef<HTMLDivElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const getViewportHeight = () => {
-    if (typeof window === "undefined") return 0;
-    return window.visualViewport?.height ?? window.innerHeight ?? 0;
-  };
-  const [scale, setScale] = useState(1);
-  const [vh, setVh] = useState<number>(() => getViewportHeight());
+  children: ReactNode;
+}
 
+const getViewportHeight = () =>
+  typeof window === "undefined" ? 0 : (window.visualViewport?.height ?? window.innerHeight ?? 0);
+
+/**
+ * Uniformly scales its content down so it always fits the visible viewport.
+ * Pins the stage height in pixels to avoid mobile browser toolbars clipping content.
+ */
+export function FitToViewport({ enabled = false, stageRef, children }: FitToViewportProps) {
+  const localStageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const usedStageRef = stageRef ?? localStageRef;
+  const [scale, setScale] = useState(1);
+  const [vh, setVh] = useState(getViewportHeight);
 
   useEffect(() => {
     if (!enabled) {
@@ -30,21 +32,11 @@ export function FitToViewport({
       const stage = usedStageRef.current;
       const content = contentRef.current;
       if (!stage || !content) return;
-
       const stageRect = stage.getBoundingClientRect();
-      const contentRect = content.getBoundingClientRect();
-
-      const cw = content.scrollWidth || contentRect.width;
-      const ch = content.scrollHeight || contentRect.height;
-
-      // Compute a uniform scale so the entire content fits inside the stage
-      // without inverting or compensating any inner elements. This avoids
-      // clipping where parts of the content would overflow after inverse
-      // transforms.
-      const s = Math.min(stageRect.width / cw, stageRect.height / ch, 1);
-      setScale(s);
-      // Keep a pinned viewport height (in pixels) to avoid mobile browser UI/toolbars
-      // shrinking/expanding the visible area and cutting off content in fullscreen.
+      const cw = content.scrollWidth || content.getBoundingClientRect().width;
+      const ch = content.scrollHeight || content.getBoundingClientRect().height;
+      if (!cw || !ch) return;
+      setScale(Math.min(stageRect.width / cw, stageRect.height / ch, 1));
       setVh(getViewportHeight() || Math.round(stageRect.height));
     };
 
@@ -52,23 +44,17 @@ export function FitToViewport({
     const ro = new ResizeObserver(calc);
     if (usedStageRef.current) ro.observe(usedStageRef.current);
     if (contentRef.current) ro.observe(contentRef.current);
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", calc);
-      window.visualViewport.addEventListener("scroll", calc);
-    }
-    window.addEventListener("orientationchange", calc);
-    window.addEventListener("fullscreenchange", calc);
-    window.addEventListener("resize", calc);
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", calc);
+    vv?.addEventListener("scroll", calc);
+    const winEvents = ["orientationchange", "fullscreenchange", "resize"] as const;
+    winEvents.forEach((evt) => window.addEventListener(evt, calc));
 
     return () => {
       ro.disconnect();
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", calc);
-        window.visualViewport.removeEventListener("scroll", calc);
-      }
-      window.removeEventListener("orientationchange", calc);
-      window.removeEventListener("fullscreenchange", calc);
-      window.removeEventListener("resize", calc);
+      vv?.removeEventListener("resize", calc);
+      vv?.removeEventListener("scroll", calc);
+      winEvents.forEach((evt) => window.removeEventListener(evt, calc));
     };
   }, [enabled, usedStageRef]);
 
@@ -76,11 +62,9 @@ export function FitToViewport({
 
   return (
     <div
-      ref={usedStageRef as any}
+      ref={usedStageRef}
       style={{
         width: "100vw",
-        // Use a pixel height derived from window.innerHeight to avoid mobile
-        // browser UI (address/toolbars) causing the bottom to be clipped.
         height: vh ? `${vh}px` : "100dvh",
         overflow: "hidden",
         position: "relative",
@@ -88,13 +72,13 @@ export function FitToViewport({
       }}
     >
       <div
+        ref={contentRef}
         style={{
           transform: `scale(${scale})`,
           transformOrigin: "top left",
           width: "max-content",
           height: "max-content",
         }}
-        ref={contentRef as any}
       >
         {children}
       </div>
