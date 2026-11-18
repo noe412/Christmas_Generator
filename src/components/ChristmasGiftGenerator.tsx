@@ -1,295 +1,68 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
+import { Maximize, Minimize, Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { Gift, Plus, Trash2, Play, Settings, X, ChevronLeft, ChevronRight, Upload, Maximize, Minimize, Download } from "lucide-react";
 import christmasBackground from "@/assets/christmas-background.jpg";
+import { AppHeader } from "./AppHeader";
+import { DrawStage } from "./DrawStage";
 import { FitToViewport } from "./FitToViewport";
-// Build the jingle list dynamically from the sounds folder
-// This prevents build errors if individual files are added/removed.
-const soundModules = import.meta.glob("@/assets/sounds/*.mp3", {
-  eager: true,
-  import: "default",
-}) as Record<string, string>;
+import { ParticipantsPanel } from "./ParticipantsPanel";
+import { SlideshowPanel } from "./SlideshowPanel";
+import { Snowfall } from "./Snowfall";
+import { useDraw } from "@/hooks/useDraw";
+import { useJinglePlayer } from "@/hooks/useJinglePlayer";
+import { useParticipants } from "@/hooks/useParticipants";
+import { usePresentationMode } from "@/hooks/usePresentationMode";
+import { useSlideshow } from "@/hooks/useSlideshow";
+import { useStartShortcut } from "@/hooks/useStartShortcut";
+import { cn } from "@/lib/utils";
 
-// Disable in-app pop-up notifications (toast no-op)
-const toast = (..._args: unknown[]) => {};
+const glassBtn = "border-2 border-white/30 bg-white/20 text-white shadow-xl backdrop-blur-md hover:bg-white/30";
 
-const JINGLE_SOUNDS: string[] = Object.values(soundModules);
-
-const Snowflake = ({ delay }: { delay: number }) => (
-  <div
-    className="absolute text-white/80 animate-fall pointer-events-none"
-    style={{
-      left: `${Math.random() * 100}%`,
-      top: `-10%`,
-      animationDelay: `-${delay}s`,
-      // Slightly shorter duration with GPU hint for smoother mobile playback
-      animationDuration: `${6 + Math.random() * 2}s`,
-      fontSize: `${Math.random() * 10 + 10}px`,
-      transform: "translateZ(0)",
-      willChange: "transform",
-    }}
-  >
-    ❄
-  </div>
-);
-
-export const ChristmasGiftGenerator = () => {
-  const presentationRef = useRef<HTMLDivElement | null>(null);
-  const startBtnRef = useRef<HTMLButtonElement | null>(null);
-  const [names, setNames] = useState<string[]>([]);
-  const [currentName, setCurrentName] = useState("");
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [selectedName, setSelectedName] = useState("");
-  const [spinningName, setSpinningName] = useState("");
-  const [audio] = useState(() => new Audio());
+/** Root feature component: composes participants, slideshow, draw and presentation mode. */
+export function ChristmasGiftGenerator() {
+  const stageRef = useRef<HTMLDivElement>(null);
   const [showSetup, setShowSetup] = useState(true);
-  const [images, setImages] = useState<string[]>([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isPresentationMode, setIsPresentationMode] = useState(false);
 
-  const NAMES_STORAGE_KEY = "christmas_gift_generator_names_v1";
+  const participants = useParticipants();
+  const slideshow = useSlideshow();
+  const { playRandom, stop } = useJinglePlayer();
+  const presentation = usePresentationMode(stageRef);
 
-  useEffect(() => {
-    return () => {
-      audio.pause();
-      audio.src = "";
-    };
-  }, [audio]);
+  const { remove: removeParticipant } = participants;
+  const onWinner = useCallback(
+    (winner: string) => {
+      stop();
+      // Each person is drawn only once: the winner leaves the pool.
+      removeParticipant(winner);
+    },
+    [stop, removeParticipant],
+  );
+  const draw = useDraw(participants.names, { onStart: playRandom, onWinner });
 
-  // Load saved names on first render
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(NAMES_STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          const normalized = parsed.map((s: unknown) => String(s).trim()).filter(Boolean);
-          setNames(Array.from(new Set(normalized)));
-        }
-      }
-    } catch (e) {
-      console.log("Failed to load saved names", e);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useStartShortcut(draw.start);
 
-  // Persist names whenever they change
-  useEffect(() => {
-    try {
-      localStorage.setItem(NAMES_STORAGE_KEY, JSON.stringify(names));
-    } catch (e) {
-      console.log("Failed to persist names", e);
-    }
-  }, [names]);
-
-  useEffect(() => {
-    if (images.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      }, 4000);
-      return () => clearInterval(interval);
-    }
-  }, [images.length]);
-
-  const playRandomJingle = () => {
-    const randomJingle = JINGLE_SOUNDS[Math.floor(Math.random() * JINGLE_SOUNDS.length)];
-    audio.src = randomJingle;
-    audio.play().catch(err => console.log("Audio play failed:", err));
+  const enterPresentation = () => {
+    setShowSetup(false);
+    presentation.enter();
   };
-
-  const addName = () => {
-    if (currentName.trim() && !names.includes(currentName.trim())) {
-      setNames([...names, currentName.trim()]);
-      setCurrentName("");
-      toast({
-        title: "Name added!",
-        description: `${currentName.trim()} was added to the list.`,
-      });
-    }
-  };
-
-  const removeName = (nameToRemove: string) => {
-    setNames(names.filter(name => name !== nameToRemove));
-    toast({
-      title: "Name removed",
-      description: `${nameToRemove} was removed from the list.`,
-    });
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          if (event.target?.result) {
-            setImages((prev) => [...prev, event.target.result as string]);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-      toast({
-        title: "Pictures added!",
-        description: `${files.length} picture(s) added to the slideshow.`,
-      });
-    }
-  };
-
-  const exportNames = () => {
-    try {
-      const blob = new Blob([JSON.stringify(names, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "names.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch (e) {
-      console.log("Failed to export names", e);
-    }
-  };
-
-  const importNamesFromFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    file
-      .text()
-      .then((text) => {
-        try {
-          const data = JSON.parse(text);
-          if (Array.isArray(data)) {
-            const normalized = data.map((s) => String(s).trim()).filter(Boolean);
-            const merged = Array.from(new Set([...names, ...normalized]));
-            setNames(merged);
-          }
-        } catch (err) {
-          console.log("Invalid names file", err);
-        }
-      })
-      .finally(() => {
-        // reset input to allow re-importing same file
-        e.target.value = "";
-      });
-  };
-
-  const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
-    if (currentImageIndex >= images.length - 1) {
-      setCurrentImageIndex(Math.max(0, images.length - 2));
-    }
-  };
-
-  const startSelection = () => {
-    if (names.length === 0) {
-      toast({
-        title: "No names available",
-        description: "Please add at least one name.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSpinning(true);
-    setSelectedName("");
-    playRandomJingle();
-
-    let iterations = 0;
-    const SPIN_STEP_MS = 120; // time between name swaps
-    const SPIN_TOTAL_MS = 6000; // total spin duration
-    const maxIterations = Math.ceil(SPIN_TOTAL_MS / SPIN_STEP_MS);
-    const interval = setInterval(() => {
-      const randomName = names[Math.floor(Math.random() * names.length)];
-      setSpinningName(randomName);
-      iterations++;
-
-      if (iterations >= maxIterations) {
-        clearInterval(interval);
-        const finalName = names[Math.floor(Math.random() * names.length)];
-        setSelectedName(finalName);
-        setIsSpinning(false);
-        audio.pause();
-        setNames((prev) => prev.filter((n) => n !== finalName));
-        
-        toast({
-          title: "🎁 Winner selected!",
-          description: `${finalName} is handing out the presents!`,
-        });
-      }
-    }, SPIN_STEP_MS);
-  };
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const togglePresentationMode = () => {
-    if (!isPresentationMode) {
-      setIsPresentationMode(true);
-      setShowSetup(false);
-      const el = presentationRef.current ?? document.documentElement;
-      el.requestFullscreen?.().catch((err) => {
-        console.warn("Fullscreen request failed:", err);
-      });
-    } else {
-      setIsPresentationMode(false);
-      document.exitFullscreen?.().catch(() => {});
-    }
-  };
-
-  useEffect(() => {
-    const onFsChange = () => {
-      if (!document.fullscreenElement) setIsPresentationMode(false);
-    };
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
-  }, []);
-
-  // Start über Enter / Space erlauben (außer wenn man gerade ein Input/textarea fokussiert)
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const active = document.activeElement as HTMLElement | null;
-      const inInput =
-        !!active && (
-          active.tagName === "INPUT" ||
-          active.tagName === "TEXTAREA" ||
-          active.isContentEditable
-        );
-      if (inInput) return;
-      // use keydown and check Enter or Space (e.code für Konsistenz)
-      if (e.key === "Enter" || e.code === "Space") {
-        e.preventDefault(); // verhindert Scroll bei Space
-        startBtnRef.current?.click();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
 
   return (
     <>
-      {/* Exit-Button: nur im Präsentationsmodus sichtbar, fixed außerhalb der gescalten Fläche */}
-      {isPresentationMode && (
-        <button
-          type="button"
-          onClick={togglePresentationMode}
-          aria-label="Beenden"
-          className="btn-primary fixed top-4 right-4 z-50"
+      {presentation.active && (
+        <Button
+          onClick={presentation.exit}
+          variant="secondary"
+          size="lg"
+          className={cn("fixed right-4 top-4 z-[10000]", glassBtn)}
         >
-          Beenden
-        </button>
+          <Minimize aria-hidden="true" className="mr-2 h-5 w-5" />
+          Exit
+        </Button>
       )}
 
-      <FitToViewport enabled={isPresentationMode} stageRef={presentationRef}>
+      <FitToViewport enabled={presentation.active} stageRef={stageRef}>
         <div
-          className={`min-h-screen relative overflow-hidden ${isPresentationMode ? "presentation" : ""}`}
+          className={cn("relative min-h-screen overflow-hidden", presentation.active && "presentation")}
           style={{
             backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${christmasBackground})`,
             backgroundSize: "cover",
@@ -297,376 +70,89 @@ export const ChristmasGiftGenerator = () => {
             backgroundAttachment: "fixed",
           }}
         >
-          {/* Exit-Button nur im Präsentationsmodus */}
-          {isPresentationMode && (
-            <button
-              type="button"
-              onClick={togglePresentationMode}
-              aria-label="Beende Präsentation"
-              className="fixed top-4 right-4 z-50 btn-primary"
-            >
-              Beenden
-            </button>
-          )}
+          <Snowfall />
 
-          {/* Snowflakes (memoized to avoid re-renders during selection) */}
-          {useMemo(() => Array.from({ length: 40 }).map((_, i) => (
-            <Snowflake key={i} delay={i * 0.5} />
-          )), [])}
+          <main className="inner-frame relative z-10 mx-auto max-w-6xl px-4 py-8">
+            {!presentation.active && (
+              <>
+                <AppHeader />
+                <nav className="mb-6 flex flex-wrap justify-center gap-4" aria-label="Controls">
+                  <Button
+                    onClick={() => setShowSetup((v) => !v)}
+                    aria-expanded={showSetup}
+                    aria-controls="setup-section"
+                    variant="secondary"
+                    size="lg"
+                    className={glassBtn}
+                  >
+                    {showSetup ? (
+                      <X aria-hidden="true" className="mr-2 h-5 w-5" />
+                    ) : (
+                      <Settings aria-hidden="true" className="mr-2 h-5 w-5" />
+                    )}
+                    {showSetup ? "Hide Setup" : "Show Setup"}
+                  </Button>
+                  <Button
+                    onClick={enterPresentation}
+                    variant="secondary"
+                    size="lg"
+                    className="border-2 border-accent bg-accent/80 font-semibold text-foreground shadow-xl backdrop-blur-md hover:bg-accent"
+                  >
+                    <Maximize aria-hidden="true" className="mr-2 h-5 w-5" />
+                    Presentation mode
+                  </Button>
+                </nav>
+              </>
+            )}
 
-          <div className="relative z-10 mx-auto py-8 px-4 max-w-6xl inner-frame">
-            {/* Header */}
-            {!isPresentationMode && (
-              <div className="text-center mb-8 animate-fade-in">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
-                  <h1 className="text-6xl md:text-7xl font-bold font-christmas text-white drop-shadow-[0_0_20px_rgba(255,215,0,0.9)]">
-                    Who Is Santa’s Helper?
-                  </h1>
-                  <Gift className="w-16 h-16 text-accent animate-bounce-subtle drop-shadow-[0_0_15px_rgba(255,215,0,0.8)]" />
-                </div>
-                <p className="text-white/90 text-2xl font-elegant drop-shadow-lg">
-                  Who’s giving, who’s getting?
-                </p>
+            {showSetup && !presentation.active && (
+              <div id="setup-section" className="mb-8 animate-scale-in space-y-6">
+                <ParticipantsPanel
+                  names={participants.names}
+                  onAdd={participants.add}
+                  onRemove={participants.remove}
+                  onExport={participants.exportToFile}
+                  onImport={participants.importFromFile}
+                />
+                <SlideshowPanel slides={slideshow.slides} onAdd={slideshow.addFiles} onRemove={slideshow.remove} />
               </div>
             )}
 
-            {/* Control Buttons */}
-            {!isPresentationMode && (
-              <div className="flex justify-center gap-4 mb-6">
-                <Button
-                  onClick={() => setShowSetup(!showSetup)}
-                  variant="secondary"
-                  size="lg"
-                  className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
-                >
-                  {showSetup ? (
-                    <>
-                      <X className="w-5 h-5 mr-2" />
-                      Hide Setup
-                    </>
-                  ) : (
-                    <>
-                      <Settings className="w-5 h-5 mr-2" />
-                      Show Setup
-                    </>
-                  )}
-                </Button>
-                <Button
-                  onClick={togglePresentationMode}
-                  variant="secondary"
-                  size="lg"
-                  className="bg-accent/80 hover:bg-accent text-foreground backdrop-blur-md border-2 border-accent shadow-xl font-semibold"
-                >
-                  <Maximize className="w-5 h-5 mr-2" />
-                  Presentation mode
-                </Button>
-              </div>
-            )}
-
-            {/* Exit Presentation Mode Button */}
-            {isPresentationMode && (
-              <div className="fixed top-4 right-4 z-50">
-                <Button
-                  onClick={togglePresentationMode}
-                  variant="secondary"
-                  size="lg"
-                  className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border-2 border-white/30 shadow-xl"
-                >
-                  <Minimize className="w-5 h-5 mr-2" />
-                  Exit
-                </Button>
-              </div>
-            )}
-
-            {/* Setup Section (Collapsible) */}
-            {showSetup && (
-              <div className="space-y-6 mb-8 animate-scale-in">
-                {/* Name Input */}
-                <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-                  <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Add names</h2>
-                  <div className="flex gap-3">
-                    <Input
-                      type="text"
-                      placeholder="Enter name..."
-                      value={currentName}
-                      onChange={(e) => setCurrentName(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && addName()}
-                      className="text-lg border-2 border-primary/50 focus:border-primary bg-white text-card-foreground font-body placeholder:text-muted-foreground"
-                    />
-                    <Button
-                      onClick={addName}
-                      className="bg-gradient-to-r from-primary to-primary/80 hover:shadow-festive transition-all text-white font-semibold"
-                      size="lg"
-                    >
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add
-                    </Button>
-                  </div>
-
-                  {/* Import/Export controls for names */}
-                  <div className="flex gap-3 mt-3">
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="sm"
-                      onClick={exportNames}
-                      className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Export
-                    </Button>
-                    <label>
-                      <input
-                        id="names-import-input"
-                        type="file"
-                        accept="application/json"
-                        className="hidden"
-                        onChange={importNamesFromFile}
-                      />
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        className="bg-white/80 text-primary border-2 border-primary/30 hover:bg-white"
-                        onClick={() => (document.getElementById('names-import-input') as HTMLInputElement | null)?.click()}
-                      >
-                        <Upload className="w-4 h-4 mr-2" />
-                        Import
-                      </Button>
-                    </label>
-                  </div>
-
-                  {names.length > 0 && (
-                    <div className="mt-6 space-y-2">
-                      <h3 className="font-semibold text-primary mb-3 font-elegant text-lg">
-                        Santas and Ms Claus ({names.length})
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                        {names.map((name, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 rounded-lg bg-white/80 hover:bg-white transition-all animate-scale-in border-2 border-primary/30 shadow-sm"
-                            style={{ animationDelay: `${index * 0.05}s` }}
-                          >
-                            <span className="font-medium text-card-foreground font-body text-base">{name}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeName(name)}
-                              className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </Card>
-
-                {/* Image Upload */}
-                <Card className="p-6 bg-white/95 backdrop-blur-sm shadow-2xl border-4 border-accent/50">
-                  <h2 className="text-2xl font-elegant text-primary mb-4 font-bold">Images for slideshow</h2>
-                  <div className="flex gap-3 mb-4">
-                    <label className="flex-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        id="image-upload-input"
-                      />
-                      <Button
-                        type="button"
-                        onClick={() => (document.getElementById('image-upload-input') as HTMLInputElement | null)?.click()}
-                        className="w-full bg-gradient-to-r from-secondary to-secondary/80"
-                        size="lg"
-                      >
-                        <Upload className="w-5 h-5 mr-2" />
-                        Upload pictures
-                      </Button>
-                    </label>
-                  </div>
-
-                  {images.length > 0 && (
-                    <div className="grid grid-cols-4 md:grid-cols-6 gap-2 max-h-48 overflow-y-auto">
-                      {images.map((img, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={img}
-                            alt={`Slide ${index + 1}`}
-                            className="w-full h-20 object-cover rounded border-2 border-primary/30"
-                          />
-                          <button
-                            onClick={() => removeImage(index)}
-                            className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </Card>
-              </div>
-            )}
-
-            {/* Start Button */}
-            <div className={`text-center mb-8 ${isPresentationMode ? 'mt-8' : ''}`}>
+            <div className={cn("mb-8 text-center", presentation.active && "mt-8")}>
               <button
-                ref={startBtnRef}
                 type="button"
                 className="btn-primary"
-                onClick={startSelection}
-                aria-label="Start selection (Enter / Space)"
+                onClick={draw.start}
+                disabled={draw.isSpinning || participants.names.length === 0}
+                aria-keyshortcuts="Enter Space"
+                title={
+                  participants.names.length === 0 ? "Add at least one name first" : "Start selection (Enter / Space)"
+                }
               >
                 Start selection
               </button>
             </div>
 
-            {/* Main Display with Picture Frame */}
-            <div className="relative animate-scale-in">
-              {/* Ornate Picture Frame */}
-              <div className={`relative mx-auto ${isPresentationMode ? 'max-w-4xl' : 'max-w-4xl'}`}>
-                {/* Frame Border - Multiple Layers for Ornate Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 rounded-lg shadow-2xl transform -rotate-1" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-amber-800 via-amber-600 to-amber-700 rounded-lg shadow-2xl transform rotate-1" />
-                
-                {/* Main Frame */}
-                <div className="relative bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 p-8 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-                  {/* Inner Frame Detail */}
-                  <div className="absolute inset-6 border-4 border-amber-900/50 rounded pointer-events-none" />
-                  <div className="absolute inset-8 border-2 border-amber-400/30 rounded pointer-events-none" />
-                  
-                  {/* Corner Ornaments */}
-                  <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-accent rounded-tl-lg" />
-                  <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-accent rounded-tr-lg" />
-                  <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-accent rounded-bl-lg" />
-                  <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-accent rounded-br-lg" />
+            <DrawStage
+              phase={draw.phase}
+              displayName={draw.displayName}
+              winner={draw.winner}
+              slides={slideshow.slides}
+              slideIndex={slideshow.index}
+              onSelectSlide={slideshow.setIndex}
+              onPrevSlide={slideshow.prev}
+              onNextSlide={slideshow.next}
+              presentation={presentation.active}
+            />
 
-                  {/* Content Area */}
-                  <Card className={`relative flex items-center justify-center bg-gradient-to-br from-white via-amber-50 to-white shadow-inner overflow-hidden ${
-                    isPresentationMode ? 'min-h-[62vh]' : 'min-h-[500px]'
-                  }`}>
-                    {/* Background Image Slideshow - Always visible when images exist */}
-                    {images.length > 0 && (
-                      <div className="absolute inset-0">
-                        {images.map((img, index) => (
-                          <img
-                            key={index}
-                            src={img}
-                            alt={`Slide ${index + 1}`}
-                            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                            }`}
-                          />
-                        ))}
-                        
-                        {/* Slideshow Controls */}
-                        {images.length > 1 && (
-                          <>
-                            <button
-                              onClick={prevImage}
-                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10"
-                            >
-                              <ChevronLeft className="w-6 h-6" />
-                            </button>
-                            <button
-                              onClick={nextImage}
-                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10"
-                            >
-                              <ChevronRight className="w-6 h-6" />
-                            </button>
-                            
-                            {/* Slide Indicators */}
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                              {images.map((_, index) => (
-                                <button
-                                  key={index}
-                                  onClick={() => setCurrentImageIndex(index)}
-                                  className={`w-3 h-3 rounded-full transition-all ${
-                                    index === currentImageIndex
-                                      ? 'bg-white scale-125'
-                                      : 'bg-white/50 hover:bg-white/75'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          </>
-                        )}
-                        
-                        {/* Overlay for text visibility */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                      </div>
-                    )}
-
-                    {/* Winner Display */}
-                    <div className="relative z-10 text-center p-12">
-                      {isSpinning ? (
-                        <div className="animate-pulse">
-                          <div className="text-8xl font-bold text-white mb-6 animate-bounce-subtle font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
-                            {spinningName}
-                          </div>
-                          <div className="text-3xl text-white font-elegant font-semibold drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                            Selecting...
-                          </div>
-                        </div>
-                      ) : selectedName ? (
-                        <div className="animate-scale-in">
-                          <div className="text-9xl mb-8 animate-spin-slow drop-shadow-2xl">🎁</div>
-                          <div className="text-7xl font-bold text-white mb-6 font-christmas drop-shadow-[0_0_30px_rgba(220,38,38,0.9)]">
-                            {selectedName}
-                          </div>
-                          <div className="text-4xl text-white font-semibold font-elegant drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                            is handing out the presents! 🎅
-                          </div>
-                        </div>
-                      ) : (
-                        <div className={`text-center ${images.length > 0 ? 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]' : 'text-muted-foreground'}`}>
-                          <Gift className="w-32 h-32 mx-auto mb-8 opacity-80" />
-                          <p className="text-3xl font-elegant">
-                            {images.length > 0 
-                              ? "Click on ‘Start selection’ to begin"
-                              : "Add names and pictures, then start the selection"}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            {!isPresentationMode && (
-              <div className="text-center mt-8 text-white/90 animate-fade-in font-elegant text-xl drop-shadow-lg">
+            {!presentation.active && (
+              <footer className="mt-8 animate-fade-in text-center font-elegant text-xl text-white/90 drop-shadow-lg">
                 <p>✨ Merry Christmas! 🎄✨</p>
-              </div>
+              </footer>
             )}
-          </div>
-
-          {/* CSS for snowflake animation (fixed rule; per-element duration set inline) */}
-          <style>{`
-            @keyframes fall {
-              0% {
-                top: -10%;
-                transform: translateX(0) rotate(0deg);
-              }
-              100% {
-                top: 100%;
-                transform: translateX(100px) rotate(360deg);
-              }
-            }
-            .animate-fall {
-              animation: fall linear infinite;
-              animation-duration: 8s; /* constant duration so flakes always fall */
-            }
-          `}</style>
+          </main>
         </div>
       </FitToViewport>
     </>
   );
-};
-
+}

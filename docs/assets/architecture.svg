@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="t d" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <title id="t">Architecture</title>
+  <desc id="d">Layered architecture: UI components use hooks, hooks use pure library modules and browser APIs. No backend.</desc>
+  <style>
+    .layer{fill:#f7f5f0;stroke:#d8d2c4}
+    .box{fill:#fff;stroke:#b01f2c;stroke-width:1.5}
+    .hook{fill:#fff;stroke:#1f7a4d;stroke-width:1.5}
+    .lib{fill:#fff;stroke:#c08a00;stroke-width:1.5}
+    .api{fill:#fff;stroke:#5a6270;stroke-width:1.5;stroke-dasharray:5 4}
+    .h{font-size:15px;font-weight:700;fill:#2b2b2b}
+    .t{font-size:13px;fill:#2b2b2b}
+    .s{font-size:11px;fill:#6b6b6b}
+    .arrow{stroke:#6b6b6b;stroke-width:1.5;fill:none;marker-end:url(#a)}
+  </style>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6b6b6b"/></marker></defs>
+  <rect width="1000" height="560" fill="#fff"/>
+
+  <rect class="layer" x="20" y="20" width="960" height="130" rx="12"/>
+  <text class="h" x="40" y="46">UI layer · src/components</text>
+  <rect class="box" x="40" y="62" width="210" height="70" rx="8"/><text class="t" x="145" y="92" text-anchor="middle">ChristmasGiftGenerator</text><text class="s" x="145" y="112" text-anchor="middle">composition root</text>
+  <rect class="box" x="265" y="62" width="160" height="70" rx="8"/><text class="t" x="345" y="92" text-anchor="middle">ParticipantsPanel</text><text class="s" x="345" y="112" text-anchor="middle">add · remove · import/export</text>
+  <rect class="box" x="440" y="62" width="150" height="70" rx="8"/><text class="t" x="515" y="92" text-anchor="middle">SlideshowPanel</text><text class="s" x="515" y="112" text-anchor="middle">image upload</text>
+  <rect class="box" x="605" y="62" width="130" height="70" rx="8"/><text class="t" x="670" y="92" text-anchor="middle">DrawStage</text><text class="s" x="670" y="112" text-anchor="middle">frame · winner</text>
+  <rect class="box" x="750" y="62" width="210" height="70" rx="8"/><text class="t" x="855" y="88" text-anchor="middle">FitToViewport · Snowfall</text><text class="t" x="855" y="106" text-anchor="middle">AppHeader · ErrorBoundary</text><text class="s" x="855" y="124" text-anchor="middle">presentation helpers</text>
+
+  <rect class="layer" x="20" y="190" width="960" height="120" rx="12"/>
+  <text class="h" x="40" y="216">State &amp; behaviour · src/hooks</text>
+  <rect class="hook" x="40" y="230" width="140" height="60" rx="8"/><text class="t" x="110" y="265" text-anchor="middle">useParticipants</text>
+  <rect class="hook" x="195" y="230" width="120" height="60" rx="8"/><text class="t" x="255" y="265" text-anchor="middle">useDraw</text>
+  <rect class="hook" x="330" y="230" width="130" height="60" rx="8"/><text class="t" x="395" y="265" text-anchor="middle">useSlideshow</text>
+  <rect class="hook" x="475" y="230" width="150" height="60" rx="8"/><text class="t" x="550" y="265" text-anchor="middle">useJinglePlayer</text>
+  <rect class="hook" x="640" y="230" width="170" height="60" rx="8"/><text class="t" x="725" y="265" text-anchor="middle">usePresentationMode</text>
+  <rect class="hook" x="825" y="230" width="135" height="60" rx="8"/><text class="t" x="892" y="265" text-anchor="middle">useStartShortcut</text>
+
+  <rect class="layer" x="20" y="350" width="600" height="120" rx="12"/>
+  <text class="h" x="40" y="376">Pure logic · src/lib + src/config.ts</text>
+  <rect class="lib" x="40" y="390" width="130" height="60" rx="8"/><text class="t" x="105" y="418" text-anchor="middle">names.ts</text><text class="s" x="105" y="436" text-anchor="middle">validate · dedupe</text>
+  <rect class="lib" x="185" y="390" width="130" height="60" rx="8"/><text class="t" x="250" y="418" text-anchor="middle">random.ts</text><text class="s" x="250" y="436" text-anchor="middle">crypto, unbiased</text>
+  <rect class="lib" x="330" y="390" width="130" height="60" rx="8"/><text class="t" x="395" y="418" text-anchor="middle">storage.ts</text><text class="s" x="395" y="436" text-anchor="middle">safe localStorage</text>
+  <rect class="lib" x="475" y="390" width="130" height="60" rx="8"/><text class="t" x="540" y="418" text-anchor="middle">config.ts</text><text class="s" x="540" y="436" text-anchor="middle">timings · limits</text>
+
+  <rect class="layer" x="640" y="350" width="340" height="120" rx="12"/>
+  <text class="h" x="660" y="376">Browser APIs</text>
+  <rect class="api" x="660" y="390" width="95" height="60" rx="8"/><text class="t" x="707" y="418" text-anchor="middle">Web</text><text class="t" x="707" y="434" text-anchor="middle">Crypto</text>
+  <rect class="api" x="765" y="390" width="95" height="60" rx="8"/><text class="t" x="812" y="418" text-anchor="middle">local-</text><text class="t" x="812" y="434" text-anchor="middle">Storage</text>
+  <rect class="api" x="870" y="390" width="95" height="60" rx="8"/><text class="t" x="917" y="418" text-anchor="middle">Audio ·</text><text class="t" x="917" y="434" text-anchor="middle">Fullscreen</text>
+
+  <path class="arrow" d="M500 150V186"/>
+  <path class="arrow" d="M320 310V346"/>
+  <path class="arrow" d="M810 310V346"/>
+
+  <text class="s" x="500" y="510" text-anchor="middle">Static SPA built by Vite · deployed to GitHub Pages · no backend, no third-party requests (enforced by CSP)</text>
+</svg>
