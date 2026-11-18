@@ -69,4 +69,4 @@ location = /index.html {
 
 ## Lizenzen von Medien
 
-Code steht unter der MIT-Lizenz. Für Hintergrundbild und Sounds in `src/assets/` muss vor einer öffentlichen bzw. kommerziellen Nutzung geprüft werden, dass die Nutzungsrechte vorliegen.
+Code steht unter der MIT-Lizenz. Herkunft und Lizenzstatus von Hintergrundbild und Sounds sind in [ASSETS.md](ASSETS.md) dokumentiert.
