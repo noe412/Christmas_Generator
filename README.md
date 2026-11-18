@@ -55,7 +55,7 @@ npm ci
 npm run dev
 ```
 
-Anschließend <http://localhost:8080> öffnen. Voraussetzung: Node.js ≥ 20.19 (siehe `.nvmrc`).
+Anschließend <http://localhost:8080> öffnen. Voraussetzung: Node.js 26 LTS (empfohlen, siehe `.nvmrc`), mindestens 22.12.
 
 ## Scripts
 

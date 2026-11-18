@@ -2,7 +2,7 @@
 
 ## Voraussetzungen
 
-- Node.js **≥ 20.19** (empfohlen: Version aus `.nvmrc`)
+- Node.js **26 LTS** (Version aus `.nvmrc`, in CI und Deployment verwendet); mindestens 22.12
 - npm ≥ 10
 
 ## Browser-Unterstützung

@@ -11,6 +11,7 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 
 ### Geändert
 
+- Laufzeit auf Node.js 26 LTS umgestellt (`.nvmrc`, CI, Deployment) und `@types/node` auf 26 angehoben; Mindestversion 22.12.
 - Upgrade auf Tailwind CSS 4 (Vite-Plugin statt PostCSS) und tailwind-merge 3; `tailwindcss-animate`, `autoprefixer` und `postcss` entfallen.
 - Upgrade auf eslint-plugin-react-hooks 7; Hooks an die neuen Regeln angepasst (keine Ref-Zuweisungen im Render, kein synchrones `setState` in Effects).
 - GitHub Actions aktualisiert (checkout v7, setup-node v7, codeql-action v4, upload-pages-artifact v5, deploy-pages v5).
