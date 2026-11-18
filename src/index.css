@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+/* Theme tokens, fonts and keyframes live in the JS config (Tailwind v4 legacy-config bridge). */
+@config "../tailwind.config.ts";
 
 /*
  * Design tokens. All colours are HSL triplets consumed via hsl(var(--token)).
@@ -55,12 +55,18 @@
   body {
     @apply bg-background font-body text-foreground antialiased;
   }
+
+  /* Tailwind v4 dropped the pointer cursor on buttons – keep the v3 behaviour. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-md px-6 py-2 font-semibold shadow-lg;
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
     background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.9));
     color: hsl(var(--primary-foreground));
     transition: var(--transition-smooth);

@@ -31,7 +31,7 @@ export function SlideshowPanel({ slides, onAdd, onRemove }: SlideshowPanelProps)
         type="button"
         size="lg"
         onClick={() => fileRef.current?.click()}
-        className="mb-2 w-full bg-gradient-to-r from-secondary to-secondary/80"
+        className="mb-2 w-full bg-linear-to-r from-secondary to-secondary/80"
       >
         <Upload aria-hidden="true" className="mr-2 h-5 w-5" />
         Upload pictures

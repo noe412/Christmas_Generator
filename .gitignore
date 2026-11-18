@@ -30,3 +30,6 @@ coverage
 .env
 .env.*
 !.env.example
+
+# TypeScript incremental build info
+*.tsbuildinfo

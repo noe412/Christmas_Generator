@@ -5,6 +5,10 @@
 - Node.js **≥ 20.19** (empfohlen: Version aus `.nvmrc`)
 - npm ≥ 10
 
+## Browser-Unterstützung
+
+Aktuelle Versionen von Chrome/Edge (≥ 111), Firefox (≥ 128) und Safari (≥ 16.4) – Voraussetzung von Tailwind CSS 4. Ältere Smart-TV-Browser werden ggf. nicht korrekt dargestellt; für Präsentationen einen Laptop mit aktuellem Browser verwenden.
+
 ## Lokaler Build
 
 ```bash
