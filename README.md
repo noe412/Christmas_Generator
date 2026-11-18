@@ -77,7 +77,7 @@ Anschließend <http://localhost:8080> öffnen. Voraussetzung: Node.js ≥ 20.19 
 | ----------- | ------------------------------------------------------ |
 | Framework   | React 18 · TypeScript (strict)                         |
 | Build       | Vite 7 · SWC                                           |
-| Styling     | Tailwind CSS 3 · Radix Slot · class-variance-authority |
+| Styling     | Tailwind CSS 4 · Radix Slot · class-variance-authority |
 | Icons/Fonts | lucide-react · @fontsource (self-hosted)               |
 | Qualität    | Vitest · Testing Library · ESLint · Prettier · CodeQL  |
 | Delivery    | GitHub Actions · GitHub Pages · Dependabot             |

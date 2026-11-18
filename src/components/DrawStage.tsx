@@ -29,10 +29,10 @@ export function DrawStage(props: DrawStageProps) {
 
   return (
     <div className="relative mx-auto max-w-4xl animate-scale-in">
-      <div className="absolute inset-0 -rotate-1 rounded-lg bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 shadow-2xl" />
-      <div className="absolute inset-0 rotate-1 rounded-lg bg-gradient-to-tr from-amber-800 via-amber-600 to-amber-700 shadow-2xl" />
+      <div className="absolute inset-0 -rotate-1 rounded-lg bg-linear-to-br from-amber-700 via-amber-600 to-amber-800 shadow-2xl" />
+      <div className="absolute inset-0 rotate-1 rounded-lg bg-linear-to-tr from-amber-800 via-amber-600 to-amber-700 shadow-2xl" />
 
-      <div className="relative rounded-lg bg-gradient-to-br from-amber-700 via-amber-600 to-amber-800 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+      <div className="relative rounded-lg bg-linear-to-br from-amber-700 via-amber-600 to-amber-800 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
         <div className="pointer-events-none absolute inset-6 rounded border-4 border-amber-900/50" />
         <div className="pointer-events-none absolute inset-8 rounded border-2 border-amber-400/30" />
         <div className="absolute left-4 top-4 h-12 w-12 rounded-tl-lg border-l-4 border-t-4 border-accent" />
@@ -42,7 +42,7 @@ export function DrawStage(props: DrawStageProps) {
 
         <Card
           className={cn(
-            "relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-amber-50 to-white shadow-inner",
+            "relative flex items-center justify-center overflow-hidden bg-linear-to-br from-white via-amber-50 to-white shadow-inner",
             presentation ? "min-h-[62vh]" : "min-h-[500px]",
           )}
         >
@@ -95,7 +95,7 @@ export function DrawStage(props: DrawStageProps) {
                   </div>
                 </>
               )}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
             </div>
           )}
 

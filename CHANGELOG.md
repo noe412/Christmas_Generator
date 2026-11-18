@@ -7,6 +7,17 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 ### Hinzugefügt
 
 - `docs/ASSETS.md`: Herkunft und Lizenzstatus der Medien dokumentiert.
+- Tests für `useSlideshow`.
+
+### Geändert
+
+- Upgrade auf Tailwind CSS 4 (Vite-Plugin statt PostCSS) und tailwind-merge 3; `tailwindcss-animate`, `autoprefixer` und `postcss` entfallen.
+- Upgrade auf eslint-plugin-react-hooks 7; Hooks an die neuen Regeln angepasst (keine Ref-Zuweisungen im Render, kein synchrones `setState` in Effects).
+- GitHub Actions aktualisiert (checkout v7, setup-node v7, codeql-action v4, upload-pages-artifact v5, deploy-pages v5).
+
+### Entfernt
+
+- Versehentlich eingecheckte `*.tsbuildinfo`-Build-Artefakte.
 
 ## [1.0.0] – 2026-11-18
 

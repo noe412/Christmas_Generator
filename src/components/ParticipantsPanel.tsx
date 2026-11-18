@@ -70,7 +70,7 @@ export function ParticipantsPanel({ names, onAdd, onRemove, onExport, onImport }
         <Button
           type="submit"
           size="lg"
-          className="bg-gradient-to-r from-primary to-primary/80 font-semibold text-white transition-all hover:shadow-festive"
+          className="bg-linear-to-r from-primary to-primary/80 font-semibold text-white transition-all hover:shadow-festive"
         >
           <Plus aria-hidden="true" className="mr-2 h-5 w-5" />
           Add
@@ -115,7 +115,7 @@ export function ParticipantsPanel({ names, onAdd, onRemove, onExport, onImport }
             {names.map((name) => (
               <li
                 key={name}
-                className="flex animate-scale-in items-center justify-between rounded-lg border-2 border-primary/30 bg-white/80 p-3 shadow-sm transition-all hover:bg-white"
+                className="flex animate-scale-in items-center justify-between rounded-lg border-2 border-primary/30 bg-white/80 p-3 shadow-xs transition-all hover:bg-white"
               >
                 <span className="font-body text-base font-medium text-card-foreground">{name}</span>
                 <Button
