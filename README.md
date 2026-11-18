@@ -98,4 +98,4 @@ Beiträge sind willkommen – siehe [CONTRIBUTING.md](CONTRIBUTING.md). Änderun
 
 ## Lizenz
 
-Veröffentlicht unter der [MIT-Lizenz](LICENSE). Für Medien in `src/assets/` (Bild, Sounds) gelten ggf. eigene Rechte – siehe [Deployment-Doku](docs/DEPLOYMENT.md#lizenzen-von-medien).
+Veröffentlicht unter der [MIT-Lizenz](LICENSE). Für Medien in `src/assets/` (Bild, Sounds) gelten ggf. eigene Rechte – siehe [docs/ASSETS.md](docs/ASSETS.md).

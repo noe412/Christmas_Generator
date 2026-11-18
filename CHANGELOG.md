@@ -2,6 +2,12 @@
 
 Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [Unreleased]
+
+### Hinzugefügt
+
+- `docs/ASSETS.md`: Herkunft und Lizenzstatus der Medien dokumentiert.
+
 ## [1.0.0] – 2026-11-18
 
 ### Hinzugefügt
