@@ -27,6 +27,10 @@
   --color-pine-500: oklch(0.5 0.11 160);
   --color-pine-700: oklch(0.33 0.07 165);
 
+  --color-apricot-200: oklch(0.9 0.07 65);
+  --color-apricot-300: oklch(0.85 0.1 60);
+  --color-apricot-400: oklch(0.79 0.13 55);
+
   --color-snow: oklch(0.98 0.01 250);
   --color-cream: oklch(0.96 0.025 80);
 

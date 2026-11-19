@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Images, Maximize, Minimize, Snowflake, Users, Volume2, VolumeX } from "lucide-react";
+import { Images, Maximize, Minimize, Users, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDraw } from "@/hooks/useDraw";
 import { useJinglePlayer } from "@/hooks/useJinglePlayer";
@@ -11,6 +11,8 @@ import { useStartShortcut } from "@/hooks/useStartShortcut";
 import { cn } from "@/lib/utils";
 import { DrawStage } from "./DrawStage";
 import { CozyRoom } from "./scene/CozyRoom";
+import { Snowfall } from "./scene/Snowfall";
+import { SnowCap } from "./SnowCap";
 import { SetupSheet, type SetupTab } from "./SetupSheet";
 
 /** Root feature component: cosy scene, draw stage, dock and setup drawer. */
@@ -58,21 +60,23 @@ export function ChristmasGiftGenerator() {
   return (
     <div className="relative flex min-h-dvh flex-col">
       <CozyRoom dimmed={setupOpen} />
+      <Snowfall />
 
       <main
         className={cn(
-          "mx-auto flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 pt-16 pb-32 sm:gap-8 sm:px-6 sm:pt-20 sm:pb-36",
+          "relative z-10 mx-auto flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 pt-16 pb-32 sm:gap-8 sm:px-6 sm:pt-20 sm:pb-44",
           isPresenting ? "max-w-5xl pb-16" : "max-w-2xl",
         )}
       >
         {!isPresenting && (
           <header className="animate-fade-up text-center">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-xs font-medium tracking-[0.25em] text-snow/70 uppercase backdrop-blur">
-              <Snowflake className="size-3.5 text-ember-300" aria-hidden="true" />
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-snow/75 uppercase backdrop-blur">
+              <span className="size-1.5 rounded-full bg-apricot-300" aria-hidden="true" />
               Christmas Gift Draw
             </p>
-            <h1 className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
-              Who is <span className="text-gold animate-shimmer">Santa’s helper</span> this year?
+            <h1 className="font-display text-5xl leading-[0.98] font-normal tracking-[-0.03em] sm:text-7xl">
+              Who will be
+              <span className="block pr-2 text-apricot-300 italic">Santa’s helper?</span>
             </h1>
           </header>
         )}
@@ -118,6 +122,7 @@ export function ChristmasGiftGenerator() {
           isPresenting ? "top-4 right-4" : "bottom-6 left-1/2 -translate-x-1/2",
         )}
       >
+        {!isPresenting && <SnowCap className="inset-x-6 w-[calc(100%-3rem)]" />}
         {!isPresenting && (
           <>
             <Button variant="ghost" onClick={() => openSetup("names")} aria-haspopup="dialog">
