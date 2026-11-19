@@ -24,25 +24,28 @@ src/
 ├── App.tsx                     # ErrorBoundary + Root-Komponente
 ├── main.tsx                    # Einstiegspunkt, Schriften, StrictMode
 ├── config.ts                   # Zentrale Konfiguration
-├── index.css                   # Design-Tokens, Basis-Styles
-├── assets/                     # Hintergrundbild, Sounds (*.mp3 werden automatisch erkannt)
+├── index.css                   # Design-Tokens (@theme), Keyframes, Basis-Styles
+├── assets/sounds/              # Jingles (*.mp3 werden automatisch erkannt)
 ├── components/
-│   ├── ChristmasGiftGenerator.tsx  # Composition Root
-│   ├── ParticipantsPanel.tsx       # Namen verwalten, Import/Export
-│   ├── SlideshowPanel.tsx          # Bilder hochladen/entfernen
-│   ├── DrawStage.tsx               # Bilderrahmen, Slideshow, Gewinneranzeige
-│   ├── FitToViewport.tsx           # Skalierung im Präsentationsmodus
-│   ├── Snowfall.tsx · AppHeader.tsx · ErrorBoundary.tsx
-│   └── ui/                         # Basis-Komponenten (Button, Card, Input)
+│   ├── ChristmasGiftGenerator.tsx  # Composition Root: Szene, Bühne, Start-Button, Werkzeugleiste
+│   ├── DrawStage.tsx               # Milchglas-Bühne: Slideshow, Shuffle, Gewinner
+│   ├── Confetti.tsx                # Einmaliger Konfetti-Effekt
+│   ├── SetupSheet.tsx              # Schublade mit Tabs „Names“ / „Photos“
+│   ├── ParticipantsPanel.tsx       # Hut, bereits gezogen, Import/Export
+│   ├── SlideshowPanel.tsx          # Fotos hinzufügen/entfernen
+│   ├── ErrorBoundary.tsx
+│   ├── scene/                      # CozyRoom, Fireplace, ChristmasTree, WinterWindow, StringLights
+│   └── ui/                         # Button, Input, Sheet (Radix Dialog)
 ├── hooks/
-│   ├── useParticipants.ts      # Liste + Persistenz + Import/Export
+│   ├── useParticipants.ts      # Hut + gezogene Namen + Runden, Persistenz, Import/Export
 │   ├── useDraw.ts              # Auslosungs-Zustandsautomat
 │   ├── useSlideshow.ts         # Object-URLs + Auto-Advance
 │   ├── useJinglePlayer.ts      # Audio
+│   ├── useSoundPreference.ts   # Ton an/aus (persistiert)
 │   ├── usePresentationMode.ts  # Fullscreen-Sync
 │   └── useStartShortcut.ts     # Enter/Space
 └── lib/
-    ├── names.ts · random.ts · storage.ts · download.ts · utils.ts
+    ├── names.ts · random.ts · storage.ts · download.ts · seeded.ts · utils.ts
 ```
 
 ## Auslosung (Zustandsautomat)
@@ -55,7 +58,7 @@ src/
 
 - `useDraw` kopiert die Kandidaten beim Start (stabiler Pool während der Animation).
 - Ein `ref` verhindert parallele Auslosungen; Timer werden beim Unmount aufgeräumt.
-- Der Gewinner wird über `onWinner` gemeldet und von der Root-Komponente aus der Liste entfernt.
+- Der Gewinner wird über `onWinner` gemeldet; `useParticipants.markDrawn` verschiebt ihn vom Hut in die Liste der Gezogenen. `resetRound` legt alle zurück.
 
 ## Designentscheidungen
 

@@ -1,27 +1,66 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "@/App";
+import { APP_CONFIG } from "@/config";
 
 describe("ChristmasGiftGenerator (integration)", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    // jsdom has no media playback.
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined);
+    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => undefined);
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+  });
 
-  it("renders and lets the user add and remove participants", async () => {
+  it("adds and removes participants via the setup drawer", async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Santa");
-    const start = screen.getByRole("button", { name: /start selection/i });
-    expect(start).toBeDisabled();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Santa’s helper");
+    expect(screen.getByRole("button", { name: /start the draw/i })).toBeDisabled();
 
-    await user.type(screen.getByLabelText(/participant name/i), "Anna{Enter}");
-    expect(screen.getByText("Anna")).toBeInTheDocument();
-    expect(start).toBeEnabled();
+    await user.click(screen.getByRole("button", { name: /^names/i }));
+    const dialog = await screen.findByRole("dialog", { name: /set up the draw/i });
 
-    await user.type(screen.getByLabelText(/participant name/i), "Anna{Enter}");
-    expect(screen.getByText(/already on the list/i)).toBeInTheDocument();
+    await user.type(within(dialog).getByLabelText(/participant name/i), "Anna{Enter}");
+    expect(within(dialog).getByText("Anna")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /remove anna/i }));
-    expect(screen.queryByText("Anna")).not.toBeInTheDocument();
+    await user.type(within(dialog).getByLabelText(/participant name/i), "Anna{Enter}");
+    expect(within(dialog).getByText(/already on the list/i)).toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: /remove anna/i }));
+    expect(within(dialog).queryByText("Anna")).not.toBeInTheDocument();
+  });
+
+  it("draws a winner, moves them to 'already drawn' and starts a new round", async () => {
+    localStorage.setItem(APP_CONFIG.storageKey, JSON.stringify(["Ben"]));
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: /start the draw/i }));
+    act(() => void vi.advanceTimersByTime(APP_CONFIG.spinTotalMs + 500));
+
+    expect(screen.getByText(/is handing out the presents/i)).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem(APP_CONFIG.drawnStorageKey)!)).toEqual(["Ben"]);
+    expect(JSON.parse(localStorage.getItem(APP_CONFIG.storageKey)!)).toEqual([]);
+
+    await user.click(screen.getByRole("button", { name: /^names/i }));
+    const dialog = await screen.findByRole("dialog");
+    expect(within(dialog).getByText(/already drawn · 1/i)).toBeInTheDocument();
+    await user.click(within(dialog).getByRole("button", { name: /new round/i }));
+    expect(within(dialog).getByText(/in the hat · 1/i)).toBeInTheDocument();
+  });
+
+  it("persists the sound preference", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: /mute jingles/i }));
+    expect(screen.getByRole("button", { name: /unmute jingles/i })).toBeInTheDocument();
+    expect(localStorage.getItem(APP_CONFIG.soundStorageKey)).toBe("false");
   });
 });

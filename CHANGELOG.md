@@ -2,7 +2,30 @@
 
 Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
-## [Unreleased]
+## [2.0.0] – 2026-11-19
+
+### Hinzugefügt
+
+- **Cozy Winter Wonderland**: neues Design mit animiertem Kamin (Flammen, Glut, Kerzen, Strümpfe), geschmücktem Weihnachtsbaum (Stern, Lichterkette, Kugeln, Geschenke), verschneitem Fenster und Lichterkette – vollständig als eigene SVG/CSS-Illustration.
+- Moderne Oberfläche: Milchglas-Bühne, schwebende Werkzeugleiste, Einstellungs-Schublade mit Tabs (Radix Dialog), Fortschrittsbalken beim Mischen, goldener Gewinnername mit Konfetti.
+- Runden: Liste „Already drawn“ und „New round“; Gezogene werden gespeichert.
+- Ton an/aus (gespeichert).
+- Schriften Fraunces und Inter (selbst gehostet).
+
+### Geändert
+
+- Design-Tokens nativ in Tailwind 4 (`@theme`), `tailwind.config.ts` entfällt.
+- Präsentationsmodus ohne Skalierungs-Hack: responsive Bühne, kompakte Steuerung oben rechts.
+
+### Entfernt
+
+- Hintergrundfoto (durch Code-Illustration ersetzt), alte Schriften, `FitToViewport`, `AppHeader`, `Snowfall`, `Card`.
+
+### Behoben
+
+- Leertaste nach Klick auf „Present“ beendete den Präsentationsmodus, statt die Auslosung zu starten.
+
+## [1.1.0] – 2026-11-18
 
 ### Hinzugefügt
 

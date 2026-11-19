@@ -26,20 +26,24 @@
 
 ## Screenshots
 
-| Einrichtung                                 | Ergebnis                                        |
-| ------------------------------------------- | ----------------------------------------------- |
-| ![Setup](docs/assets/screenshot-setup.webp) | ![Gewinner](docs/assets/screenshot-winner.webp) |
+![Gemütliches Wohnzimmer mit Kamin und Weihnachtsbaum](docs/assets/screenshot-stage.webp)
+
+| Gewinner                                        | Einrichtung                                 | Mobil                                                                    |
+| ----------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------ |
+| ![Gewinner](docs/assets/screenshot-winner.webp) | ![Setup](docs/assets/screenshot-setup.webp) | <img src="docs/assets/screenshot-mobile.webp" width="200" alt="Mobil" /> |
 
 ## Features
 
+- 🔥 **Cozy Winter Wonderland** – animierter Kamin mit Glut und Kerzen, geschmückter Baum mit Lichterkette, verschneites Fenster; komplett als eigene SVG/CSS-Illustration.
 - 🎲 **Faire Auslosung** – Web Crypto API mit Rejection Sampling, kein Modulo-Bias.
-- 🔁 **Jede Person genau einmal** – Gewinner werden automatisch aus dem Pool entfernt.
-- 💾 **Persistenz & Austausch** – Liste bleibt lokal gespeichert; Import/Export als JSON.
-- 🖼️ **Slideshow** – eigene Fotos im verzierten Bilderrahmen, Auto-Wechsel und manuelle Navigation.
-- 🖥️ **Präsentationsmodus** – Vollbild mit automatischer Skalierung auf jede Bildschirmgröße.
-- 🎵 **Jingles** – zufälliger Weihnachtssound während der Auslosung.
+- 🔁 **Runden** – Gezogene landen unter „Already drawn“; „New round“ legt alle zurück in den Hut.
+- 🎉 **Großer Auftritt** – Namens-Shuffle mit Fortschrittsbalken, goldener Gewinnername und Konfetti.
+- 💾 **Persistenz & Austausch** – Teilnehmer, Runde und Ton-Einstellung bleiben lokal gespeichert; Import/Export als JSON.
+- 🖼️ **Slideshow** – eigene Fotos laufen hinter der Auslosung.
+- 🖥️ **Präsentationsmodus** – Vollbild mit großer Bühne und kompakter Steuerung.
+- 🎵 **Jingles** – zufälliger Weihnachtssound, per Klick stummschaltbar.
 - ⌨️ **Tastatursteuerung** – Start mit `Enter` / `Leertaste`.
-- ♿ **Barrierearm** – Labels, Live-Regionen, Fokus-Styles, `prefers-reduced-motion`.
+- ♿ **Barrierearm** – fokussierbare Schublade (Radix Dialog), Live-Regionen, `prefers-reduced-motion`.
 - 🔒 **Privacy by Design** – strikte CSP, selbst gehostete Schriften, keine externen Requests.
 
 ## Ablauf
@@ -73,14 +77,14 @@ Anschließend <http://localhost:8080> öffnen. Voraussetzung: Node.js 26 LTS (em
 
 ## Tech-Stack
 
-| Bereich     | Technologie                                            |
-| ----------- | ------------------------------------------------------ |
-| Framework   | React 18 · TypeScript (strict)                         |
-| Build       | Vite 7 · SWC                                           |
-| Styling     | Tailwind CSS 4 · Radix Slot · class-variance-authority |
-| Icons/Fonts | lucide-react · @fontsource (self-hosted)               |
-| Qualität    | Vitest · Testing Library · ESLint · Prettier · CodeQL  |
-| Delivery    | GitHub Actions · GitHub Pages · Dependabot             |
+| Bereich     | Technologie                                                   |
+| ----------- | ------------------------------------------------------------- |
+| Framework   | React 18 · TypeScript (strict)                                |
+| Build       | Vite 7 · SWC                                                  |
+| Styling     | Tailwind CSS 4 · Radix Dialog/Slot · class-variance-authority |
+| Icons/Fonts | lucide-react · Fraunces & Inter (@fontsource, self-hosted)    |
+| Qualität    | Vitest · Testing Library · ESLint · Prettier · CodeQL         |
+| Delivery    | GitHub Actions · GitHub Pages · Dependabot                    |
 
 ## Architektur
 
@@ -98,4 +102,4 @@ Beiträge sind willkommen – siehe [CONTRIBUTING.md](CONTRIBUTING.md). Änderun
 
 ## Lizenz
 
-Veröffentlicht unter der [MIT-Lizenz](LICENSE). Für Medien in `src/assets/` (Bild, Sounds) gelten ggf. eigene Rechte – siehe [docs/ASSETS.md](docs/ASSETS.md).
+Veröffentlicht unter der [MIT-Lizenz](LICENSE). Für die Sounds in `src/assets/sounds/` gelten ggf. eigene Rechte – siehe [docs/ASSETS.md](docs/ASSETS.md).

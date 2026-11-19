@@ -1,10 +1,12 @@
 # Medien & Lizenzen
 
-Der **Quellcode** steht unter der [MIT-Lizenz](../LICENSE). Für die Medien in `src/assets/` gilt Folgendes:
+Der **Quellcode** steht unter der [MIT-Lizenz](../LICENSE). Das gilt seit Version 2.0 auch für die gesamte Szene (Kamin, Baum, Fenster, Lichterkette): Sie ist als eigener SVG-/CSS-Code in `src/components/scene/` umgesetzt – das frühere Hintergrundfoto wurde entfernt.
+
+Für die Sounds in `src/assets/sounds/` gilt Folgendes:
 
 ## Status
 
-Laut Maintainer wurden alle Medien aus **lizenzfreien Quellen** bezogen. Die konkreten Quellen wurden zum Zeitpunkt der Aufnahme ins Repository (2025-11-06) **nicht dokumentiert**. Die Dateien enthalten keine Metadaten (ID3-Tags, EXIF) mit Herkunfts- oder Lizenzangaben.
+Laut Maintainer wurden alle Sounds aus **lizenzfreien Quellen** bezogen. Die konkreten Quellen wurden zum Zeitpunkt der Aufnahme ins Repository (2025-11-06) **nicht dokumentiert**. Die Dateien enthalten keine Metadaten (ID3-Tags, EXIF) mit Herkunfts- oder Lizenzangaben.
 
 | Datei                       | Typ   | Dauer / Größe | Quelle        | Lizenz                         |
 | --------------------------- | ----- | ------------- | ------------- | ------------------------------ |

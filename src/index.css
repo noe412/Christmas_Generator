@@ -1,114 +1,208 @@
 @import "tailwindcss";
-/* Theme tokens, fonts and keyframes live in the JS config (Tailwind v4 legacy-config bridge). */
-@config "../tailwind.config.ts";
 
 /*
- * Design tokens. All colours are HSL triplets consumed via hsl(var(--token)).
- * Fonts are self-hosted through @fontsource (imported in main.tsx) – no third-party requests.
+ * Cozy Winter Wonderland – design tokens.
+ * Night-time living room: deep ink blues, warm amber firelight, cranberry and pine accents.
+ * Fonts are self-hosted via @fontsource (see main.tsx) – no third-party requests.
  */
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-night-950: oklch(0.14 0.03 265);
+  --color-night-900: oklch(0.18 0.035 265);
+  --color-night-800: oklch(0.24 0.04 265);
+  --color-night-700: oklch(0.32 0.045 265);
+
+  --color-ember-300: oklch(0.88 0.12 80);
+  --color-ember-400: oklch(0.82 0.15 70);
+  --color-ember-500: oklch(0.74 0.17 55);
+  --color-ember-600: oklch(0.64 0.19 40);
+
+  --color-cranberry-400: oklch(0.68 0.19 18);
+  --color-cranberry-500: oklch(0.6 0.2 20);
+  --color-cranberry-600: oklch(0.52 0.19 22);
+
+  --color-pine-400: oklch(0.62 0.12 160);
+  --color-pine-500: oklch(0.5 0.11 160);
+  --color-pine-700: oklch(0.33 0.07 165);
+
+  --color-snow: oklch(0.98 0.01 250);
+  --color-cream: oklch(0.96 0.025 80);
+
+  --radius-card: 1.75rem;
+
+  --shadow-glow: 0 0 0 1px oklch(0.88 0.12 80 / 0.35), 0 10px 40px -8px oklch(0.74 0.17 55 / 0.6);
+  --shadow-card: 0 30px 80px -20px oklch(0 0 0 / 0.65), inset 0 1px 0 oklch(1 0 0 / 0.08);
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-pop: pop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-flicker: flicker 2.4s ease-in-out infinite;
+  --animate-twinkle: twinkle 2.2s ease-in-out infinite;
+  --animate-snowfall: snowfall 9s linear infinite;
+  --animate-ember: ember 3.2s ease-out infinite;
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+  --animate-flame: flame 1.6s ease-in-out infinite;
+  --animate-confetti: confetti 1.6s cubic-bezier(0.15, 0.6, 0.35, 1) forwards;
+  --animate-shimmer: shimmer 3s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    25% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+    50% {
+      opacity: 0.75;
+      transform: scale(0.97);
+    }
+    75% {
+      opacity: 0.95;
+      transform: scale(1.02);
+    }
+  }
+  @keyframes flame {
+    0%,
+    100% {
+      transform: scaleY(1) scaleX(1) skewX(0deg);
+    }
+    25% {
+      transform: scaleY(1.08) scaleX(0.96) skewX(2deg);
+    }
+    50% {
+      transform: scaleY(0.94) scaleX(1.03) skewX(-2deg);
+    }
+    75% {
+      transform: scaleY(1.05) scaleX(0.98) skewX(1deg);
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
+  @keyframes snowfall {
+    from {
+      transform: translate3d(0, -10vh, 0) rotate(0deg);
+    }
+    to {
+      transform: translate3d(6vw, 110vh, 0) rotate(360deg);
+    }
+  }
+  @keyframes ember {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0) scale(1);
+    }
+    15% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--drift, 6px), -70px) scale(0.3);
+    }
+  }
+  @keyframes confetti {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 200% 50%;
+    }
+  }
+}
+
 @layer base {
-  :root {
-    --background: 355 20% 15%;
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 355 85% 25%;
-
-    --primary: 355 75% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 145 60% 40%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 145 15% 88%;
-    --muted-foreground: 145 10% 35%;
-
-    --accent: 45 95% 60%;
-    --accent-foreground: 355 85% 25%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 145 20% 85%;
-    --input: 145 20% 90%;
-    --ring: 355 75% 45%;
-
-    --radius: 0.75rem;
-
-    --shadow-festive: 0 10px 40px -10px hsl(355 75% 45% / 0.5);
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  * {
-    @apply border-border;
-  }
-
   html,
   body,
   #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+    min-height: 100%;
   }
 
   body {
-    @apply bg-background font-body text-foreground antialiased;
+    @apply bg-night-950 font-sans text-snow antialiased;
   }
 
-  /* Tailwind v4 dropped the pointer cursor on buttons – keep the v3 behaviour. */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ember-300);
+    outline-offset: 3px;
+  }
 }
 
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md px-6 py-2 font-semibold shadow-lg;
-    @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.9));
-    color: hsl(var(--primary-foreground));
-    transition: var(--transition-smooth);
-  }
+@utility glass {
+  background: linear-gradient(160deg, oklch(1 0 0 / 0.1), oklch(1 0 0 / 0.04));
+  border: 1px solid oklch(1 0 0 / 0.12);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: var(--shadow-card);
+}
 
-  .btn-primary:hover {
-    filter: brightness(0.95);
-  }
-
-  .btn-primary:active {
-    transform: translateY(1px);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Presentation mode: full viewport stage, content centred. */
-  .presentation {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  .presentation .inner-frame {
-    width: 100%;
-    max-width: min(1200px, 86vw) !important;
-  }
-
-  @media (orientation: landscape) {
-    .presentation {
-      font-size: 1.2em;
-    }
-  }
+@utility text-gold {
+  background: linear-gradient(
+    90deg,
+    var(--color-ember-300),
+    var(--color-cream),
+    var(--color-ember-400),
+    var(--color-ember-300)
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -118,5 +212,34 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scene keyframes used directly by SVG elements (user-space units). */
+@keyframes window-snow {
+  from {
+    transform: translate(0, -20px);
+  }
+  to {
+    transform: translate(14px, 330px);
+  }
+}
+
+/* SVG elements animate around their own box (e.g. flames grow from their base). */
+.origin-base {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.origin-center {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }

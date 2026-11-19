@@ -17,20 +17,20 @@
 
   <rect class="layer" x="20" y="20" width="960" height="130" rx="12"/>
   <text class="h" x="40" y="46">UI layer · src/components</text>
-  <rect class="box" x="40" y="62" width="210" height="70" rx="8"/><text class="t" x="145" y="92" text-anchor="middle">ChristmasGiftGenerator</text><text class="s" x="145" y="112" text-anchor="middle">composition root</text>
-  <rect class="box" x="265" y="62" width="160" height="70" rx="8"/><text class="t" x="345" y="92" text-anchor="middle">ParticipantsPanel</text><text class="s" x="345" y="112" text-anchor="middle">add · remove · import/export</text>
-  <rect class="box" x="440" y="62" width="150" height="70" rx="8"/><text class="t" x="515" y="92" text-anchor="middle">SlideshowPanel</text><text class="s" x="515" y="112" text-anchor="middle">image upload</text>
-  <rect class="box" x="605" y="62" width="130" height="70" rx="8"/><text class="t" x="670" y="92" text-anchor="middle">DrawStage</text><text class="s" x="670" y="112" text-anchor="middle">frame · winner</text>
-  <rect class="box" x="750" y="62" width="210" height="70" rx="8"/><text class="t" x="855" y="88" text-anchor="middle">FitToViewport · Snowfall</text><text class="t" x="855" y="106" text-anchor="middle">AppHeader · ErrorBoundary</text><text class="s" x="855" y="124" text-anchor="middle">presentation helpers</text>
+  <rect class="box" x="40" y="62" width="210" height="70" rx="8"/><text class="t" x="145" y="92" text-anchor="middle">ChristmasGiftGenerator</text><text class="s" x="145" y="112" text-anchor="middle">composition root · dock</text>
+  <rect class="box" x="265" y="62" width="160" height="70" rx="8"/><text class="t" x="345" y="92" text-anchor="middle">SetupSheet</text><text class="s" x="345" y="112" text-anchor="middle">names · drawn · photos</text>
+  <rect class="box" x="440" y="62" width="150" height="70" rx="8"/><text class="t" x="515" y="92" text-anchor="middle">DrawStage</text><text class="s" x="515" y="112" text-anchor="middle">slideshow · confetti</text>
+  <rect class="box" x="605" y="62" width="130" height="70" rx="8"/><text class="t" x="670" y="92" text-anchor="middle">ui/</text><text class="s" x="670" y="112" text-anchor="middle">Button · Input · Sheet</text>
+  <rect class="box" x="750" y="62" width="210" height="70" rx="8"/><text class="t" x="855" y="88" text-anchor="middle">scene/CozyRoom</text><text class="t" x="855" y="106" text-anchor="middle">Fireplace · Tree · Window</text><text class="s" x="855" y="124" text-anchor="middle">animated SVG illustration</text>
 
   <rect class="layer" x="20" y="190" width="960" height="120" rx="12"/>
   <text class="h" x="40" y="216">State &amp; behaviour · src/hooks</text>
-  <rect class="hook" x="40" y="230" width="140" height="60" rx="8"/><text class="t" x="110" y="265" text-anchor="middle">useParticipants</text>
+  <rect class="hook" x="40" y="230" width="140" height="60" rx="8"/><text class="t" x="110" y="258" text-anchor="middle">useParticipants</text><text class="s" x="110" y="276" text-anchor="middle">pool · drawn · rounds</text>
   <rect class="hook" x="195" y="230" width="120" height="60" rx="8"/><text class="t" x="255" y="265" text-anchor="middle">useDraw</text>
   <rect class="hook" x="330" y="230" width="130" height="60" rx="8"/><text class="t" x="395" y="265" text-anchor="middle">useSlideshow</text>
   <rect class="hook" x="475" y="230" width="150" height="60" rx="8"/><text class="t" x="550" y="265" text-anchor="middle">useJinglePlayer</text>
   <rect class="hook" x="640" y="230" width="170" height="60" rx="8"/><text class="t" x="725" y="265" text-anchor="middle">usePresentationMode</text>
-  <rect class="hook" x="825" y="230" width="135" height="60" rx="8"/><text class="t" x="892" y="265" text-anchor="middle">useStartShortcut</text>
+  <rect class="hook" x="825" y="230" width="135" height="60" rx="8"/><text class="t" x="892" y="258" text-anchor="middle">useStartShortcut</text><text class="s" x="892" y="276" text-anchor="middle">+ useSoundPreference</text>
 
   <rect class="layer" x="20" y="350" width="600" height="120" rx="12"/>
   <text class="h" x="40" y="376">Pure logic · src/lib + src/config.ts</text>

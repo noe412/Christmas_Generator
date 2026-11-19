@@ -1,7 +1,5 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import { Upload, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { ImagePlus, X } from "lucide-react";
 import type { Slide } from "@/hooks/useSlideshow";
 
 interface SlideshowPanelProps {
@@ -24,43 +22,41 @@ export function SlideshowPanel({ slides, onAdd, onRemove }: SlideshowPanelProps)
   };
 
   return (
-    <Card className="border-4 border-accent/50 bg-white/95 p-6 shadow-2xl backdrop-blur-sm">
-      <h2 className="mb-4 font-elegant text-2xl font-bold text-primary">Images for slideshow</h2>
+    <div className="space-y-4">
+      <p className="text-sm text-snow/60">
+        Photos play as a slideshow behind the draw. They stay on this device and are never uploaded.
+      </p>
       <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleUpload} className="hidden" />
-      <Button
+      <button
         type="button"
-        size="lg"
         onClick={() => fileRef.current?.click()}
-        className="mb-2 w-full bg-linear-to-r from-secondary to-secondary/80"
+        className="flex w-full flex-col items-center gap-2 rounded-2xl border border-dashed border-white/20 bg-white/[0.04] px-4 py-8 text-snow/80 transition hover:border-ember-300/60 hover:bg-white/[0.07]"
       >
-        <Upload aria-hidden="true" className="mr-2 h-5 w-5" />
-        Upload pictures
-      </Button>
-      <p role="status" aria-live="polite" className="mb-2 min-h-[1.25rem] text-sm text-muted-foreground">
+        <ImagePlus className="size-7 text-ember-300" aria-hidden="true" />
+        <span className="font-medium">Add photos</span>
+        <span className="text-xs text-snow/50">JPG, PNG, WebP · up to 15 MB each</span>
+      </button>
+      <p role="status" aria-live="polite" className="min-h-5 text-sm text-ember-300/90">
         {status}
       </p>
 
       {slides.length > 0 && (
-        <ul className="grid max-h-48 grid-cols-4 gap-2 overflow-y-auto pt-2 md:grid-cols-6">
+        <ul className="grid grid-cols-3 gap-2">
           {slides.map((slide, i) => (
-            <li key={slide.id} className="group relative">
-              <img
-                src={slide.url}
-                alt={`Slide ${i + 1}: ${slide.name}`}
-                className="h-20 w-full rounded border-2 border-primary/30 object-cover"
-              />
+            <li key={slide.id} className="group relative aspect-square overflow-hidden rounded-xl ring-1 ring-white/10">
+              <img src={slide.url} alt={`Slide ${i + 1}: ${slide.name}`} className="h-full w-full object-cover" />
               <button
                 type="button"
                 onClick={() => onRemove(slide.id)}
                 aria-label={`Remove slide ${i + 1}`}
-                className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-white opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
+                className="absolute top-1.5 right-1.5 grid size-7 place-items-center rounded-full bg-night-950/70 text-snow opacity-0 backdrop-blur transition group-hover:opacity-100 focus:opacity-100"
               >
-                <X aria-hidden="true" className="h-4 w-4" />
+                <X className="size-4" aria-hidden="true" />
               </button>
             </li>
           ))}
         </ul>
       )}
-    </Card>
+    </div>
   );
 }

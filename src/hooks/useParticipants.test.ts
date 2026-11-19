@@ -34,6 +34,20 @@ describe("useParticipants", () => {
     expect(result.current.names).toEqual(["Cara", "Dan"]);
   });
 
+  it("moves winners to the drawn list and restores them on a new round", () => {
+    const { result } = renderHook(() => useParticipants());
+    act(() => void result.current.add("Anna"));
+    act(() => void result.current.add("Ben"));
+    act(() => result.current.markDrawn("Anna"));
+    expect(result.current.names).toEqual(["Ben"]);
+    expect(result.current.drawn).toEqual(["Anna"]);
+    expect(result.current.add("Anna")).toBe("duplicate");
+
+    act(() => result.current.resetRound());
+    expect(result.current.names).toEqual(["Ben", "Anna"]);
+    expect(result.current.drawn).toEqual([]);
+  });
+
   it("removes names", () => {
     const { result } = renderHook(() => useParticipants());
     act(() => void result.current.add("Eva"));

@@ -19,14 +19,24 @@
 
 Alle `*.mp3`-Dateien in `src/assets/sounds/` werden beim Build automatisch eingebunden (`import.meta.glob`). Datei hinzufügen oder löschen genügt – kein Code nötig.
 
-## Hintergrund
+## Szene
 
-`src/assets/christmas-background.jpg` ersetzen (empfohlen: 1920×1080, < 300 KB, JPEG/WebP).
+Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt in `src/components/scene/`:
+
+| Datei               | Inhalt                                                     |
+| ------------------- | ---------------------------------------------------------- |
+| `CozyRoom.tsx`      | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette |
+| `Fireplace.tsx`     | Kamin mit Flammen, Glut, Kerzen, Strümpfen                 |
+| `ChristmasTree.tsx` | Baum mit Stern, Lichterkette, Kugeln, Geschenken           |
+| `WinterWindow.tsx`  | Fenster mit Mond, Sternen und Schneefall                   |
+| `StringLights.tsx`  | Lichterkette unter der Decke                               |
+
+Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden bei `prefers-reduced-motion` automatisch angehalten.
 
 ## Farben & Schriften
 
-- Farb-Tokens (HSL) in `src/index.css` unter `:root` (z. B. `--primary`, `--secondary`, `--accent`).
-- Schriften werden in `src/main.tsx` über `@fontsource/*` importiert und in `tailwind.config.ts` (`fontFamily`) zugeordnet.
+- Design-Tokens (OKLCH) in `src/index.css` unter `@theme`: `night-*`, `ember-*`, `cranberry-*`, `pine-*`, `snow`, `cream`.
+- Schriften: **Fraunces** (Überschriften, `font-display`) und **Inter** (Text, `font-sans`), importiert in `src/main.tsx`.
 
 ## Basis-Pfad (Hosting)
 

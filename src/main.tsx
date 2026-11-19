@@ -1,11 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@fontsource/great-vibes/400.css";
-import "@fontsource/merriweather/400.css";
-import "@fontsource/merriweather/700.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
 import App from "./App";
 import "./index.css";
 

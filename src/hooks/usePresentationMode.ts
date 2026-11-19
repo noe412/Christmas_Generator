@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type RefObject } from "react";
 
 /** Toggles a fullscreen presentation mode and stays in sync when the user exits via ESC. */
-export function usePresentationMode(targetRef: RefObject<HTMLElement>) {
+export function usePresentationMode(targetRef?: RefObject<HTMLElement | null>) {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function usePresentationMode(targetRef: RefObject<HTMLElement>) {
 
   const enter = useCallback(() => {
     setActive(true);
-    const el = targetRef.current ?? document.documentElement;
+    const el = targetRef?.current ?? document.documentElement;
     // Fullscreen may be unsupported (e.g. iOS Safari); presentation mode still works in-page.
     el.requestFullscreen?.().catch(() => undefined);
   }, [targetRef]);

@@ -5,14 +5,16 @@
 export const APP_CONFIG = {
   /** localStorage key for the persisted participant list (bump the suffix on breaking changes). */
   storageKey: "christmas_gift_generator_names_v1",
+  /** localStorage key for names already drawn in the current round. */
+  drawnStorageKey: "christmas_gift_generator_drawn_v1",
+  /** localStorage key for the sound preference. */
+  soundStorageKey: "christmas_gift_generator_sound_v1",
   /** Interval between name swaps during the draw animation (ms). */
   spinStepMs: 120,
   /** Total duration of the draw animation (ms). */
   spinTotalMs: 6000,
   /** Slideshow auto-advance interval (ms). */
   slideIntervalMs: 4000,
-  /** Number of animated snowflakes. */
-  snowflakeCount: 40,
   /** Hard limits protecting the browser from oversized input. */
   limits: {
     maxNameLength: 60,
