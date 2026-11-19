@@ -1,7 +1,9 @@
 import { useCallback, useState } from "react";
-import { Images, Maximize, Minimize, Users, Volume2, VolumeX } from "lucide-react";
+import { Download, Images, Maximize, Minimize, Snowflake, Users, Volume2, VolumeX, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDraw } from "@/hooks/useDraw";
+import { useInstallPrompt } from "@/hooks/useInstallPrompt";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useJinglePlayer } from "@/hooks/useJinglePlayer";
 import { useParticipants } from "@/hooks/useParticipants";
 import { usePresentationMode } from "@/hooks/usePresentationMode";
@@ -25,6 +27,8 @@ export function ChristmasGiftGenerator() {
   const sound = useSoundPreference();
   const { playRandom, stop } = useJinglePlayer();
   const presentation = usePresentationMode();
+  const installPrompt = useInstallPrompt();
+  const online = useOnlineStatus();
 
   const { markDrawn } = participants;
   const onStart = useCallback(() => {
@@ -64,19 +68,18 @@ export function ChristmasGiftGenerator() {
 
       <main
         className={cn(
-          "relative z-10 mx-auto flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 pt-16 pb-32 sm:gap-8 sm:px-6 sm:pt-20 sm:pb-44",
+          "relative z-10 mx-auto flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 pt-16 pb-32 sm:gap-8 sm:px-6 sm:pt-20 sm:pb-48",
           isPresenting ? "max-w-5xl pb-16" : "max-w-2xl",
         )}
       >
         {!isPresenting && (
           <header className="animate-fade-up text-center">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-snow/75 uppercase backdrop-blur">
-              <span className="size-1.5 rounded-full bg-apricot-300" aria-hidden="true" />
+              <Snowflake className="size-3.5 text-ember-300" aria-hidden="true" />
               Christmas Gift Draw
             </p>
-            <h1 className="font-display text-5xl leading-[0.98] font-normal tracking-[-0.03em] sm:text-7xl">
-              Who will be
-              <span className="block pr-2 text-apricot-300 italic">Santa’s helper?</span>
+            <h1 className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-balance drop-shadow-[0_2px_20px_oklch(0.14_0.03_265_/_0.9)] sm:text-6xl">
+              Who is <span className="text-gold animate-shimmer">Santa’s helper</span> this year?
             </h1>
           </header>
         )}
@@ -118,7 +121,7 @@ export function ChristmasGiftGenerator() {
       <nav
         aria-label="Controls"
         className={cn(
-          "glass fixed z-30 flex items-center gap-1 rounded-full p-1.5",
+          "glass fixed z-30 flex items-center gap-1 rounded-full bg-night-950/60 p-1.5",
           isPresenting ? "top-4 right-4" : "bottom-6 left-1/2 -translate-x-1/2",
         )}
       >
@@ -138,6 +141,22 @@ export function ChristmasGiftGenerator() {
             </Button>
             <span className="mx-1 h-6 w-px bg-white/15" aria-hidden="true" />
           </>
+        )}
+        {!online && (
+          <span
+            role="status"
+            className="flex h-10 items-center gap-1.5 rounded-full px-3 text-sm text-ember-300"
+            title="No connection – the app keeps working offline"
+          >
+            <WifiOff className="size-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Offline</span>
+          </span>
+        )}
+        {installPrompt.canInstall && !isPresenting && (
+          <Button variant="ghost" onClick={installPrompt.install} title="Install as an app – works offline">
+            <Download aria-hidden="true" />
+            <span className="hidden sm:inline">Install</span>
+          </Button>
         )}
         <Button
           variant="ghost"

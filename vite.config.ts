@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
+import { pwaPlugin } from "./build/pwa";
 import path from "node:path";
 import type { Plugin } from "vite";
 
@@ -14,6 +15,8 @@ const CSP = [
   "media-src 'self' blob:",
   "font-src 'self' data:",
   "connect-src 'self'",
+  "worker-src 'self'",
+  "manifest-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'none'",
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => ({
     host: "localhost",
     port: 8080,
   },
-  plugins: [react(), tailwindcss(), cspPlugin()],
+  plugins: [react(), tailwindcss(), cspPlugin(), pwaPlugin()],
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },
@@ -48,6 +51,7 @@ export default defineConfig(({ mode }) => ({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}", "build/**/*.test.ts"],
     css: false,
     coverage: {
       provider: "v8",

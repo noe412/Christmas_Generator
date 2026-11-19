@@ -11,6 +11,10 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 - Runden: Liste „Already drawn“ und „New round“; Gezogene werden gespeichert.
 - Ton an/aus (gespeichert).
 - Schriften Fraunces und Inter (selbst gehostet).
+- Großes Panoramafenster mit Vorhängen, Polarlicht, Sternschnuppen, Bergen, Tannenwald, Hütte mit Rauch und Schneefall.
+- Weihnachtsmann mit Rentierschlitten, der regelmäßig vorbeifliegt.
+- Schneefall über der ganzen Seite; Schnee, der sich auf Bühne und Werkzeugleiste setzt.
+- Offline-App (PWA): Manifest, Icons, eigener Service Worker mit Precache, „Install“-Button und Offline-Anzeige.
 
 ### Geändert
 

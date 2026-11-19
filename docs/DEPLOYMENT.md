@@ -49,7 +49,12 @@ location /assets/ {
 location = /index.html {
   add_header Cache-Control "no-cache";
 }
+location = /sw.js {
+  add_header Cache-Control "no-cache";
+}
 ```
+
+> **Service Worker:** `sw.js` muss unter dem App-Pfad liegen (Scope) und darf nicht lange gecacht werden. GitHub Pages erfüllt das automatisch. Die eingebettete CSP erlaubt `worker-src 'self'` und `manifest-src 'self'`.
 
 ## CI/CD-Übersicht
 

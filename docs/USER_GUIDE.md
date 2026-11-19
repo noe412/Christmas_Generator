@@ -60,6 +60,20 @@ Unterstützte Formate:
 
 Das Lautsprecher-Symbol in der Werkzeugleiste schaltet die Jingles an oder aus. Die Einstellung wird gespeichert.
 
+## Als App installieren & offline nutzen
+
+Der Generator ist eine Progressive Web App. Nach dem ersten Besuch liegen alle Dateien (inkl. Schriften und Jingles) im Browser – danach funktioniert er auch ohne Internet, z. B. am Fernseher bei der Familienfeier.
+
+| Gerät / Browser         | So geht's                                                                |
+| ----------------------- | ------------------------------------------------------------------------ |
+| Chrome / Edge (Desktop) | **Install** in der Werkzeugleiste oder Install-Symbol in der Adresszeile |
+| Android (Chrome)        | **Install** in der Werkzeugleiste oder Menü ⋮ → „App installieren“       |
+| iPhone / iPad (Safari)  | Teilen-Symbol → „Zum Home-Bildschirm“                                    |
+| macOS (Safari 17+)      | Ablage → „Zum Dock hinzufügen“                                           |
+
+- Ohne Verbindung zeigt die Werkzeugleiste **Offline** – alles funktioniert weiter.
+- Updates werden beim nächsten Start mit Internet automatisch geladen.
+
 ## Tastenkürzel
 
 | Taste             | Aktion                        |

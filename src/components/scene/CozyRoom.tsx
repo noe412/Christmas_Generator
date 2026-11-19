@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ChristmasTree } from "./ChristmasTree";
 import { Fireplace } from "./Fireplace";
 import { StringLights } from "./StringLights";
-import { WinterWindow } from "./WinterWindow";
+import { PanoramaWindow } from "./PanoramaWindow";
 
 /**
  * Decorative, fixed background scene: a cosy living room on a winter night.
@@ -34,7 +34,12 @@ export const CozyRoom = memo(function CozyRoom({ dimmed = false }: { dimmed?: bo
 
       <StringLights className="absolute inset-x-0 top-0 h-12 w-full sm:h-16" />
 
-      <WinterWindow className="absolute top-[8vh] left-[6vw] hidden h-[30vh] w-auto opacity-90 xl:block" />
+      <PanoramaWindow
+        className={cn(
+          "absolute top-[6vh] left-1/2 w-[min(118vw,1180px)] max-w-none -translate-x-1/2 transition-opacity duration-700 sm:w-[min(96vw,1180px)] lg:w-[min(78vw,1180px)]",
+          dimmed ? "opacity-40" : "opacity-75 lg:opacity-100",
+        )}
+      />
 
       {/* Wooden floor */}
       <div

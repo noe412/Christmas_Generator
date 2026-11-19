@@ -23,20 +23,33 @@ Alle `*.mp3`-Dateien in `src/assets/sounds/` werden beim Build automatisch einge
 
 Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt in `src/components/scene/`:
 
-| Datei               | Inhalt                                                     |
-| ------------------- | ---------------------------------------------------------- |
-| `CozyRoom.tsx`      | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette |
-| `Fireplace.tsx`     | Kamin mit Flammen, Glut, Kerzen, Strümpfen                 |
-| `ChristmasTree.tsx` | Baum mit Stern, Lichterkette, Kugeln, Geschenken           |
-| `WinterWindow.tsx`  | Fenster mit Mond, Sternen und Schneefall                   |
-| `StringLights.tsx`  | Lichterkette unter der Decke                               |
+| Datei                | Inhalt                                                        |
+| -------------------- | ------------------------------------------------------------- |
+| `CozyRoom.tsx`       | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette    |
+| `Fireplace.tsx`      | Kamin mit Flammen, Glut, Kerzen, Strümpfen                    |
+| `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken              |
+| `PanoramaWindow.tsx` | Panoramafenster: Polarlicht, Mond, Berge, Wald, Hütte, Schnee |
+| `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`) |
+| `Snowfall.tsx`       | Schneefall über der ganzen Seite                              |
+| `StringLights.tsx`   | Lichterkette unter der Decke                                  |
 
 Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden bei `prefers-reduced-motion` automatisch angehalten.
 
 ## Farben & Schriften
 
-- Design-Tokens (OKLCH) in `src/index.css` unter `@theme`: `night-*`, `ember-*`, `cranberry-*`, `pine-*`, `snow`, `cream`.
+- Design-Tokens (OKLCH) in `src/index.css` unter `@theme`: `night-*` (Nachtblau), `ember-*` (Kamingold), `cranberry-*` (Hauptfarbe/Buttons), `pine-*`, `snow`, `cream`.
 - Schriften: **Fraunces** (Überschriften, `font-display`) und **Inter** (Text, `font-sans`), importiert in `src/main.tsx`.
+
+## Offline-App (PWA)
+
+| Datei                              | Zweck                                                                |
+| ---------------------------------- | -------------------------------------------------------------------- |
+| `public/manifest.webmanifest`      | Name, Farben, Icons, Startseite                                      |
+| `public/icons/`                    | App-Icons (192/512, maskable, Apple Touch)                           |
+| `build/pwa.ts`                     | Build-Plugin: erzeugt `sw.js` mit Precache-Liste aller Build-Dateien |
+| `src/lib/registerServiceWorker.ts` | Registriert den Service Worker (nur Production-Build)                |
+
+Strategie: Seiten **network-first** (neue Releases sofort sichtbar, offline aus dem Cache), Assets **cache-first** (gehashte Dateinamen). Der Cache-Name enthält einen Hash über Dateinamen und Inhalte; alte Caches werden beim Aktivieren gelöscht.
 
 ## Basis-Pfad (Hosting)
 

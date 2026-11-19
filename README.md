@@ -34,7 +34,9 @@
 
 ## Features
 
-- 🔥 **Cozy Winter Wonderland** – animierter Kamin mit Glut und Kerzen, geschmückter Baum mit Lichterkette, verschneites Fenster; komplett als eigene SVG/CSS-Illustration.
+- 🔥 **Cozy Winter Wonderland** – animierter Kamin mit Glut und Kerzen, geschmückter Baum mit Lichterkette, großes Panoramafenster mit Bergen, Polarlicht, Hütte und Schneefall – komplett als eigene SVG/CSS-Illustration.
+- 🛷 **Weihnachtsmann** – fliegt regelmäßig mit seinem Rentierschlitten am Fenster vorbei.
+- 📲 **Offline-App (PWA)** – installierbar auf Desktop, Android und iOS; nach dem ersten Besuch komplett ohne Internet nutzbar.
 - 🎲 **Faire Auslosung** – Web Crypto API mit Rejection Sampling, kein Modulo-Bias.
 - 🔁 **Runden** – Gezogene landen unter „Already drawn“; „New round“ legt alle zurück in den Hut.
 - 🎉 **Großer Auftritt** – Namens-Shuffle mit Fortschrittsbalken, goldener Gewinnername und Konfetti.

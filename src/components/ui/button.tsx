@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-linear-to-b from-apricot-200 to-apricot-400 text-night-950 shadow-glow hover:brightness-110 hover:shadow-[0_0_0_1px_var(--color-ember-300),0_14px_50px_-6px_var(--color-ember-500)]",
+          "bg-linear-to-b from-cranberry-400 to-cranberry-600 text-snow shadow-glow ring-1 ring-ember-300/40 ring-inset hover:brightness-110 hover:shadow-[0_0_0_1px_var(--color-ember-300),0_14px_50px_-6px_var(--color-cranberry-500)]",
         glass: "glass text-snow hover:bg-white/15",
         ghost: "text-snow/80 hover:bg-white/10 hover:text-snow",
         danger: "text-snow/60 hover:bg-cranberry-500/20 hover:text-cranberry-400",

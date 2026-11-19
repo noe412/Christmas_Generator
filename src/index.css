@@ -27,16 +27,12 @@
   --color-pine-500: oklch(0.5 0.11 160);
   --color-pine-700: oklch(0.33 0.07 165);
 
-  --color-apricot-200: oklch(0.9 0.07 65);
-  --color-apricot-300: oklch(0.85 0.1 60);
-  --color-apricot-400: oklch(0.79 0.13 55);
-
   --color-snow: oklch(0.98 0.01 250);
   --color-cream: oklch(0.96 0.025 80);
 
   --radius-card: 1.75rem;
 
-  --shadow-glow: 0 0 0 1px oklch(0.88 0.12 80 / 0.35), 0 10px 40px -8px oklch(0.74 0.17 55 / 0.6);
+  --shadow-glow: 0 0 0 1px oklch(0.75 0.17 20 / 0.45), 0 10px 40px -8px oklch(0.6 0.2 20 / 0.7);
   --shadow-card: 0 30px 80px -20px oklch(0 0 0 / 0.65), inset 0 1px 0 oklch(1 0 0 / 0.08);
 
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -188,7 +184,8 @@
 }
 
 @utility glass {
-  background: linear-gradient(160deg, oklch(1 0 0 / 0.1), oklch(1 0 0 / 0.04));
+  /* background-image only, so a bg-* colour utility can add a tint underneath */
+  background-image: linear-gradient(160deg, oklch(1 0 0 / 0.1), oklch(1 0 0 / 0.04));
   border: 1px solid oklch(1 0 0 / 0.12);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -245,5 +242,120 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+/* ---- Panorama window: own scene animations ---- */
+.animate-santa-flight {
+  animation: santa-flight 32s linear -24s infinite;
+}
+@keyframes santa-flight {
+  0% {
+    transform: translate(-260px, 225px) scale(1.05);
+  }
+  18% {
+    transform: translate(150px, 170px) scale(1.05);
+  }
+  32% {
+    transform: translate(470px, 112px) scale(1);
+  }
+  45% {
+    transform: translate(960px, 64px) scale(0.9);
+  }
+  45.01%,
+  100% {
+    transform: translate(1200px, 64px) scale(0.9);
+  }
+}
+.animate-sleigh-bob {
+  animation: sleigh-bob 1.4s ease-in-out infinite;
+}
+@keyframes sleigh-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.animate-gallop {
+  animation: gallop 0.6s ease-in-out infinite;
+}
+@keyframes gallop {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+}
+.animate-aurora {
+  animation: aurora 14s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  from {
+    opacity: 0.55;
+    transform: translateX(-30px) skewX(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(30px) skewX(4deg);
+  }
+}
+.animate-shooting-star {
+  opacity: 0;
+  animation: shooting-star 11s ease-in 3s infinite;
+}
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: translate(200px, 50px);
+  }
+  2% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0;
+    transform: translate(420px, 128px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(420px, 128px);
+  }
+}
+.animate-smoke {
+  animation: smoke 4s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes smoke {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  20% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18px, -46px) scale(1.8);
+  }
+}
+
+/* Snow settling onto cards when they appear. */
+.animate-settle {
+  animation: settle 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: 50% 100%;
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scaleY(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
   }
 }

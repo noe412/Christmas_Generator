@@ -1,9 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@fontsource-variable/fraunces/opsz.css";
-import "@fontsource-variable/fraunces/opsz-italic.css";
+import "@fontsource-variable/fraunces";
 import "@fontsource-variable/inter";
 import App from "./App";
+import { registerServiceWorker } from "./lib/registerServiceWorker";
 import "./index.css";
 
 const container = document.getElementById("root");
@@ -14,3 +14,5 @@ createRoot(container).render(
     <App />
   </StrictMode>,
 );
+
+registerServiceWorker();

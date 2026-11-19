@@ -34,7 +34,7 @@ src/
 │   ├── ParticipantsPanel.tsx       # Hut, bereits gezogen, Import/Export
 │   ├── SlideshowPanel.tsx          # Fotos hinzufügen/entfernen
 │   ├── ErrorBoundary.tsx
-│   ├── scene/                      # CozyRoom, Fireplace, ChristmasTree, WinterWindow, StringLights
+│   ├── scene/                      # CozyRoom, Fireplace, ChristmasTree, PanoramaWindow, SantaSleigh, Snowfall, StringLights
 │   └── ui/                         # Button, Input, Sheet (Radix Dialog)
 ├── hooks/
 │   ├── useParticipants.ts      # Hut + gezogene Namen + Runden, Persistenz, Import/Export
@@ -43,9 +43,14 @@ src/
 │   ├── useJinglePlayer.ts      # Audio
 │   ├── useSoundPreference.ts   # Ton an/aus (persistiert)
 │   ├── usePresentationMode.ts  # Fullscreen-Sync
-│   └── useStartShortcut.ts     # Enter/Space
+│   ├── useStartShortcut.ts     # Enter/Space
+│   ├── useInstallPrompt.ts     # „Install“-Button (beforeinstallprompt)
+│   └── useOnlineStatus.ts      # Offline-Anzeige
 └── lib/
     ├── names.ts · random.ts · storage.ts · download.ts · seeded.ts · utils.ts
+    └── registerServiceWorker.ts
+build/
+└── pwa.ts                      # Vite-Plugin: generiert den Service Worker (sw.js)
 ```
 
 ## Auslosung (Zustandsautomat)
