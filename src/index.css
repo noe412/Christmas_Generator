@@ -359,3 +359,130 @@
     transform: translateY(0) scaleY(1);
   }
 }
+
+/* ---- Snowman ---- */
+.animate-wave {
+  animation: wave 2.6s ease-in-out infinite;
+}
+@keyframes wave {
+  0%,
+  55%,
+  100% {
+    transform: rotate(0deg);
+  }
+  65% {
+    transform: rotate(-28deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+  85% {
+    transform: rotate(-24deg);
+  }
+}
+.animate-blink {
+  animation: blink 5s infinite;
+}
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+.animate-scarf {
+  animation: scarf 1.8s ease-in-out infinite;
+}
+.origin-top {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+@keyframes scarf {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(14deg);
+  }
+}
+
+/* ---- Snow drift + snowplow (one shared 48 s cycle) ---- */
+.animate-snowdrift {
+  transform-origin: 50% 100%;
+  animation: snowdrift 48s linear -16s infinite;
+}
+@keyframes snowdrift {
+  0% {
+    transform: scaleY(0);
+    clip-path: inset(0 0 0 0);
+  }
+  75% {
+    transform: scaleY(1);
+    clip-path: inset(0 0 0 0);
+  }
+  95% {
+    transform: scaleY(1);
+    clip-path: inset(0 0 0 100%);
+  }
+  95.01%,
+  100% {
+    transform: scaleY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+.animate-plow {
+  animation: plow 48s linear -16s infinite;
+}
+@keyframes plow {
+  0%,
+  75% {
+    transform: translateX(-11rem);
+  }
+  95% {
+    transform: translateX(calc(100vw - 1rem));
+  }
+  95.01%,
+  100% {
+    transform: translateX(110vw);
+  }
+}
+.animate-wheel {
+  animation: spin-wheel 0.5s linear infinite;
+}
+@keyframes spin-wheel {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-beacon {
+  animation: beacon 0.8s steps(2, jump-none) infinite;
+}
+@keyframes beacon {
+  0% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px #ffb020);
+  }
+  100% {
+    opacity: 0.25;
+    filter: none;
+  }
+}
+.animate-spray {
+  animation: spray 0.7s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes spray {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -26px);
+  }
+}

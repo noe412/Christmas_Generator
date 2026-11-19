@@ -34,7 +34,7 @@ src/
 │   ├── ParticipantsPanel.tsx       # Hut, bereits gezogen, Import/Export
 │   ├── SlideshowPanel.tsx          # Fotos hinzufügen/entfernen
 │   ├── ErrorBoundary.tsx
-│   ├── scene/                      # CozyRoom, Fireplace, ChristmasTree, PanoramaWindow, SantaSleigh, Snowfall, StringLights
+│   ├── scene/                      # CozyRoom, Fireplace, ChristmasTree, PanoramaWindow, SantaSleigh, Snowman, SnowPlow, Snowfall, StringLights
 │   └── ui/                         # Button, Input, Sheet (Radix Dialog)
 ├── hooks/
 │   ├── useParticipants.ts      # Hut + gezogene Namen + Runden, Persistenz, Import/Export

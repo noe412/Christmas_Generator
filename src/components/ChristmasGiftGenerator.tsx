@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { DrawStage } from "./DrawStage";
 import { CozyRoom } from "./scene/CozyRoom";
 import { Snowfall } from "./scene/Snowfall";
+import { SnowPlow } from "./scene/SnowPlow";
 import { SnowCap } from "./SnowCap";
 import { SetupSheet, type SetupTab } from "./SetupSheet";
 
@@ -65,6 +66,7 @@ export function ChristmasGiftGenerator() {
     <div className="relative flex min-h-dvh flex-col">
       <CozyRoom dimmed={setupOpen} />
       <Snowfall />
+      <SnowPlow />
 
       <main
         className={cn(

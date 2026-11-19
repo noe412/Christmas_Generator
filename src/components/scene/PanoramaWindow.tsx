@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { seeded } from "@/lib/seeded";
 import { SantaSleigh } from "./SantaSleigh";
+import { Snowman } from "./Snowman";
 
 const rand = seeded(11);
 
@@ -63,6 +64,11 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           <stop offset="0" stopColor="#fff" stopOpacity=".55" />
           <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </radialGradient>
+        <linearGradient id="pw-drift" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f4f7ff" />
+          <stop offset=".35" stopColor="#d9e2f5" />
+          <stop offset="1" stopColor="#9fb0d6" />
+        </linearGradient>
         <clipPath id="pw-glass">
           <rect x="60" y="34" width="780" height="380" rx="10" />
         </clipPath>
@@ -170,6 +176,22 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
             <path d={`M${p.x} ${p.y - p.h}l${-p.h * 0.12} ${p.h * 0.32}h${p.h * 0.24}z`} fill="#eef3ff" />
           </g>
         ))}
+
+        {/* Snow drift with a snowman, in the part of the view left of the stage */}
+        {[
+          [214, 236, 34],
+          [236, 244, 26],
+        ].map(([x, y, h]) => (
+          <g key={x}>
+            <path d={`M${x} ${y - h}l${-h * 0.36} ${h}h${h * 0.72}z`} fill="#1d3b4a" />
+            <path d={`M${x} ${y - h}l${-h * 0.12} ${h * 0.32}h${h * 0.24}z`} fill="#eef3ff" />
+          </g>
+        ))}
+        <path d="M60 262 Q110 220 170 228 T300 262 V414 H60 Z" fill="url(#pw-drift)" />
+        <path d="M60 262 Q110 220 170 228 T300 262" fill="none" stroke="#ffffff" strokeOpacity=".8" strokeWidth="2" />
+        <g transform="translate(168 232)">
+          <Snowman />
+        </g>
 
         {/* Falling snow */}
         {FLAKES.map((f, i) => (

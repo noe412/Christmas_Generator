@@ -23,15 +23,17 @@ Alle `*.mp3`-Dateien in `src/assets/sounds/` werden beim Build automatisch einge
 
 Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt in `src/components/scene/`:
 
-| Datei                | Inhalt                                                        |
-| -------------------- | ------------------------------------------------------------- |
-| `CozyRoom.tsx`       | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette    |
-| `Fireplace.tsx`      | Kamin mit Flammen, Glut, Kerzen, Strümpfen                    |
-| `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken              |
-| `PanoramaWindow.tsx` | Panoramafenster: Polarlicht, Mond, Berge, Wald, Hütte, Schnee |
-| `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`) |
-| `Snowfall.tsx`       | Schneefall über der ganzen Seite                              |
-| `StringLights.tsx`   | Lichterkette unter der Decke                                  |
+| Datei                | Inhalt                                                           |
+| -------------------- | ---------------------------------------------------------------- |
+| `CozyRoom.tsx`       | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette       |
+| `Fireplace.tsx`      | Kamin mit Flammen, Glut, Kerzen, Strümpfen                       |
+| `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken                 |
+| `PanoramaWindow.tsx` | Panoramafenster: Polarlicht, Mond, Berge, Wald, Hütte, Schnee    |
+| `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`)    |
+| `Snowfall.tsx`       | Schneefall über der ganzen Seite                                 |
+| `Snowman.tsx`        | Winkender, blinzelnder Schneemann mit wehendem Schal             |
+| `SnowPlow.tsx`       | Schneewehe am unteren Rand + Räumwagen (gemeinsamer 48-s-Zyklus) |
+| `StringLights.tsx`   | Lichterkette unter der Decke                                     |
 
 Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden bei `prefers-reduced-motion` automatisch angehalten.
 

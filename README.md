@@ -36,6 +36,7 @@
 
 - 🔥 **Cozy Winter Wonderland** – animierter Kamin mit Glut und Kerzen, geschmückter Baum mit Lichterkette, großes Panoramafenster mit Bergen, Polarlicht, Hütte und Schneefall – komplett als eigene SVG/CSS-Illustration.
 - 🛷 **Weihnachtsmann** – fliegt regelmäßig mit seinem Rentierschlitten am Fenster vorbei.
+- ⛄ **Schneemann & Schneepflug** – ein winkender Schneemann im Fenster; am Bildschirmrand sammelt sich Schnee, den ab und zu ein kleiner Räumwagen wegschiebt.
 - 📲 **Offline-App (PWA)** – installierbar auf Desktop, Android und iOS; nach dem ersten Besuch komplett ohne Internet nutzbar.
 - 🎲 **Faire Auslosung** – Web Crypto API mit Rejection Sampling, kein Modulo-Bias.
 - 🔁 **Runden** – Gezogene landen unter „Already drawn“; „New round“ legt alle zurück in den Hut.
