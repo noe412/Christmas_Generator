@@ -32,7 +32,7 @@ Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt i
 | `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken                                                 |
 | `PanoramaWindow.tsx` | Panoramafenster in Ebenen: Himmel · Polarlicht/Santa · Landschaft · Schneemann · Schnee · Rahmen |
 | `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`)                                    |
-| `Snowfall.tsx`       | Schneefall über der ganzen Seite                                                                 |
+| `Snowfall.tsx`       | Schnee im Raum: zwei dezente Schnee-Schichten + einzelne große Flocken                           |
 | `Snowman.tsx`        | Winkender, blinzelnder Schneemann; jubelt bei jedem Gewinner                                     |
 | `SnowPlow.tsx`       | Schneewehe am unteren Rand + Räumwagen; gemeinsamer 48-s-Zyklus, Schaufel exakt an der Räumkante |
 | `StringLights.tsx`   | Lichterkette unter der Decke                                                                     |

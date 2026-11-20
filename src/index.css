@@ -380,18 +380,26 @@
 /* Shares its timing with `snowdrift`: 75 % → 95 % sweeps 0 → 100 % of the width. */
 @keyframes plow-track {
   0%,
+  74.9% {
+    opacity: 0;
+    transform: translateX(-14rem);
+  }
   75% {
+    opacity: 1;
     transform: translateX(0%);
   }
   95% {
+    opacity: 1;
     transform: translateX(100%);
   }
   99% {
+    opacity: 1;
     transform: translateX(calc(100% + 12rem));
   }
   99.01%,
   100% {
-    transform: translateX(0%);
+    opacity: 0;
+    transform: translateX(-14rem);
   }
 }
 .animate-wheel {
@@ -658,5 +666,37 @@
   15%,
   70% {
     transform: rotate(-30deg);
+  }
+}
+
+/* ---- Snow sheets: tiled flakes, looped by exactly one tile (seamless), compositor only ---- */
+.snow-sheet {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  background-repeat: repeat;
+  will-change: transform;
+  animation-name: snow-sheet-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes snow-sheet-fall {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, var(--tile), 0);
+  }
+}
+.snow-sway {
+  will-change: transform;
+  animation: snow-sway 9s ease-in-out infinite alternate;
+}
+@keyframes snow-sway {
+  from {
+    transform: translateX(-12px);
+  }
+  to {
+    transform: translateX(12px);
   }
 }

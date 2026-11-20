@@ -84,6 +84,7 @@ build/
 | Deterministischer Zufall für Deko    | `seeded()` sorgt für identische Szene bei jedem Render, in Tests und Screenshots.                                                                             |
 | Eigener Service Worker statt Workbox | ~3 KB, keine Zusatzabhängigkeit, vollständig testbar (`build/pwa.test.ts`).                                                                                   |
 | Animationen über `data-motion`       | Folgt „Bewegung reduzieren“ des Systems, lässt sich per Schalter überstimmen.                                                                                 |
+| Schnee als gekachelte Schichten      | Flocken als wiederholtes Verlaufsmuster, das um genau eine Kachel verschoben wird – nahtlos, hunderte Flocken pro Element (`lib/snowSheet.ts`).               |
 
 ## Qualitätssicherung
 

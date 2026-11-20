@@ -1,5 +1,7 @@
 import { memo, type CSSProperties } from "react";
 import { seeded } from "@/lib/seeded";
+import type { SnowSheetLayer } from "@/lib/snowSheet";
+import { SnowSheets } from "../SnowSheets";
 import { SantaSleigh } from "./SantaSleigh";
 import { Snowman } from "./Snowman";
 
@@ -30,12 +32,12 @@ const STARS = Array.from({ length: 40 }, (_, i) => ({
   r: 0.5 + rand() * 1.2,
   twinkle: i % 4 === 0, // only a few twinkle – each one costs a repaint
 }));
-const FLAKES = Array.from({ length: 60 }, () => ({
-  left: rand() * 100,
-  size: 2 + rand() * 4,
-  dur: 7 + rand() * 7,
-  delay: -rand() * 14,
-}));
+/** Outside: dense snow in three depths (far, mid, near). */
+const WINDOW_SNOW: SnowSheetLayer[] = [
+  { tile: 140, flakes: 22, minR: 0.6, maxR: 1.2, duration: 9, opacity: 0.7, seed: 21 },
+  { tile: 220, flakes: 16, minR: 1.2, maxR: 2, duration: 7, opacity: 0.85, seed: 22 },
+  { tile: 340, flakes: 9, minR: 2, maxR: 3.4, duration: 5.5, opacity: 0.95, blur: 0.6, seed: 23 },
+];
 
 /** A row of snowy pines along a ridge line. */
 function forest(y0: number, count: number, scale: number, seed: number) {
@@ -259,19 +261,7 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className, cheerKey
 
         {/* Falling snow – composited HTML layer */}
         <div className="pw-glass absolute overflow-hidden rounded-[1.1%]" style={glassStyle}>
-          {FLAKES.map((f, i) => (
-            <span
-              key={i}
-              className="pw-flake"
-              style={{
-                left: `${f.left}%`,
-                width: f.size,
-                height: f.size,
-                animationDuration: `${f.dur}s`,
-                animationDelay: `${f.delay}s`,
-              }}
-            />
-          ))}
+          <SnowSheets layers={WINDOW_SNOW} />
         </div>
 
         <Frame />
