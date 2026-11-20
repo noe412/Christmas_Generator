@@ -66,20 +66,13 @@ export const ChristmasTree = memo(function ChristmasTree({ className }: { classN
         </radialGradient>
       </defs>
 
-      {/* Presents */}
-      <g>
-        <rect x="46" y="332" width="64" height="50" rx="5" fill="#c9343f" />
-        <rect x="72" y="332" width="12" height="50" fill="#f2c14e" />
-        <rect x="46" y="350" width="64" height="10" fill="#f2c14e" />
-        <rect x="170" y="344" width="58" height="38" rx="5" fill="#3d7fb8" />
-        <rect x="193" y="344" width="11" height="38" fill="#f7f1e6" />
-        <rect x="116" y="356" width="48" height="26" rx="4" fill="#2f7a55" />
-        <rect x="134" y="356" width="10" height="26" fill="#e0424f" />
-        <path d="M78 332c-10-12-22-6-14 2zM78 332c10-12 22-6 14 2z" fill="#f2c14e" />
-      </g>
-
-      {/* Trunk */}
-      <rect x="126" y="300" width="28" height="40" rx="3" fill="#5a3420" />
+      {/* Ground shadow, trunk and tree skirt – the tree stands on the floor */}
+      <ellipse cx="140" cy="392" rx="128" ry="8" fill="#000" opacity=".35" />
+      <rect x="127" y="292" width="26" height="80" rx="3" fill="#5a3420" />
+      <rect x="127" y="292" width="8" height="80" fill="#000" opacity=".18" />
+      <ellipse cx="140" cy="378" rx="100" ry="14" fill="#a8273a" />
+      <ellipse cx="140" cy="376" rx="100" ry="12" fill="#c62f3b" />
+      <path d="M40 377 Q140 396 240 377" fill="none" stroke="#f4f7ff" strokeWidth="4" strokeLinecap="round" />
 
       {/* Tiers (bottom to top) */}
       {["M140 150L36 300q104 26 208 0z", "M140 88L64 216q76 20 152 0z", "M140 40L90 138q50 14 100 0z"].map((d) => (
@@ -131,6 +124,28 @@ export const ChristmasTree = memo(function ChristmasTree({ className }: { classN
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
+
+      {/* Presents in front of the tree, resting on skirt and floor (with contact shadows) */}
+      <g>
+        <ellipse cx="78" cy="393" rx="38" ry="5" fill="#000" opacity=".4" />
+        <ellipse cx="196" cy="393" rx="34" ry="5" fill="#000" opacity=".4" />
+        <ellipse cx="140" cy="394" rx="28" ry="4" fill="#000" opacity=".4" />
+
+        <rect x="46" y="340" width="64" height="52" rx="4" fill="#c9343f" />
+        <rect x="46" y="340" width="64" height="9" rx="3" fill="#000" opacity=".12" />
+        <rect x="72" y="340" width="12" height="52" fill="#f2c14e" />
+        <rect x="46" y="360" width="64" height="10" fill="#f2c14e" />
+        <path d="M78 340c-12-14-26-6-16 3zM78 340c12-14 26-6 16 3z" fill="#f2c14e" />
+
+        <rect x="166" y="352" width="60" height="40" rx="4" fill="#3d7fb8" />
+        <rect x="190" y="352" width="11" height="40" fill="#f7f1e6" />
+        <rect x="166" y="366" width="60" height="9" fill="#f7f1e6" />
+        <path d="M195 352c-9-10-20-4-12 2zM195 352c9-10 20-4 12 2z" fill="#f7f1e6" />
+
+        <rect x="114" y="364" width="50" height="30" rx="4" fill="#2f7a55" />
+        <rect x="134" y="364" width="10" height="30" fill="#e0424f" />
+        <rect x="114" y="364" width="50" height="6" rx="3" fill="#000" opacity=".12" />
+      </g>
     </svg>
   );
 });

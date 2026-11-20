@@ -37,7 +37,7 @@ export const CozyRoom = memo(function CozyRoom({ dimmed = false, cheerKey }: { d
       <PanoramaWindow
         cheerKey={cheerKey}
         className={cn(
-          "absolute top-[6vh] left-1/2 w-[min(118vw,1180px)] max-w-none -translate-x-1/2 transition-opacity duration-700 sm:w-[min(96vw,1180px)] lg:w-[min(78vw,1180px)]",
+          "absolute top-[6vh] left-1/2 w-[min(118vw,111vh)] max-w-none -translate-x-1/2 transition-opacity duration-700 sm:w-[min(96vw,111vh)] lg:w-[min(78vw,111vh)]",
           dimmed ? "opacity-40" : "opacity-75 lg:opacity-100",
         )}
       />
@@ -67,7 +67,7 @@ export const CozyRoom = memo(function CozyRoom({ dimmed = false, cheerKey }: { d
       />
       <ChristmasTree
         className={cn(
-          "absolute right-[-10vw] bottom-[6vh] h-[52vh] w-auto transition-opacity duration-700 sm:right-[1vw] sm:h-[62vh] lg:right-[3vw] lg:h-[78vh]",
+          "absolute right-[-10vw] bottom-[3vh] h-[52vh] w-auto transition-opacity duration-700 sm:right-[1vw] sm:h-[62vh] lg:right-[3vw] lg:h-[78vh]",
           dimmed ? "opacity-35" : "opacity-30 sm:opacity-60 lg:opacity-100",
         )}
       />

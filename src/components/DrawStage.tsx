@@ -40,7 +40,7 @@ export function DrawStage(props: DrawStageProps) {
         aria-label="Draw"
         className={cn(
           "glass relative isolate flex w-full bg-night-950/70 items-center justify-center overflow-hidden rounded-[var(--radius-card)] text-center",
-          presentation ? "min-h-[68vh]" : "min-h-[19rem] sm:min-h-[26rem]",
+          presentation ? "min-h-[38vh]" : "min-h-[19rem] sm:min-h-[26rem]",
         )}
       >
         {hasSlides && (

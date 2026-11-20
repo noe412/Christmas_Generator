@@ -87,8 +87,11 @@ export function ChristmasGiftGenerator() {
 
       <main
         className={cn(
-          "relative z-10 mx-auto flex w-full flex-1 flex-col items-center justify-center gap-6 px-4 pt-16 pb-32 sm:gap-8 sm:px-6 sm:pt-20 sm:pb-48",
-          isPresenting ? "max-w-5xl pb-16" : "max-w-2xl",
+          "relative z-10 mx-auto flex w-full flex-1 flex-col items-center gap-6 px-4 sm:gap-8 sm:px-6",
+          // Presenting: stage anchored low so the window stays visible above it.
+          isPresenting
+            ? "max-w-4xl justify-end pt-16 pb-[5vh]"
+            : "max-w-2xl justify-center pt-16 pb-32 sm:pt-20 sm:pb-48",
         )}
       >
         {!isPresenting && (

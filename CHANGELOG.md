@@ -34,6 +34,8 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 
 - Flüssigere Animationen: Das Panoramafenster ist in statische Grafik-Ebenen und bewegte, von der Grafikkarte verschobene Ebenen aufgeteilt (Schnee, Polarlicht, Sternschnuppe, Weihnachtsmann); Lichter funkeln gruppenweise statt einzeln, keine Filter pro Bild mehr, schwächerer Glas-Weichzeichner. Gemessen ≈ 40 % weniger Arbeit im Hauptthread.
 - Schneepflug und geräumter Schnee laufen bei jeder Bildschirmbreite (auch im Vollbild) exakt synchron.
+- Präsentationsmodus: Die Bühne sitzt unten und ist kompakter, das Fenster bleibt sichtbar; das Fenster wächst mit der Bildschirmhöhe statt bei 1180 px zu enden.
+- Der Weihnachtsbaum steht auf dem Boden (längerer Stamm, Baumdecke, Bodenschatten); die Geschenke liegen mit Schatten vor statt hinter dem Baum.
 - Leertaste nach Klick auf „Present“ beendete den Präsentationsmodus, statt die Auslosung zu starten.
 
 ## [1.1.0] – 2026-11-18
