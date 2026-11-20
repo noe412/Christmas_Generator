@@ -187,8 +187,8 @@
   /* background-image only, so a bg-* colour utility can add a tint underneath */
   background-image: linear-gradient(160deg, oklch(1 0 0 / 0.1), oklch(1 0 0 / 0.04));
   border: 1px solid oklch(1 0 0 / 0.12);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
   box-shadow: var(--shadow-card);
 }
 
@@ -220,16 +220,6 @@
   transition-duration: 0.01ms !important;
 }
 
-/* Scene keyframes used directly by SVG elements (user-space units). */
-@keyframes window-snow {
-  from {
-    transform: translate(0, -20px);
-  }
-  to {
-    transform: translate(14px, 330px);
-  }
-}
-
 /* SVG elements animate around their own box (e.g. flames grow from their base). */
 .origin-base {
   transform-box: fill-box;
@@ -250,27 +240,6 @@
 }
 
 /* ---- Panorama window: own scene animations ---- */
-.animate-santa-flight {
-  animation: santa-flight 32s linear -24s infinite;
-}
-@keyframes santa-flight {
-  0% {
-    transform: translate(-260px, 225px) scale(1.05);
-  }
-  18% {
-    transform: translate(150px, 170px) scale(1.05);
-  }
-  32% {
-    transform: translate(470px, 112px) scale(1);
-  }
-  45% {
-    transform: translate(960px, 64px) scale(0.9);
-  }
-  45.01%,
-  100% {
-    transform: translate(1200px, 64px) scale(0.9);
-  }
-}
 .animate-sleigh-bob {
   animation: sleigh-bob 1.4s ease-in-out infinite;
 }
@@ -293,40 +262,6 @@
   }
   50% {
     transform: translateY(-3px) rotate(-4deg);
-  }
-}
-.animate-aurora {
-  animation: aurora 14s ease-in-out infinite alternate;
-}
-@keyframes aurora {
-  from {
-    opacity: 0.55;
-    transform: translateX(-30px) skewX(-4deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(30px) skewX(4deg);
-  }
-}
-.animate-shooting-star {
-  opacity: 0;
-  animation: shooting-star 11s ease-in 3s infinite;
-}
-@keyframes shooting-star {
-  0% {
-    opacity: 0;
-    transform: translate(200px, 50px);
-  }
-  2% {
-    opacity: 1;
-  }
-  8% {
-    opacity: 0;
-    transform: translate(420px, 128px);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(420px, 128px);
   }
 }
 .animate-smoke {
@@ -438,20 +373,25 @@
     clip-path: inset(0 0 0 0);
   }
 }
-.animate-plow {
-  animation: plow 48s linear -16s infinite;
+.animate-plow-track {
+  will-change: transform;
+  animation: plow-track 48s linear -16s infinite;
 }
-@keyframes plow {
+/* Shares its timing with `snowdrift`: 75 % → 95 % sweeps 0 → 100 % of the width. */
+@keyframes plow-track {
   0%,
   75% {
-    transform: translateX(-11rem);
+    transform: translateX(0%);
   }
   95% {
-    transform: translateX(calc(100vw - 1rem));
+    transform: translateX(100%);
   }
-  95.01%,
+  99% {
+    transform: translateX(calc(100% + 12rem));
+  }
+  99.01%,
   100% {
-    transform: translateX(110vw);
+    transform: translateX(0%);
   }
 }
 .animate-wheel {
@@ -540,5 +480,183 @@
   }
   80% {
     transform: rotate(0.4deg);
+  }
+}
+
+/* ---- Panorama window: composited layers (cq units = size of the glass area) ---- */
+.pw-glass {
+  container-type: size;
+}
+.pw-aurora {
+  position: absolute;
+  left: -15%;
+  top: 10%;
+  width: 130%;
+  height: 30%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgb(79 255 192 / 0.45) 30%, rgb(125 139 255 / 0.4) 70%, transparent);
+  filter: blur(22px);
+  will-change: transform, opacity;
+  animation: pw-aurora 14s ease-in-out infinite alternate;
+}
+@keyframes pw-aurora {
+  from {
+    opacity: 0.55;
+    transform: translateX(-3cqw) rotate(-7deg) skewX(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(3cqw) rotate(-4deg) skewX(6deg);
+  }
+}
+.pw-shooting-star {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6cqw;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #fff);
+  opacity: 0;
+  transform-origin: 0 50%;
+  animation: pw-shooting-star 11s ease-in 3s infinite;
+}
+@keyframes pw-shooting-star {
+  0% {
+    opacity: 0;
+    transform: translate(18cqw, 4cqh) rotate(19deg);
+  }
+  2% {
+    opacity: 1;
+  }
+  8%,
+  100% {
+    opacity: 0;
+    transform: translate(46cqw, 25cqh) rotate(19deg);
+  }
+}
+.pw-santa-flight {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  animation: pw-santa-flight 32s linear -24s infinite;
+}
+.pw-santa-bob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 41.7cqw;
+  transform-origin: 0 0;
+  animation: sleigh-bob 1.4s ease-in-out infinite;
+}
+@keyframes pw-santa-flight {
+  0% {
+    transform: translate(-50.4cqw, 48.6cqh) scale(1);
+  }
+  18% {
+    transform: translate(2.1cqw, 34.1cqh) scale(1);
+  }
+  32% {
+    transform: translate(43.1cqw, 18.9cqh) scale(0.95);
+  }
+  45% {
+    transform: translate(106cqw, 6.2cqh) scale(0.86);
+  }
+  45.01%,
+  100% {
+    transform: translate(140cqw, 6.2cqh) scale(0.86);
+  }
+}
+.pw-flake {
+  position: absolute;
+  top: -3%;
+  border-radius: 9999px;
+  background: #fff;
+  opacity: 0.9;
+  will-change: transform;
+  animation-name: pw-snow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes pw-snow {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(2.5cqw, 108cqh, 0);
+  }
+}
+
+/* ---- Snowman cheers when a winner is drawn ---- */
+.animate-snowman-jump {
+  animation: snowman-jump 2.4s ease-in-out both;
+}
+@keyframes snowman-jump {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  8% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  20% {
+    transform: translateY(-18px) scale(0.97, 1.04);
+  }
+  32% {
+    transform: translateY(0) scale(1.05, 0.94);
+  }
+  44% {
+    transform: translateY(-14px) scale(0.98, 1.03);
+  }
+  56% {
+    transform: translateY(0) scale(1.03, 0.97);
+  }
+  66% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+.animate-hat-toss {
+  animation: hat-toss 2.4s cubic-bezier(0.3, 0, 0.4, 1) both;
+}
+@keyframes hat-toss {
+  0%,
+  10% {
+    transform: translateY(0) rotate(0deg);
+  }
+  35% {
+    transform: translateY(-46px) rotate(-200deg);
+  }
+  60% {
+    transform: translateY(-8px) rotate(-340deg);
+  }
+  68%,
+  100% {
+    transform: translateY(0) rotate(-360deg);
+  }
+}
+.animate-cheer-arm-left {
+  animation: cheer-arm-left 2.4s ease-in-out both;
+}
+@keyframes cheer-arm-left {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15%,
+  70% {
+    transform: rotate(48deg);
+  }
+}
+.animate-cheer-arm-right {
+  animation: cheer-arm-right 2.4s ease-in-out both;
+}
+@keyframes cheer-arm-right {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15%,
+  70% {
+    transform: rotate(-30deg);
   }
 }

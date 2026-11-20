@@ -35,6 +35,7 @@ import { SetupSheet, type SetupTab } from "./SetupSheet";
 export function ChristmasGiftGenerator() {
   const [setupOpen, setSetupOpen] = useState(false);
   const [setupTab, setSetupTab] = useState<SetupTab>("names");
+  const [wins, setWins] = useState(0);
 
   const participants = useParticipants();
   const slideshow = useSlideshow();
@@ -54,6 +55,7 @@ export function ChristmasGiftGenerator() {
     (winner: string) => {
       stop();
       markDrawn(winner);
+      setWins((n) => n + 1);
     },
     [stop, markDrawn],
   );
@@ -79,7 +81,7 @@ export function ChristmasGiftGenerator() {
 
   return (
     <div className="relative flex min-h-dvh flex-col">
-      <CozyRoom dimmed={setupOpen} />
+      <CozyRoom dimmed={setupOpen} cheerKey={wins > 0 ? String(wins) : undefined} />
       <Snowfall />
       <SnowPlow />
 
@@ -96,7 +98,7 @@ export function ChristmasGiftGenerator() {
               Christmas Gift Draw
             </p>
             <h1 className="font-display text-4xl leading-[1.05] font-semibold tracking-tight text-balance drop-shadow-[0_2px_20px_oklch(0.14_0.03_265_/_0.9)] sm:text-6xl">
-              Who is <span className="text-gold animate-shimmer">Santa’s helper</span> this year?
+              Who is <span className="text-gold">Santa’s helper</span> this year?
             </h1>
           </header>
         )}

@@ -25,17 +25,17 @@ Alle `*.mp3`-Dateien in `src/assets/sounds/` werden beim Build automatisch einge
 
 Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt in `src/components/scene/`:
 
-| Datei                | Inhalt                                                           |
-| -------------------- | ---------------------------------------------------------------- |
-| `CozyRoom.tsx`       | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette       |
-| `Fireplace.tsx`      | Kamin mit Flammen, Glut, Kerzen, Strümpfen                       |
-| `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken                 |
-| `PanoramaWindow.tsx` | Panoramafenster: Polarlicht, Mond, Berge, Wald, Hütte, Schnee    |
-| `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`)    |
-| `Snowfall.tsx`       | Schneefall über der ganzen Seite                                 |
-| `Snowman.tsx`        | Winkender, blinzelnder Schneemann mit wehendem Schal             |
-| `SnowPlow.tsx`       | Schneewehe am unteren Rand + Räumwagen (gemeinsamer 48-s-Zyklus) |
-| `StringLights.tsx`   | Lichterkette unter der Decke                                     |
+| Datei                | Inhalt                                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| `CozyRoom.tsx`       | Komposition: Wand, Boden, Teppich, Lichtstimmung, Vignette                                       |
+| `Fireplace.tsx`      | Kamin mit Flammen, Glut, Kerzen, Strümpfen                                                       |
+| `ChristmasTree.tsx`  | Baum mit Stern, Lichterkette, Kugeln, Geschenken                                                 |
+| `PanoramaWindow.tsx` | Panoramafenster in Ebenen: Himmel · Polarlicht/Santa · Landschaft · Schneemann · Schnee · Rahmen |
+| `SantaSleigh.tsx`    | Weihnachtsmann mit Rentierschlitten (Flugbahn in `index.css`)                                    |
+| `Snowfall.tsx`       | Schneefall über der ganzen Seite                                                                 |
+| `Snowman.tsx`        | Winkender, blinzelnder Schneemann; jubelt bei jedem Gewinner                                     |
+| `SnowPlow.tsx`       | Schneewehe am unteren Rand + Räumwagen; gemeinsamer 48-s-Zyklus, Schaufel exakt an der Räumkante |
+| `StringLights.tsx`   | Lichterkette unter der Decke                                                                     |
 
 Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden angehalten, sobald `<html data-motion="reduced">` gesetzt ist – aus der System-Einstellung `prefers-reduced-motion` oder dem Animationen-Schalter (`useMotionPreference`). Die Tailwind-Variante `motion-reduce:` ist per `@custom-variant` in `index.css` auf dieses Attribut umgestellt.
 

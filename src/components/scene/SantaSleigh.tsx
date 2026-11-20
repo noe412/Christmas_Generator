@@ -39,14 +39,10 @@ export function SantaSleigh() {
             strokeLinecap="round"
           />
           {i === reindeer.length - 1 && (
-            <circle
-              cx={x + 20}
-              cy={16 - i * 2}
-              r="2.4"
-              fill="#ff4545"
-              className="animate-twinkle"
-              style={{ animationDuration: "0.9s", filter: "drop-shadow(0 0 3px #ff4545)" }}
-            />
+            <g className="animate-twinkle" style={{ animationDuration: "0.9s" }}>
+              <circle cx={x + 20} cy={16 - i * 2} r="5" fill="#ff4545" opacity=".35" />
+              <circle cx={x + 20} cy={16 - i * 2} r="2.4" fill="#ff4545" />
+            </g>
           )}
         </g>
       ))}

@@ -46,6 +46,8 @@ describe("ChristmasGiftGenerator (integration)", () => {
     act(() => void vi.advanceTimersByTime(APP_CONFIG.spinTotalMs + 500));
 
     expect(screen.getByText(/is handing out the presents/i)).toBeInTheDocument();
+    // The snowman in the window cheers for the winner.
+    expect(document.querySelector(".animate-snowman-jump")).not.toBeNull();
     expect(JSON.parse(localStorage.getItem(APP_CONFIG.drawnStorageKey)!)).toEqual(["Ben"]);
     expect(JSON.parse(localStorage.getItem(APP_CONFIG.storageKey)!)).toEqual([]);
 

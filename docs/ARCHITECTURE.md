@@ -69,15 +69,21 @@ build/
 
 ## Designentscheidungen
 
-| Entscheidung                        | Begründung                                                                         |
-| ----------------------------------- | ---------------------------------------------------------------------------------- |
-| Kein Backend                        | Kein Betriebsaufwand, keine personenbezogenen Daten auf Servern (DSGVO).           |
-| Web Crypto statt `Math.random`      | Nachweislich gleichverteilte, nicht vorhersagbare Auswahl.                         |
-| Object-URLs statt Base64 für Bilder | Ca. 33 % weniger Speicher, kein Blockieren des Main Threads, explizites Freigeben. |
-| Self-hosted Fonts (`@fontsource`)   | Keine Requests an Google (DSGVO), funktioniert offline, CSP `font-src 'self'`.     |
-| Animation per `transform`           | Compositor-only, flüssig auf Mobilgeräten.                                         |
-| CSP nur im Build                    | Der Dev-Server benötigt Inline-Skripte für HMR.                                    |
-| Minimaler Komponentensatz           | Nur tatsächlich genutzte UI-Bausteine – kleinere Angriffsfläche und Bundle.        |
+| Entscheidung                         | Begründung                                                                                                                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kein Backend                         | Kein Betriebsaufwand, keine personenbezogenen Daten auf Servern (DSGVO).                                                                                      |
+| Web Crypto statt `Math.random`       | Nachweislich gleichverteilte, nicht vorhersagbare Auswahl.                                                                                                    |
+| Object-URLs statt Base64 für Bilder  | Ca. 33 % weniger Speicher, kein Blockieren des Main Threads, explizites Freigeben.                                                                            |
+| Self-hosted Fonts (`@fontsource`)    | Keine Requests an Google (DSGVO), funktioniert offline, CSP `font-src 'self'`.                                                                                |
+| Animation per `transform`            | Compositor-only, flüssig auf Mobilgeräten.                                                                                                                    |
+| CSP nur im Build                     | Der Dev-Server benötigt Inline-Skripte für HMR.                                                                                                               |
+| Minimaler Komponentensatz            | Nur tatsächlich genutzte UI-Bausteine – kleinere Angriffsfläche und Bundle.                                                                                   |
+| Szene als SVG-Code statt Foto        | Gestochen scharf in jeder Auflösung, animierbar, kaum Bildlast, keine Lizenzfragen.                                                                           |
+| Fenster als Ebenen-Stapel            | Große Grafiken bleiben statisch; Bewegtes läuft als `transform`/`opacity`-Ebene auf der GPU (Container-Einheiten `cqw`/`cqh` für bildschirmunabhängige Wege). |
+| Lichter in Gruppen animiert          | 6 statt 55 SVG-Animationen – weniger Stil- und Zeichenarbeit pro Bild.                                                                                        |
+| Deterministischer Zufall für Deko    | `seeded()` sorgt für identische Szene bei jedem Render, in Tests und Screenshots.                                                                             |
+| Eigener Service Worker statt Workbox | ~3 KB, keine Zusatzabhängigkeit, vollständig testbar (`build/pwa.test.ts`).                                                                                   |
+| Animationen über `data-motion`       | Folgt „Bewegung reduzieren“ des Systems, lässt sich per Schalter überstimmen.                                                                                 |
 
 ## Qualitätssicherung
 

@@ -17,6 +17,7 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 - Schneepflug: Am unteren Bildschirmrand wächst eine Schneewehe, die ein Räumwagen regelmäßig wegschiebt.
 - Schnee abschütteln: Klick auf den Schnee von Bühne oder Werkzeugleiste – Karte wackelt, Schnee fällt herunter und wächst langsam nach.
 - Animationen-Schalter: folgt standardmäßig „Bewegung reduzieren“ des Systems, lässt sich überstimmen (gespeichert).
+- Der Schneemann jubelt bei jedem Gewinner: zwei Hüpfer, Arme hoch, Hut-Salto.
 - Schneefall über der ganzen Seite; Schnee, der sich auf Bühne und Werkzeugleiste setzt.
 - Offline-App (PWA): Manifest, Icons, eigener Service Worker mit Precache, „Install“-Button und Offline-Anzeige.
 
@@ -31,6 +32,8 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 
 ### Behoben
 
+- Flüssigere Animationen: Das Panoramafenster ist in statische Grafik-Ebenen und bewegte, von der Grafikkarte verschobene Ebenen aufgeteilt (Schnee, Polarlicht, Sternschnuppe, Weihnachtsmann); Lichter funkeln gruppenweise statt einzeln, keine Filter pro Bild mehr, schwächerer Glas-Weichzeichner. Gemessen ≈ 40 % weniger Arbeit im Hauptthread.
+- Schneepflug und geräumter Schnee laufen bei jeder Bildschirmbreite (auch im Vollbild) exakt synchron.
 - Leertaste nach Klick auf „Present“ beendete den Präsentationsmodus, statt die Auslosung zu starten.
 
 ## [1.1.0] – 2026-11-18

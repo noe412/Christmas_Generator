@@ -26,6 +26,9 @@ function garland(y: number, sag: number, count: number) {
 
 const STRANDS = [garland(108, 8, 5), garland(170, 12, 7), garland(234, 14, 9), garland(280, 12, 11)];
 
+const LIGHTS = STRANDS.flat().map((p, i) => ({ ...p, i, color: LIGHT_COLORS[i % LIGHT_COLORS.length] }));
+const TWINKLE_GROUPS = [0, 1, 2].map((g) => LIGHTS.filter((l) => l.i % 3 === g));
+
 const ORNAMENTS = [
   { x: 128, y: 112, r: 7, c: "#e0424f" },
   { x: 160, y: 128, r: 6, c: "#f2c14e" },
@@ -42,7 +45,6 @@ const ORNAMENTS = [
 
 /** Decorated Christmas tree with a glowing star, twinkling lights, ornaments and presents. */
 export const ChristmasTree = memo(function ChristmasTree({ className }: { className?: string }) {
-  let lightIndex = 0;
   return (
     <svg viewBox="0 0 280 400" className={className} aria-hidden="true" focusable="false">
       <defs>
@@ -87,30 +89,27 @@ export const ChristmasTree = memo(function ChristmasTree({ className }: { classN
         </g>
       ))}
 
-      {/* Light strands */}
+      {/* Light strands (wires) */}
       {STRANDS.map((strand, s) => (
-        <g key={s}>
-          <polyline
-            points={strand.map((p) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="#1b2a22"
-            strokeWidth="1.2"
-            opacity=".7"
-          />
-          {strand.map((p) => {
-            const i = lightIndex++;
-            return (
-              <circle
-                key={i}
-                cx={p.x}
-                cy={p.y}
-                r="3.4"
-                fill={LIGHT_COLORS[i % LIGHT_COLORS.length]}
-                className="animate-twinkle"
-                style={{ animationDelay: `${(i * 0.37) % 2.2}s`, filter: "drop-shadow(0 0 3px currentColor)" }}
-              />
-            );
-          })}
+        <polyline
+          key={s}
+          points={strand.map((p) => `${p.x},${p.y}`).join(" ")}
+          fill="none"
+          stroke="#1b2a22"
+          strokeWidth="1.2"
+          opacity=".7"
+        />
+      ))}
+
+      {/* Bulbs in three groups that twinkle in turn – 3 animations instead of one per bulb */}
+      {TWINKLE_GROUPS.map((group, g) => (
+        <g key={g} className="animate-twinkle" style={{ animationDelay: `${g * -0.73}s` }}>
+          {group.map((l) => (
+            <g key={l.i}>
+              <circle cx={l.x} cy={l.y} r="7" fill={l.color} opacity=".28" />
+              <circle cx={l.x} cy={l.y} r="3.4" fill={l.color} />
+            </g>
+          ))}
         </g>
       ))}
 

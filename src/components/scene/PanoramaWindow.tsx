@@ -1,15 +1,38 @@
-import { memo } from "react";
+import { memo, type CSSProperties } from "react";
 import { seeded } from "@/lib/seeded";
 import { SantaSleigh } from "./SantaSleigh";
 import { Snowman } from "./Snowman";
 
-const rand = seeded(11);
+/*
+ * Performance note: the window is a stack of layers. The large SVGs (sky, landscape, frame)
+ * are static and painted once; everything that moves across a large area (aurora, shooting
+ * star, Santa, falling snow) lives in HTML layers animated with transform/opacity only, so the
+ * compositor moves them without repainting the scene. Coordinates below are in the 900 × 470
+ * viewBox; the glass area is x 60–840, y 34–414.
+ */
 
-const STARS = Array.from({ length: 40 }, () => ({ x: 70 + rand() * 760, y: 40 + rand() * 150, r: 0.5 + rand() * 1.2 }));
-const FLAKES = Array.from({ length: 70 }, () => ({
-  x: 60 + rand() * 780,
-  y: rand() * 80 - 60,
-  r: 0.8 + rand() * 2.2,
+const VB_W = 900;
+const VB_H = 470;
+const GLASS = { x: 60, y: 34, w: 780, h: 380 };
+const pct = (v: number, of: number) => `${(v / of) * 100}%`;
+
+const glassStyle: CSSProperties = {
+  left: pct(GLASS.x, VB_W),
+  top: pct(GLASS.y, VB_H),
+  width: pct(GLASS.w, VB_W),
+  height: pct(GLASS.h, VB_H),
+};
+
+const rand = seeded(11);
+const STARS = Array.from({ length: 40 }, (_, i) => ({
+  x: 70 + rand() * 760,
+  y: 40 + rand() * 150,
+  r: 0.5 + rand() * 1.2,
+  twinkle: i % 4 === 0, // only a few twinkle – each one costs a repaint
+}));
+const FLAKES = Array.from({ length: 60 }, () => ({
+  left: rand() * 100,
+  size: 2 + rand() * 4,
   dur: 7 + rand() * 7,
   delay: -rand() * 14,
 }));
@@ -27,14 +50,18 @@ function forest(y0: number, count: number, scale: number, seed: number) {
 const FAR_PINES = forest(318, 26, 0.6, 3);
 const NEAR_PINES = forest(372, 16, 1, 5).filter((_, i) => i % 3 !== 1);
 
-/**
- * Panoramic three-pane window with curtains, looking out on a winter night:
- * aurora, moon, mountains, forest, a cabin with a smoking chimney, falling snow,
- * an occasional shooting star – and Santa's sleigh flying past.
- */
-export const PanoramaWindow = memo(function PanoramaWindow({ className }: { className?: string }) {
+/** Snowman placement (base point) in viewBox units, and its own small viewBox. */
+const SNOWMAN = { x: 168, y: 232, vb: { x: -40, y: -150, w: 80, h: 158 } };
+
+interface PanoramaWindowProps {
+  className?: string;
+  /** Changes whenever a winner is drawn – the snowman cheers once per change. */
+  cheerKey?: string;
+}
+
+function Sky() {
   return (
-    <svg viewBox="0 0 900 470" className={className} aria-hidden="true" focusable="false">
+    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
       <defs>
         <linearGradient id="pw-sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#060d24" />
@@ -45,21 +72,32 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           <stop offset="0" stopColor="#fff6d8" stopOpacity=".55" />
           <stop offset="1" stopColor="#fff6d8" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="pw-aurora" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#4fffc0" stopOpacity="0" />
-          <stop offset=".3" stopColor="#4fffc0" stopOpacity=".55" />
-          <stop offset=".7" stopColor="#7d8bff" stopOpacity=".45" />
-          <stop offset="1" stopColor="#7d8bff" stopOpacity="0" />
-        </linearGradient>
-        <filter id="pw-blur" x="-20%" y="-50%" width="140%" height="200%">
-          <feGaussianBlur stdDeviation="14" />
-        </filter>
-        <linearGradient id="pw-curtain" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#7a1b26" />
-          <stop offset=".35" stopColor="#a8303c" />
-          <stop offset=".6" stopColor="#7f1f2a" />
-          <stop offset="1" stopColor="#a02b37" />
-        </linearGradient>
+      </defs>
+      <rect x={GLASS.x} y={GLASS.y} width={GLASS.w} height={GLASS.h} rx="10" fill="url(#pw-sky)" />
+      {STARS.map((s, i) => (
+        <circle
+          key={i}
+          cx={s.x}
+          cy={s.y}
+          r={s.r}
+          fill="#fff"
+          opacity={s.twinkle ? undefined : 0.75}
+          className={s.twinkle ? "animate-twinkle" : undefined}
+          style={s.twinkle ? { animationDelay: `${(i * 0.37) % 3}s`, animationDuration: "3.6s" } : undefined}
+        />
+      ))}
+      <circle cx="720" cy="96" r="60" fill="url(#pw-moon-glow)" />
+      <circle cx="720" cy="96" r="24" fill="#fff3cf" />
+      <circle cx="711" cy="90" r="4" fill="#ebdcae" />
+      <circle cx="728" cy="104" r="3" fill="#ebdcae" />
+    </svg>
+  );
+}
+
+function Landscape() {
+  return (
+    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
+      <defs>
         <radialGradient id="pw-frost" cx="0" cy="0" r="1">
           <stop offset="0" stopColor="#fff" stopOpacity=".55" />
           <stop offset="1" stopColor="#fff" stopOpacity="0" />
@@ -70,56 +108,10 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           <stop offset="1" stopColor="#9fb0d6" />
         </linearGradient>
         <clipPath id="pw-glass">
-          <rect x="60" y="34" width="780" height="380" rx="10" />
+          <rect x={GLASS.x} y={GLASS.y} width={GLASS.w} height={GLASS.h} rx="10" />
         </clipPath>
       </defs>
-
       <g clipPath="url(#pw-glass)">
-        <rect x="60" y="34" width="780" height="380" fill="url(#pw-sky)" />
-
-        {/* Aurora */}
-        <g filter="url(#pw-blur)" className="animate-aurora">
-          <path d="M40 150 Q220 60 420 120 T860 90 L860 130 Q640 170 420 160 T40 190 Z" fill="url(#pw-aurora)" />
-        </g>
-
-        {STARS.map((s, i) => (
-          <circle
-            key={i}
-            cx={s.x}
-            cy={s.y}
-            r={s.r}
-            fill="#fff"
-            className="animate-twinkle"
-            style={{ animationDelay: `${(i * 0.37) % 3}s`, animationDuration: "3.6s" }}
-          />
-        ))}
-
-        {/* Shooting star */}
-        <line
-          x1="0"
-          y1="0"
-          x2="46"
-          y2="16"
-          stroke="#fff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          className="animate-shooting-star"
-        />
-
-        {/* Moon */}
-        <circle cx="720" cy="96" r="60" fill="url(#pw-moon-glow)" />
-        <circle cx="720" cy="96" r="24" fill="#fff3cf" />
-        <circle cx="711" cy="90" r="4" fill="#ebdcae" />
-        <circle cx="728" cy="104" r="3" fill="#ebdcae" />
-
-        {/* Santa flies across the sky */}
-        <g className="animate-santa-flight">
-          <g className="animate-sleigh-bob">
-            <SantaSleigh />
-          </g>
-        </g>
-
-        {/* Mountains */}
         <path
           d="M60 300 L170 196 L240 250 L340 170 L450 262 L540 200 L640 270 L730 190 L840 280 V414 H60 Z"
           fill="#5d6fa3"
@@ -128,16 +120,12 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           d="M170 196 L196 221 L184 218 L170 230 L156 214 Z M340 170 L372 200 L356 196 L340 212 L322 192 Z M540 200 L566 224 L552 222 L540 232 L528 218 Z M730 190 L760 218 L744 214 L730 226 L714 208 Z"
           fill="#e8eefc"
         />
-
-        {/* Far forest */}
         {FAR_PINES.map((p, i) => (
           <path key={i} d={`M${p.x} ${p.y - p.h}l${-p.h * 0.32} ${p.h}h${p.h * 0.64}z`} fill="#2c4566" />
         ))}
-
-        {/* Snowy hills */}
         <path d="M60 330 Q240 286 430 318 T840 300 V414 H60 Z" fill="#c5d3ef" />
 
-        {/* Cabin with warm windows and chimney smoke */}
+        {/* Cabin with warm windows and chimney smoke (small, local repaints only) */}
         <g>
           {[0, 1, 2].map((i) => (
             <circle
@@ -154,22 +142,12 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           <rect x="610" y="276" width="10" height="22" fill="#4a3428" />
           <path d="M574 300 L604 272 L640 300 Z" fill="#f4f7ff" />
           <rect x="580" y="298" width="54" height="32" fill="#6b4630" />
-          <rect x="588" y="306" width="12" height="11" fill="#ffd36b" className="animate-flicker origin-center" />
-          <rect
-            x="612"
-            y="306"
-            width="12"
-            height="11"
-            fill="#ffd36b"
-            className="animate-flicker origin-center"
-            style={{ animationDelay: "-1s" }}
-          />
+          <rect x="588" y="306" width="12" height="11" fill="#ffd36b" />
+          <rect x="612" y="306" width="12" height="11" fill="#ffd36b" />
           <path d="M572 300 L604 270 L642 300" fill="none" stroke="#f4f7ff" strokeWidth="5" strokeLinejoin="round" />
         </g>
 
         <path d="M60 370 Q260 340 470 366 T840 350 V414 H60 Z" fill="#eef3ff" />
-
-        {/* Near pines with snow */}
         {NEAR_PINES.map((p, i) => (
           <g key={i}>
             <path d={`M${p.x} ${p.y - p.h}l${-p.h * 0.36} ${p.h}h${p.h * 0.72}z`} fill="#1d3b4a" />
@@ -177,7 +155,7 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
           </g>
         ))}
 
-        {/* Snow drift with a snowman, in the part of the view left of the stage */}
+        {/* Snow drift for the snowman, in the part of the view left of the stage */}
         {[
           [214, 236, 34],
           [236, 244, 26],
@@ -189,38 +167,30 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
         ))}
         <path d="M60 262 Q110 220 170 228 T300 262 V414 H60 Z" fill="url(#pw-drift)" />
         <path d="M60 262 Q110 220 170 228 T300 262" fill="none" stroke="#ffffff" strokeOpacity=".8" strokeWidth="2" />
-        <g transform="translate(168 232)">
-          <Snowman />
-        </g>
 
-        {/* Falling snow */}
-        {FLAKES.map((f, i) => (
-          <circle
-            key={i}
-            cx={f.x}
-            cy={f.y}
-            r={f.r}
-            fill="#fff"
-            opacity=".9"
-            style={{ animation: `window-snow ${f.dur}s linear ${f.delay}s infinite` }}
-          />
-        ))}
-
-        {/* Frosted corners */}
         <circle cx="60" cy="414" r="90" fill="url(#pw-frost)" />
         <circle cx="840" cy="414" r="90" fill="url(#pw-frost)" />
       </g>
+    </svg>
+  );
+}
 
-      {/* Frame with mullions */}
+function Frame() {
+  return (
+    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
+      <defs>
+        <linearGradient id="pw-curtain" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#7a1b26" />
+          <stop offset=".35" stopColor="#a8303c" />
+          <stop offset=".6" stopColor="#7f1f2a" />
+          <stop offset="1" stopColor="#a02b37" />
+        </linearGradient>
+      </defs>
       <rect x="60" y="34" width="780" height="380" rx="10" fill="none" stroke="#5b3a26" strokeWidth="16" />
       <path d="M320 34V414M580 34V414M60 150H840" stroke="#5b3a26" strokeWidth="9" />
       <rect x="60" y="34" width="780" height="380" rx="10" fill="none" stroke="#8a5a3b" strokeWidth="3" />
-
-      {/* Sill with snow */}
       <rect x="36" y="410" width="828" height="20" rx="5" fill="#6b4630" />
       <path d="M46 412q30-10 60-3t70-1 80 2 70-3 80 3 70-2 80 2 70-3 80 3 70-2 60 1v6H46z" fill="#f4f7ff" />
-
-      {/* Curtain rod and curtains */}
       <rect x="10" y="10" width="880" height="9" rx="4.5" fill="#3b2418" />
       <circle cx="12" cy="14.5" r="9" fill="#c9a45c" />
       <circle cx="888" cy="14.5" r="9" fill="#c9a45c" />
@@ -243,5 +213,69 @@ export const PanoramaWindow = memo(function PanoramaWindow({ className }: { clas
       <rect x="70" y="222" width="44" height="10" rx="5" fill="#e9c46a" />
       <rect x="786" y="222" width="44" height="10" rx="5" fill="#e9c46a" />
     </svg>
+  );
+}
+
+/**
+ * Panoramic three-pane window with curtains, looking out on a winter night:
+ * aurora, moon, mountains, forest, a cabin with a smoking chimney, a waving snowman,
+ * falling snow, an occasional shooting star – and Santa's sleigh flying past.
+ */
+export const PanoramaWindow = memo(function PanoramaWindow({ className, cheerKey }: PanoramaWindowProps) {
+  const { vb } = SNOWMAN;
+  return (
+    <div className={className} style={{ aspectRatio: `${VB_W} / ${VB_H}` }} aria-hidden="true">
+      <div className="relative h-full w-full">
+        <Sky />
+
+        {/* Moving sky layer: aurora, shooting star, Santa (behind the mountains) */}
+        <div className="pw-glass absolute overflow-hidden rounded-[1.1%]" style={glassStyle}>
+          <div className="pw-aurora" />
+          <span className="pw-shooting-star" />
+          <div className="pw-santa-flight">
+            <div className="pw-santa-bob">
+              <svg viewBox="-70 -6 310 82" className="block h-auto w-full overflow-visible">
+                <SantaSleigh />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <Landscape />
+
+        {/* Snowman in its own small layer so waving/cheering only repaints itself */}
+        <svg
+          viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
+          className="absolute overflow-visible"
+          style={{
+            left: pct(SNOWMAN.x + vb.x, VB_W),
+            top: pct(SNOWMAN.y + vb.y, VB_H),
+            width: pct(vb.w, VB_W),
+            height: pct(vb.h, VB_H),
+          }}
+        >
+          <Snowman cheerKey={cheerKey} />
+        </svg>
+
+        {/* Falling snow – composited HTML layer */}
+        <div className="pw-glass absolute overflow-hidden rounded-[1.1%]" style={glassStyle}>
+          {FLAKES.map((f, i) => (
+            <span
+              key={i}
+              className="pw-flake"
+              style={{
+                left: `${f.left}%`,
+                width: f.size,
+                height: f.size,
+                animationDuration: `${f.dur}s`,
+                animationDelay: `${f.delay}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        <Frame />
+      </div>
+    </div>
   );
 });

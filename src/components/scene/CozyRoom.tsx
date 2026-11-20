@@ -9,7 +9,7 @@ import { PanoramaWindow } from "./PanoramaWindow";
  * Decorative, fixed background scene: a cosy living room on a winter night.
  * Purely visual – hidden from assistive technology. Animations stop with prefers-reduced-motion.
  */
-export const CozyRoom = memo(function CozyRoom({ dimmed = false }: { dimmed?: boolean }) {
+export const CozyRoom = memo(function CozyRoom({ dimmed = false, cheerKey }: { dimmed?: boolean; cheerKey?: string }) {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-night-950">
       {/* Wall with subtle wallpaper stripes */}
@@ -23,7 +23,7 @@ export const CozyRoom = memo(function CozyRoom({ dimmed = false }: { dimmed?: bo
 
       {/* Warm firelight spilling into the room */}
       <div
-        className="absolute -bottom-[20vh] -left-[10vw] h-[90vh] w-[80vw] animate-flicker rounded-full mix-blend-screen"
+        className="absolute -bottom-[20vh] -left-[10vw] h-[90vh] w-[80vw] animate-flicker rounded-full will-change-[transform,opacity]"
         style={{ background: "radial-gradient(closest-side, oklch(0.74 0.17 55 / 0.32), transparent)" }}
       />
       {/* Soft glow behind the tree */}
@@ -35,6 +35,7 @@ export const CozyRoom = memo(function CozyRoom({ dimmed = false }: { dimmed?: bo
       <StringLights className="absolute inset-x-0 top-0 h-12 w-full sm:h-16" />
 
       <PanoramaWindow
+        cheerKey={cheerKey}
         className={cn(
           "absolute top-[6vh] left-1/2 w-[min(118vw,1180px)] max-w-none -translate-x-1/2 transition-opacity duration-700 sm:w-[min(96vw,1180px)] lg:w-[min(78vw,1180px)]",
           dimmed ? "opacity-40" : "opacity-75 lg:opacity-100",

@@ -38,7 +38,7 @@
 - 🛷 **Weihnachtsmann** – fliegt regelmäßig mit seinem Rentierschlitten am Fenster vorbei.
 - ❄️ **Schnee abschütteln** – ein Klick auf den Schnee lässt Bühne oder Werkzeugleiste wackeln; der Schnee rieselt herunter und setzt sich langsam neu.
 - ✨ **Animationen an/aus** – folgt der System-Einstellung „Bewegung reduzieren“, lässt sich aber per Schalter überstimmen.
-- ⛄ **Schneemann & Schneepflug** – ein winkender Schneemann im Fenster; am Bildschirmrand sammelt sich Schnee, den ab und zu ein kleiner Räumwagen wegschiebt.
+- ⛄ **Schneemann & Schneepflug** – ein winkender Schneemann im Fenster, der bei jedem Gewinner jubelt (Hüpfer, Arme hoch, Hut-Salto); am Bildschirmrand sammelt sich Schnee, den ab und zu ein kleiner Räumwagen wegschiebt.
 - 📲 **Offline-App (PWA)** – installierbar auf Desktop, Android und iOS; nach dem ersten Besuch komplett ohne Internet nutzbar.
 - 🎲 **Faire Auslosung** – Web Crypto API mit Rejection Sampling, kein Modulo-Bias.
 - 🔁 **Runden** – Gezogene landen unter „Already drawn“; „New round“ legt alle zurück in den Hut.
