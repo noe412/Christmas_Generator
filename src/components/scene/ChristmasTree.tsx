@@ -143,8 +143,11 @@ export const ChristmasTree = memo(function ChristmasTree({ className }: { classN
         <path d="M195 352c-9-10-20-4-12 2zM195 352c9-10 20-4 12 2z" fill="#f7f1e6" />
 
         <rect x="114" y="364" width="50" height="30" rx="4" fill="#2f7a55" />
-        <rect x="134" y="364" width="10" height="30" fill="#e0424f" />
         <rect x="114" y="364" width="50" height="6" rx="3" fill="#000" opacity=".12" />
+        <rect x="134" y="364" width="10" height="30" fill="#e0424f" />
+        <rect x="114" y="376" width="50" height="8" fill="#e0424f" />
+        <path d="M139 364c-9-10-20-4-12 2zM139 364c9-10 20-4 12 2z" fill="#e0424f" />
+        <circle cx="139" cy="364" r="2.6" fill="#b8323f" />
       </g>
     </svg>
   );
