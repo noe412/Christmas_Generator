@@ -206,14 +206,18 @@
   color: transparent;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+/*
+ * Reduced motion is driven by <html data-motion="reduced">, set from the OS preference
+ * or the in-app "Animations" switch (see useMotionPreference).
+ */
+@custom-variant motion-reduce (&:where([data-motion="reduced"], [data-motion="reduced"] *));
+
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
 /* Scene keyframes used directly by SVG elements (user-space units). */
@@ -484,5 +488,57 @@
   100% {
     opacity: 0;
     transform: translate(14px, -26px);
+  }
+}
+
+/* ---- Shake the snow off ---- */
+.animate-snow-drop {
+  animation: snow-drop 1.15s cubic-bezier(0.45, 0, 0.9, 0.6) forwards;
+}
+@keyframes snow-drop {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+  }
+}
+.animate-regrow {
+  animation: regrow 6s cubic-bezier(0.3, 0, 0.3, 1) both;
+}
+@keyframes regrow {
+  from {
+    opacity: 0.2;
+    transform: scaleY(0.05);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+.animate-wiggle {
+  animation: wiggle 0.55s ease-in-out;
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-1.4deg);
+  }
+  40% {
+    transform: rotate(1.2deg);
+  }
+  60% {
+    transform: rotate(-0.8deg);
+  }
+  80% {
+    transform: rotate(0.4deg);
   }
 }

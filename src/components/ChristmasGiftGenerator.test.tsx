@@ -63,4 +63,21 @@ describe("ChristmasGiftGenerator (integration)", () => {
     expect(screen.getByRole("button", { name: /unmute jingles/i })).toBeInTheDocument();
     expect(localStorage.getItem(APP_CONFIG.soundStorageKey)).toBe("false");
   });
+
+  it("shakes the snow off the stage and lets it settle again", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const [stageSnow] = screen.getAllByRole("button", { name: /shake off the snow/i });
+    await user.click(stageSnow);
+    expect(stageSnow).toBeDisabled();
+    expect(document.querySelectorAll(".animate-snow-drop").length).toBeGreaterThan(0);
+  });
+
+  it("offers an animations switch in the dock", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: /turn animations off/i }));
+    expect(document.documentElement.dataset.motion).toBe("reduced");
+    expect(screen.getByRole("button", { name: /turn animations on/i })).toBeInTheDocument();
+  });
 });

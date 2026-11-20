@@ -1,13 +1,26 @@
 import { useCallback, useState } from "react";
-import { Download, Images, Maximize, Minimize, Snowflake, Users, Volume2, VolumeX, WifiOff } from "lucide-react";
+import {
+  Download,
+  Images,
+  Maximize,
+  Minimize,
+  Snowflake,
+  Sparkles,
+  Users,
+  Volume2,
+  VolumeX,
+  WifiOff,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDraw } from "@/hooks/useDraw";
 import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useJinglePlayer } from "@/hooks/useJinglePlayer";
+import { useMotionPreference } from "@/hooks/useMotionPreference";
 import { useParticipants } from "@/hooks/useParticipants";
 import { usePresentationMode } from "@/hooks/usePresentationMode";
 import { useSlideshow } from "@/hooks/useSlideshow";
+import { useSnowShake } from "@/hooks/useSnowShake";
 import { useSoundPreference } from "@/hooks/useSoundPreference";
 import { useStartShortcut } from "@/hooks/useStartShortcut";
 import { cn } from "@/lib/utils";
@@ -26,6 +39,8 @@ export function ChristmasGiftGenerator() {
   const participants = useParticipants();
   const slideshow = useSlideshow();
   const sound = useSoundPreference();
+  const motion = useMotionPreference();
+  const dockSnow = useSnowShake();
   const { playRandom, stop } = useJinglePlayer();
   const presentation = usePresentationMode();
   const installPrompt = useInstallPrompt();
@@ -124,10 +139,13 @@ export function ChristmasGiftGenerator() {
         aria-label="Controls"
         className={cn(
           "glass fixed z-30 flex items-center gap-1 rounded-full bg-night-950/60 p-1.5",
+          dockSnow.phase === "falling" && "animate-wiggle",
           isPresenting ? "top-4 right-4" : "bottom-6 left-1/2 -translate-x-1/2",
         )}
       >
-        {!isPresenting && <SnowCap className="inset-x-6 w-[calc(100%-3rem)]" />}
+        {!isPresenting && (
+          <SnowCap className="inset-x-6" phase={dockSnow.phase} shakes={dockSnow.shakes} onShake={dockSnow.shake} />
+        )}
         {!isPresenting && (
           <>
             <Button variant="ghost" onClick={() => openSetup("names")} aria-haspopup="dialog">
@@ -160,6 +178,17 @@ export function ChristmasGiftGenerator() {
             <span className="hidden sm:inline">Install</span>
           </Button>
         )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={motion.toggle}
+          aria-pressed={!motion.reduced}
+          aria-label={motion.reduced ? "Turn animations on" : "Turn animations off"}
+          title={motion.reduced ? "Animations off" : "Animations on"}
+          className={motion.reduced ? "text-snow/45" : undefined}
+        >
+          <Sparkles />
+        </Button>
         <Button
           variant="ghost"
           size="icon"

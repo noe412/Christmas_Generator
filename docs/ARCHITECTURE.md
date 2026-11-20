@@ -42,6 +42,8 @@ src/
 │   ├── useSlideshow.ts         # Object-URLs + Auto-Advance
 │   ├── useJinglePlayer.ts      # Audio
 │   ├── useSoundPreference.ts   # Ton an/aus (persistiert)
+│   ├── useMotionPreference.ts  # Animationen an/aus (System-Vorgabe + Schalter)
+│   ├── useSnowShake.ts         # Schnee abschütteln: ruhend → fällt → wächst nach
 │   ├── usePresentationMode.ts  # Fullscreen-Sync
 │   ├── useStartShortcut.ts     # Enter/Space
 │   ├── useInstallPrompt.ts     # „Install“-Button (beforeinstallprompt)

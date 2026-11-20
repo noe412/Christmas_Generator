@@ -56,6 +56,17 @@ Unterstützte Formate:
 - Sind alle gezogen, zeigt die Bühne **Start a new round**.
 - Jederzeit möglich über **Names → Already drawn → New round**: Alle Gezogenen kommen zurück in den Hut.
 
+## Schnee abschütteln
+
+Auf der Bühne und der Werkzeugleiste liegt Schnee. Ein Klick (oder Tipp) darauf schüttelt ihn ab: Die Karte wackelt, der Schnee rieselt herunter und setzt sich in den nächsten Sekunden langsam wieder. Per Tastatur: mit `Tab` den Schnee fokussieren und `Enter` drücken.
+
+## Animationen
+
+Das ✨-Symbol in der Werkzeugleiste schaltet alle Animationen (Feuer, Schnee, Weihnachtsmann, Schneepflug …) an oder aus.
+
+- Standardmäßig folgt die App der System-Einstellung **„Bewegung reduzieren“** (Windows: Einstellungen → Barrierefreiheit → Visuelle Effekte → _Animationseffekte_; macOS/iOS: Bedienungshilfen → Bewegung). Ist sie aktiv, startet die App ohne Animationen.
+- Mit dem Schalter lässt sich das jederzeit überstimmen; die Wahl wird gespeichert.
+
 ## Ton
 
 Das Lautsprecher-Symbol in der Werkzeugleiste schaltet die Jingles an oder aus. Die Einstellung wird gespeichert.
@@ -94,6 +105,7 @@ Es werden keine Daten an Server übertragen. Es gibt kein Tracking, keine Cookie
 
 | Problem                      | Lösung                                                                                                                 |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Keine Animationen            | System-Einstellung „Bewegung reduzieren“ ist aktiv – ✨ in der Werkzeugleiste antippen.                                |
 | Kein Ton                     | Ton-Symbol in der Werkzeugleiste prüfen; Browser blockieren Autoplay bis zur ersten Interaktion.                       |
 | Vollbild startet nicht       | Manche Browser (z. B. iOS Safari) unterstützen die Fullscreen-API nicht; der Präsentationsmodus funktioniert trotzdem. |
 | Liste nach Neustart leer     | Privater Modus oder blockierter Speicher – Liste vorher exportieren.                                                   |

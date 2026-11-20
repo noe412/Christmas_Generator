@@ -15,6 +15,8 @@ Alle relevanten Änderungen werden hier dokumentiert. Format nach [Keep a Change
 - Weihnachtsmann mit Rentierschlitten, der regelmäßig vorbeifliegt.
 - Winkender Schneemann auf einer Schneewehe im Fenster.
 - Schneepflug: Am unteren Bildschirmrand wächst eine Schneewehe, die ein Räumwagen regelmäßig wegschiebt.
+- Schnee abschütteln: Klick auf den Schnee von Bühne oder Werkzeugleiste – Karte wackelt, Schnee fällt herunter und wächst langsam nach.
+- Animationen-Schalter: folgt standardmäßig „Bewegung reduzieren“ des Systems, lässt sich überstimmen (gespeichert).
 - Schneefall über der ganzen Seite; Schnee, der sich auf Bühne und Werkzeugleiste setzt.
 - Offline-App (PWA): Manifest, Icons, eigener Service Worker mit Precache, „Install“-Button und Offline-Anzeige.
 

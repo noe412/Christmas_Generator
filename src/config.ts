@@ -9,6 +9,8 @@ export const APP_CONFIG = {
   drawnStorageKey: "christmas_gift_generator_drawn_v1",
   /** localStorage key for the sound preference. */
   soundStorageKey: "christmas_gift_generator_sound_v1",
+  /** localStorage key for the animation preference ("system" | "on" | "off"). */
+  motionStorageKey: "christmas_gift_generator_motion_v1",
   /** Interval between name swaps during the draw animation (ms). */
   spinStepMs: 120,
   /** Total duration of the draw animation (ms). */

@@ -2,18 +2,20 @@
 
 ## Anwendungsparameter – `src/config.ts`
 
-| Schlüssel               | Standard                            | Beschreibung                             |
-| ----------------------- | ----------------------------------- | ---------------------------------------- |
-| `storageKey`            | `christmas_gift_generator_names_v1` | `localStorage`-Schlüssel der Namensliste |
-| `spinStepMs`            | `120`                               | Intervall zwischen Namenswechseln (ms)   |
-| `spinTotalMs`           | `6000`                              | Gesamtdauer der Auslosung (ms)           |
-| `slideIntervalMs`       | `4000`                              | Slideshow-Intervall (ms)                 |
-| `snowflakeCount`        | `40`                                | Anzahl Schneeflocken                     |
-| `limits.maxNameLength`  | `60`                                | Max. Zeichen pro Name                    |
-| `limits.maxNames`       | `500`                               | Max. Anzahl Namen                        |
-| `limits.maxImportBytes` | `262144` (256 KB)                   | Max. Größe einer Import-Datei            |
-| `limits.maxImageBytes`  | `15728640` (15 MB)                  | Max. Größe pro Bild                      |
-| `limits.maxImages`      | `100`                               | Max. Anzahl Slideshow-Bilder             |
+| Schlüssel               | Standard                             | Beschreibung                               |
+| ----------------------- | ------------------------------------ | ------------------------------------------ |
+| `storageKey`            | `christmas_gift_generator_names_v1`  | Namen im Hut                               |
+| `drawnStorageKey`       | `christmas_gift_generator_drawn_v1`  | Bereits gezogene Namen der aktuellen Runde |
+| `soundStorageKey`       | `christmas_gift_generator_sound_v1`  | Ton an/aus                                 |
+| `motionStorageKey`      | `christmas_gift_generator_motion_v1` | Animationen: `system` / `on` / `off`       |
+| `spinStepMs`            | `120`                                | Intervall zwischen Namenswechseln (ms)     |
+| `spinTotalMs`           | `6000`                               | Gesamtdauer der Auslosung (ms)             |
+| `slideIntervalMs`       | `4000`                               | Slideshow-Intervall (ms)                   |
+| `limits.maxNameLength`  | `60`                                 | Max. Zeichen pro Name                      |
+| `limits.maxNames`       | `500`                                | Max. Anzahl Namen                          |
+| `limits.maxImportBytes` | `262144` (256 KB)                    | Max. Größe einer Import-Datei              |
+| `limits.maxImageBytes`  | `15728640` (15 MB)                   | Max. Größe pro Bild                        |
+| `limits.maxImages`      | `100`                                | Max. Anzahl Slideshow-Bilder               |
 
 ## Sounds
 
@@ -35,7 +37,7 @@ Das Wohnzimmer ist vollständig in Code gezeichnet (kein Bild-Asset) und liegt i
 | `SnowPlow.tsx`       | Schneewehe am unteren Rand + Räumwagen (gemeinsamer 48-s-Zyklus) |
 | `StringLights.tsx`   | Lichterkette unter der Decke                                     |
 
-Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden bei `prefers-reduced-motion` automatisch angehalten.
+Animationen (`flame`, `ember`, `twinkle`, `flicker` …) sind in `src/index.css` unter `@theme` definiert und werden angehalten, sobald `<html data-motion="reduced">` gesetzt ist – aus der System-Einstellung `prefers-reduced-motion` oder dem Animationen-Schalter (`useMotionPreference`). Die Tailwind-Variante `motion-reduce:` ist per `@custom-variant` in `index.css` auf dieses Attribut umgestellt.
 
 ## Farben & Schriften
 

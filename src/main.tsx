@@ -4,7 +4,10 @@ import "@fontsource-variable/fraunces";
 import "@fontsource-variable/inter";
 import App from "./App";
 import { registerServiceWorker } from "./lib/registerServiceWorker";
+import { initMotion } from "./hooks/useMotionPreference";
 import "./index.css";
+
+initMotion();
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element #root not found");

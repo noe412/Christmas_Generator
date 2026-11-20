@@ -4,6 +4,7 @@ import { APP_CONFIG } from "@/config";
 import type { DrawPhase } from "@/hooks/useDraw";
 import type { Slide } from "@/hooks/useSlideshow";
 import { cn } from "@/lib/utils";
+import { useSnowShake } from "@/hooks/useSnowShake";
 import { Confetti } from "./Confetti";
 import { SnowCap } from "./SnowCap";
 
@@ -30,10 +31,11 @@ const navBtn =
 export function DrawStage(props: DrawStageProps) {
   const { phase, displayName, winner, poolSize, drawnCount, slides, slideIndex, presentation } = props;
   const hasSlides = slides.length > 0;
+  const snow = useSnowShake();
 
   return (
-    <div className="relative w-full">
-      <SnowCap />
+    <div className={cn("relative w-full", snow.phase === "falling" && "animate-wiggle")}>
+      <SnowCap phase={snow.phase} shakes={snow.shakes} onShake={snow.shake} />
       <section
         aria-label="Draw"
         className={cn(
